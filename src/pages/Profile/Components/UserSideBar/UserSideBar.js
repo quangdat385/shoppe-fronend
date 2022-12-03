@@ -5,16 +5,18 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Toast from 'react-bootstrap/Toast';
-import Nav from 'react-bootstrap/Nav';
+
 
 
 
 
 import { useState } from 'react';
 import avatar from "~/assets/images/20210214_092405.jpg";
-import Gift from "~/assets/images/97cb82f5dd0a13419b1608c16681df9e.png"
-
+import Gift from "~/assets/images/97cb82f5dd0a13419b1608c16681df9e.png";
+import MyAccount from "~/assets/images/myaccout.png";
+import SaleBirth from "~/assets/images/sieusale12.12.png";
+import OderList from "~/assets/images/donmua.png";
+import NotifiImg from "~/assets/images/thongbao.png"
 
 import styles from './UserSideBar.module.scss';
 import useAuth from '~/hooks/useAuth';
@@ -25,17 +27,37 @@ const cx = className.bind(styles);
 const UserSideBar = () => {
     const navigate = useNavigate();
     const { user_name } = useAuth();
-    const [show, setShow] = useState(1);
+    const [show, setShow] = useState(JSON.parse(localStorage.getItem("user_page")) || 3);
     console.log(show);
 
-    const toggleShowA = () => {
-        setShow(1)
-
+    const toggleShowC = () => {
+        setShow(3)
+        localStorage.setItem("user_page", 3)
+        navigate("/user/profile")
 
     }
     const toggleShowB = () => {
         setShow(2)
-        navigate("gift")
+        localStorage.setItem("user_page", 2)
+        navigate("shop/birthday")
+
+    }
+    const toggleShowA = () => {
+        setShow(1)
+        localStorage.setItem("user_page", 1)
+        navigate("gift/voucher")
+
+    }
+    const toggleShowD = () => {
+        setShow(4)
+        localStorage.setItem("user_page", 4)
+        navigate("order/list")
+
+    }
+    const toggleShowE = () => {
+        setShow(5)
+        localStorage.setItem("user_page", 5)
+        navigate("notify/order/updates")
 
     }
 
@@ -48,7 +70,7 @@ const UserSideBar = () => {
         <div className={cx('wrapper')}>
             <Container fluid>
                 <Row className="py-4">
-                    <Col sm={4}>
+                    <Col xs={4} sm={4}>
                         <div className={cx("avatar")}>
                             <div className={cx("avatar-placeholder")}>
                                 <svg enableBackground="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" className={cx("avatar-icon")}>
@@ -65,7 +87,7 @@ const UserSideBar = () => {
                             </div>
                         </div>
                     </Col>
-                    <Col sm={8}>
+                    <Col xs={8} sm={8}>
                         <div className={cx("ps-2 d-flex flex-column justify-content-center align-items-start fs-4")}>
                             <Col className={cx("user-name")}>{user_name}</Col>
                             <Col className="text-black-50">
@@ -82,40 +104,13 @@ const UserSideBar = () => {
                 </Row>
                 <Row>
 
+
                     <Col md={12} className="mb-2">
+
+
                         <Button
-                            as={Nav.Link}
-                            variant="light"
                             onClick={toggleShowA}
-                            to="/"
-                            className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
-                            <Col sm={3} className="align-items-start">
-                                <img className="rounded-circle bg-white" height="20px" width="20px" src={Gift} alt="Gift" />
-                            </Col>
-                            <Col sm={9} className="align-items-start">
-                                <span className="lh-1 text-start d-block ">
-                                    Ưu Đãi Dành Riêng Cho Bạn
-                                </span>
-                            </Col>
-                        </Button>
-                        <Toast show={(show === 1 ? true : false)} className="my-toast bg-transparent border-0 shadow-none ps-4">
 
-                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user">Kho Voucher Của Bạn</NavLink>
-                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/a">Tặng Đến 400k</NavLink>
-                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/b">Gì Cũng Rẻ</NavLink>
-                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/c">Mã Giảm Giá</NavLink>
-                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/d">Miễn Phí Vận Chuyển</NavLink>
-
-
-
-                        </Toast>
-                    </Col>
-                    <Col md={12} className="mb-2">
-
-
-                        <Button
-                            onClick={toggleShowB}
-                            as={Nav.Link}
                             data-toggle="1"
                             variant="light"
                             to="user/gift"
@@ -129,17 +124,113 @@ const UserSideBar = () => {
                                 </span>
                             </Col>
                         </Button>
-                        <Toast data-toggle="1" show={(show === 2) ? true : false} className="bg-transparent border-0 shadow-none ps-4">
-                            <Nav defaultActiveKey="/user/gift" className="flex-column fs-4 ">
-                                <Nav.Link className="link-dark" href="/user/gift">Kho Voucher Của Bạn</Nav.Link>
-                                <Nav.Link className="link-dark" eventKey="link-1">Tặng Đến 400k</Nav.Link>
-                                <Nav.Link className="link-dark" eventKey="link-2">Gì Cũng Rẻ</Nav.Link>
-                                <Nav.Link className="link-dark" eventKey="link-2">Mã Giảm Giá</Nav.Link>
-                                <Nav.Link className="link-dark" eventKey="link-2">Miễn Phí Vận Chuyển</Nav.Link>
-                            </Nav>
+                        <Container fluid className={cx((show === 1) ? "my-toast show" : "my-toast", "bg-transparent border-0 shadow-none ps-4")}>
+
+                            <NavLink aria-current={(isActive) => (isActive === true) ? "page" : null} className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/voucher">Kho Voucher Của Bạn</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/offer">Tặng Đến 400K</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/saleoff">Gì Cững Rẻ</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/code">Mã Giảm Giá</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/freeship">Miễn Phí Vận Chuyển</NavLink>
 
 
-                        </Toast>
+
+                        </Container>
+                    </Col>
+                    <Col md={12}>
+                        <Button
+
+
+                            variant="light"
+                            onClick={toggleShowB}
+
+                            className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
+                            <Col sm={3} className="align-items-start">
+                                <img height="20px" width="20px" src={SaleBirth} alt="Gift" />
+                            </Col>
+                            <Col sm={9} className="align-items-start">
+                                <span className="lh-1 text-start d-block ">
+                                    12.12 Siêu Sale Sinh Nhật
+                                </span>
+                            </Col>
+                        </Button>
+                    </Col>
+                    <Col md={12} className="mb-2">
+                        <Button
+
+
+                            variant="light"
+                            onClick={toggleShowC}
+
+                            className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
+                            <Col sm={3} className="align-items-start">
+                                <img height="20px" width="20px" src={MyAccount} alt="Gift" />
+                            </Col>
+                            <Col sm={9} className="align-items-start">
+                                <span className="lh-1 text-start d-block ">
+                                    Tài Khoản Của Tôi
+                                </span>
+                            </Col>
+                        </Button>
+                        <Container fluid className={cx((show === 3) ? "my-toast show" : "my-toast", "bg-transparent border-0 shadow-none ps-4")}>
+
+                            <NavLink aria-current={(isActive) => (isActive === true) ? "page" : null} className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/profile">Hồ Sơ</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/bank">Ngân Hàng</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/address">Địa Chỉ</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/password">Đổi Mật Khẩu</NavLink>
+
+
+
+
+                        </Container>
+                    </Col>
+                    <Col md={12}>
+                        <Button
+
+
+                            variant="light"
+                            onClick={toggleShowD}
+
+                            className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
+                            <Col sm={3} className="align-items-start">
+                                <img height="20px" width="20px" src={OderList} alt="Gift" />
+                            </Col>
+                            <Col sm={9} className="align-items-start">
+                                <span className="lh-1 text-start d-block ">
+                                    Đơn Mua
+                                </span>
+                            </Col>
+                        </Button>
+                    </Col>
+                    <Col md={12} className="mb-2">
+                        <Button
+
+
+                            variant="light"
+                            onClick={toggleShowE}
+
+                            className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
+                            <Col sm={3} className="align-items-start">
+                                <img height="20px" width="20px" src={NotifiImg} alt="Gift" />
+                            </Col>
+                            <Col sm={9} className="align-items-start">
+                                <span className="lh-1 text-start d-block ">
+                                    Thông Báo
+                                </span>
+                            </Col>
+                        </Button>
+                        <Container fluid className={cx((show === 5) ? "my-toast show" : "my-toast", "bg-transparent border-0 shadow-none ps-4")}>
+
+                            <NavLink aria-current={(isActive) => (isActive === true) ? "page" : null} className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/notify/order/updates">Cập Nhật Đơn Hàng</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/notify/promotions">Khuyến Mãi</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/notify/wallet/update">Cập Nhật Ví</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/notify/activities">Hoạt Động</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/notify/rating">Cập Nhật Đánh Giá</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/notify/shop/update">Cập Nhật Shopee</NavLink>
+
+
+
+
+                        </Container>
                     </Col>
 
 

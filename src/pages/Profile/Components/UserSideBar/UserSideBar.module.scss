@@ -70,15 +70,29 @@
 
 }
 
+.my-toast {
+    display: none;
+    transition: opacity 1s linear;
 
+    .show {
+        display: block;
+        transition: opacity 1s linear;
+    }
+
+
+}
 
 .my-link {
     color: rgba(0, 0, 0, .65);
     display: Block;
     width: 100%;
-    padding: 5px 10px 5px 24px;
+    padding: 5px 10px 5px 16px;
     font-weight: 400;
     font-size: 15px;
+
+    &:hover {
+        color: #ee4d2d;
+    }
 }
 
 .my-link.active {

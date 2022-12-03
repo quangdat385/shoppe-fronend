@@ -10,6 +10,26 @@ import Gift from '~/pages/Profile/pages/Gift'
 import styles from './Profile.module.scss';
 import UserContent from './Components/UserContent';
 import useAuth from '~/hooks/useAuth';
+import Bank from './UserDetails/Bank';
+import Address from './UserDetails/Address';
+import ChangePwd from './UserDetails/ChangePwd';
+
+import ShopSpecial from "./pages/ShopSpecial"
+import OrderList from './pages/OderList/OrderList';
+
+import Offer from './pages/Gift/Offer';
+import CodeSaleOff from './pages/Gift/CodeSaleOff';
+import SaleOff from './pages/Gift/SaleOff';
+import FreeShip from './pages/Gift/FreeeShep';
+
+
+import NotifiCation from './pages/NotifiCations';
+import Activities from './pages/NotifiCations/Activities';
+import PromoTion from './pages/NotifiCations/PromoTion';
+import Rating from './pages/NotifiCations/Rating';
+import ShopUpdate from './pages/NotifiCations/ShopUpdate';
+import WalletUpdate from './pages/NotifiCations/WalletUpdate';
+
 
 const cx = className.bind(styles);
 
@@ -36,15 +56,32 @@ function Profile() {
 
 
             <Routes>
-                <Route element={<UserContent />}>
+                <Route path="/" element={<UserContent />}>
 
-                    <Route index element={<UserDetails />}>
-                        <Route path="/a" element={<h1>A</h1>}></Route>
-                        <Route path="/b" element={<h1>B</h1>}></Route>
-                        <Route path="/c" element={<h1>C</h1>}></Route>
-                        <Route path="/d" element={<h1>D</h1>}></Route>
+                    <Route path="/profile" index element={<UserDetails />}>
                     </Route>
-                    <Route path="gift" element={<Gift />}></Route>
+                    <Route path="/bank" element={<Bank />}></Route>
+                    <Route path="/password" element={<ChangePwd />}></Route>
+                    <Route path="/address" element={<Address />}></Route>
+
+                    <Route path="/shop/birthday" element={<ShopSpecial />}></Route>
+
+                    <Route path="/gift/voucher" element={<Gift />}>
+
+                    </Route>
+                    <Route path="/gift/offer" element={<Offer />}></Route>
+                    <Route path="/gift/saleoff" element={<SaleOff />}></Route>
+                    <Route path="/gift/code" element={<CodeSaleOff />}></Route>
+                    <Route path="/gift/freeship" element={<FreeShip />}></Route>
+
+                    <Route path="/order/list" element={<OrderList />}></Route>
+
+                    <Route path="/notify/order/updates" element={<NotifiCation />}></Route>
+                    <Route path="/notify/promotions" element={<PromoTion />}></Route>
+                    <Route path="/notify/wallet/update" element={<WalletUpdate />}></Route>
+                    <Route path="/notify/activities" element={<Activities />}></Route>
+                    <Route path="/notify/rating" element={<Rating />}></Route>
+                    <Route path="/notify/shop/update" element={<ShopUpdate />}></Route>
                 </Route>
             </Routes>
 

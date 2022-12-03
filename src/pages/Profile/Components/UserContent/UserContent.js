@@ -15,10 +15,10 @@ const Content = () => {
         <div className={cx('wrapper')}>
             <Container className={cx('content')}>
                 <Row >
-                    <Col sm={3} lg={2}>
+                    <Col xs={6} sm={5} md={3} xl={2}>
                         <UserSideBar />
                     </Col>
-                    <Col sm={9} lg={10}>
+                    <Col xs={12} sm={12} md={9} xl={10}>
                         <Outlet />
                     </Col>
 

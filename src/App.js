@@ -77,23 +77,30 @@ function App() {
         }
         const Page = route.component;
         return <Route key={route.component} path={`${route.path}/*`} element={
-
+          //dung Route moi dung duoc Outlet
+          //Khong dung thi dung children
 
           <PersitLogin>
-            <Layout>
 
-              <Prefetch>
-                {route.allowedRoles ?
-                  <RequireAuth allowedRoles={[...Object.values(config.ROLES)]}>
+
+            <Prefetch>
+              {route.allowedRoles ?
+                <RequireAuth allowedRoles={[...Object.values(config.ROLES)]}>
+                  <Layout>
+
                     <Page />
-                  </RequireAuth> : <RequireAuth allowedRoles={[config.ROLES.Manager, config.ROLES.Admin]}>
+                  </Layout>
+                </RequireAuth> : <RequireAuth allowedRoles={[config.ROLES.Manager, config.ROLES.Admin]}>
+                  <Layout>
+
                     <Page />
-                  </RequireAuth>}
-              </Prefetch>
+                  </Layout>
+                </RequireAuth>}
+            </Prefetch>
 
 
 
-            </Layout>
+
           </PersitLogin>
 
 
