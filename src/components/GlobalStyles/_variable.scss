@@ -1,0 +1,27 @@
+//root variable
+
+
+
+
+
+
+$fontFamily: Roboto, Arial, Tahoma, PingFangSC, sans-serif;
+$primaryColor: rgb(238, 77, 45);
+$whiteColor: #fff;
+$blackColor: #000;
+$blackRgba-6: rgba(0, 0, 0, 0.6);
+$blackRgba-4: rgba(0, 0, 0, 0.4);
+$shadesOfccc: #ccc;
+$shadesOfddd: #ddd;
+$brightRed: #f44336;
+$darkGray: #757575;
+$darkCyan: rgb(214, 91, 29);
+$vividBlue: #2196f3;
+$VeryLightGray: #f1f1f1;
+$textColor: rgba(0, 0, 0, 0.8);
+
+//header
+$headerBgColor: linear-gradient(0, #fe6333, #f7432e);
+$headerHeight: 120px;
+$navbarHeight: 34px;
+$topSearchHeight: calc($headerHeight - $navbarHeight );

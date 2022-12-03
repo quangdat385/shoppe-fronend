@@ -1,0 +1,35 @@
+@import "../../../../components/GlobalStyles/GlobalStyles.scss";
+
+
+.wrapper {
+    display: block;
+    max-width: 100%;
+    background-color: rgb(238, 77, 45);
+
+
+
+    .content {
+
+        height: 600px;
+
+        background-image: url(../../../../assets/images/5569eb9dc7e09e2dbed5315b8f2ea8ba.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+
+
+
+
+    }
+
+
+
+    @media (max-width: 991px) {
+        .content {
+            background-image: none;
+        }
+    }
+
+
+
+}

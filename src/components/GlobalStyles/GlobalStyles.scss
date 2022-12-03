@@ -1,0 +1,250 @@
+@import "~bootstrap/scss/bootstrap";
+
+@import'./_variable.scss';
+
+
+
+
+
+// Fonts emmbeded
+@font-face {
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto-Light.ttf');
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto-Regular.ttf');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto-Medium.ttf');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto-Medium.ttf');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url('/assets/fonts/Roboto-Bold.ttf');
+    font-weight: 700;
+}
+
+
+
+
+
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+
+body {
+    font-family: $fontFamily;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    text-rendering: optimizeSpeed;
+    color: $textColor;
+    overflow-y: overflow;
+}
+
+
+
+a {
+    color: $textColor;
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+}
+
+p,
+a,
+li,
+button,
+ul {
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+    text-decoration: none;
+}
+
+// Scrollbar CSS
+html *::-webkit-scrollbar {
+    border-radius: 0;
+    width: 8px;
+}
+
+html *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+html *::-webkit-scrollbar-track {
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.errmsg {
+    display: inline-block;
+    background-color: var(--TABLE-BGCOLOR);
+    color: var(--ERROR);
+    padding: 0.25em;
+    margin-bottom: 0.5em;
+}
+
+.errmsg a:any-link {
+    color: var(--ERROR);
+    text-decoration: underline;
+}
+
+nav.navbar {
+    padding: 0;
+
+}
+
+nav.navbar .navbar-toggler:active,
+nav.navbar .navbar-toggler:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+nav.navbar .navbar-toggler-icon {
+    width: 24px;
+    height: 17px;
+    background-image: none;
+    position: relative;
+    border-bottom: 2px solid #fff;
+    transition: all 300ms linear;
+    top: -2px;
+}
+
+nav.navbar .navbar-toggler-icon:focus {
+    border-bottom: 2px solid #fff;
+}
+
+nav.navbar .navbar-toggler-icon::after,
+nav.navbar .navbar-toggler-icon::before {
+    width: 24px;
+    position: absolute;
+    height: 2px;
+    background-color: #fff;
+    top: 0;
+    left: 0;
+    content: '';
+    z-index: 2;
+    transition: all 300ms linear;
+}
+
+nav.navbar .navbar-toggler-icon::after {
+    top: 8px;
+}
+
+nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::after {
+    transform: rotate(45deg);
+    background-color: #fff;
+    height: 2px;
+}
+
+nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon::before {
+    transform: translateY(8px) rotate(-45deg);
+    background-color: #fff;
+    height: 2px;
+}
+
+nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+    border-color: transparent;
+}
+
+
+
+//form login 
+
+
+.login-body {
+    padding-bottom: 5px;
+    display: block;
+
+    .form-control {
+        padding: 12px;
+        color: $textColor;
+        font-size: 1.2rem;
+
+
+
+
+    }
+
+    .form-control:focus {
+        border-color: rgba(0, 0, 0, 0.54);
+        box-shadow: none;
+    }
+
+
+    .invalid-feedback {
+        width: 327px;
+        font-size: 1.2rem;
+        color: #ff424f;
+        font-weight: 400;
+        height: 20px;
+    }
+}
+
+form {
+    .login-button.btn.btn-primary {
+        color: $whiteColor;
+        background-color: #ee4d2d;
+        width: 100%;
+        padding: 12px;
+        font-size: 1.4rem;
+        font-weight: 400;
+        border-color: #ee4d2d;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+
+}
+
+.padding-invalid {
+    width: 100%;
+    height: 20px;
+    display: block;
+}
+
+.was-validated .padding-invalid {
+    display: none;
+}
+
+
+//usercontent
+
+
+.nav .nav-link.nav-dark {
+    font-weight: 300;
+}

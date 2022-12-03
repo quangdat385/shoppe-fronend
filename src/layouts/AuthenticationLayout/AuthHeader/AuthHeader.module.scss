@@ -1,0 +1,77 @@
+@import "../../../components/GlobalStyles/GlobalStyles.scss";
+
+
+.wrapper {
+    display: block;
+    width: 100%;
+    background-color: $whiteColor;
+    height: 84px;
+
+
+    .header-nav {
+        margin: 26px 0;
+    }
+
+    .text {
+        color: $blackColor;
+        font-size: 2.4rem;
+        font-weight: 400;
+        display: block;
+    }
+
+    .nav-link {
+        color: #ee4d2d;
+        font-size: 1.4rem;
+    }
+
+    @media (max-width: 768px) {
+        .help-icon {
+            display: block;
+        }
+
+        .help-text {
+            display: none;
+        }
+
+        .text {
+            display: none;
+
+        }
+
+        .login-icon {
+            display: block;
+        }
+    }
+
+}
+
+.logo {
+    height: 42px;
+    width: 192px;
+    margin-top: -10px;
+    margin-right: -18px;
+}
+
+
+.header-nav {
+    height: 32px;
+
+}
+
+.login-icon {
+    display: none;
+    width: 24px;
+    height: 24px;
+
+
+}
+
+.help-icon {
+    display: none;
+    width: 27px;
+    height: 27px;
+}
+
+.help-text {
+    display: block;
+}

@@ -1,13 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import SSRProvider from 'react-bootstrap/SSRProvider';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+
+
+import App from './App';
+import { store } from '~/app/store';
+import GlobalStyles from '~/components/GlobalStyles';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <SSRProvider>
+        <GlobalStyles>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/*" element={<App />} ></Route>
+            </Routes>
+          </BrowserRouter>
+        </GlobalStyles>
+      </SSRProvider>
+    </Provider>
   </React.StrictMode>
 );
 

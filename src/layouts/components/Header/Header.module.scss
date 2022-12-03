@@ -1,0 +1,296 @@
+@import '../../../components/GlobalStyles/GlobalStyles.scss';
+
+//navbar
+.header {
+    background-image: $headerBgColor;
+    height: $headerHeight;
+    display: block;
+
+
+    position: relative;
+
+    .conect {
+        display: inline-flex;
+        padding-left: 8px;
+
+    }
+
+    .logo-1 {
+        width: 80px;
+        display: none;
+        padding: 0;
+    }
+
+    .nav_link {
+        &:hover {
+            cursor: pointer;
+            color: #ddd;
+        }
+    }
+
+    $color-collapse: $whiteColor;
+
+    @media (max-width: 991px) {
+        .navbar {
+            padding: 0 7.5px;
+        }
+
+        nav .collapse-bgcolor {
+            z-index: 999;
+            background-color: $color-collapse;
+            border-radius: 8px;
+            margin-top: 8px;
+            position: relative;
+            padding: 8px;
+            font-size: 1.6rem;
+            color: $textColor;
+            box-shadow: 0 1px 4px rgb(0 0 0 / 10%);
+
+        }
+
+
+        .fa-icon {
+            width: 18px;
+            height: 18px;
+            background-color: red;
+            border-radius: 30%;
+            margin-left: 16px;
+            margin-right: 16px;
+        }
+
+        .ins-icon {
+            width: 18px;
+            height: 18px;
+            background-color: red;
+
+        }
+
+
+        .logo-1 {
+            display: block;
+
+        }
+
+
+        .conect {
+            padding-left: 0;
+        }
+
+        .nav_link {
+            color: $textColor;
+            align-self: start;
+
+            &::after {
+                display: none;
+            }
+        }
+
+        .sign-up::after {
+            display: none;
+        }
+
+        .notify,
+        .user,
+        .help,
+        .nav_link,
+        .conect,
+        .login,
+        .sign-up {
+            margin: 4px 0 4px 8px;
+
+
+        }
+
+        .notify-icon,
+        .avatar,
+        .help-icon {
+            display: none;
+        }
+
+    }
+}
+
+.header_navbar {
+    height: $navbarHeight;
+}
+
+.collapse-bgcolor {
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin: auto 0;
+    color: $whiteColor;
+
+}
+
+.text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav_link {
+    $marginRight: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-right: $marginRight;
+    color: $whiteColor;
+
+
+
+
+}
+
+.nav_link--after {
+    &::after {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 4px;
+        right: -8px;
+        transform: translateY(-5%);
+        height: 13px;
+        width: 1.5px;
+        background-color: #fb9086;
+    }
+}
+
+
+.fa-icon {
+    width: 16px;
+    height: 16px;
+    align-items: center;
+    margin: auto 5px auto 5px;
+    background-image: url(../../../assets/images/icon/cab134ca96b0829b591cfaff892ae62c.png);
+    background-size: 487.5% 293.75%;
+    background-position: 8.064516129032258% 16.129032258064516%;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.6;
+    }
+}
+
+.ins-icon {
+    width: 16px;
+    height: 16px;
+    margin: auto 10px auto 0px;
+    align-items: center;
+    background-image: url(../../../assets/images/icon/cab134ca96b0829b591cfaff892ae62c.png);
+    background-size: 487.5% 293.75%;
+    background-position: 58.064516129032256% 16.129032258064516%;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.6;
+    }
+}
+
+//search bar
+
+.search {
+    height: $topSearchHeight;
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+
+}
+
+.sign-up {
+    position: relative;
+    margin-right: 8px;
+
+
+}
+
+.login {
+    margin-left: 8px;
+}
+
+
+.notify,
+.nav_qr {
+    display: flex;
+}
+
+.notify,
+.help {
+    &:hover {
+        opacity: 0.8;
+        cursor: pointer;
+    }
+}
+
+.notify-icon {
+    width: 14px;
+    height: 18px;
+    display: inline-block;
+    margin-right: 5px;
+
+
+}
+
+.help-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    margin-right: 5px;
+
+
+}
+
+.avatar {
+    height: 22px;
+    width: 22px;
+    display: block;
+
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.user-name {
+    margin: 0 8px;
+}
+
+.avatar-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke: #c6c6c6;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 2rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+}
+
+.avatar-img {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    &:hover {
+        opacity: 0.8;
+        cursor: pointer;
+    }
+}
