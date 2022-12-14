@@ -11,30 +11,35 @@
     font-family: Roboto;
     src: url('/assets/fonts/Roboto-Light.ttf');
     font-weight: 300;
+    font-display: fallback;
 }
 
 @font-face {
     font-family: Roboto;
     src: url('/assets/fonts/Roboto-Regular.ttf');
     font-weight: 400;
+    font-display: fallback;
 }
 
 @font-face {
     font-family: Roboto;
     src: url('/assets/fonts/Roboto-Medium.ttf');
     font-weight: 500;
+    font-display: fallback;
 }
 
 @font-face {
     font-family: Roboto;
     src: url('/assets/fonts/Roboto-Medium.ttf');
     font-weight: 600;
+    font-display: fallback;
 }
 
 @font-face {
     font-family: Roboto;
     src: url('/assets/fonts/Roboto-Bold.ttf');
     font-weight: 700;
+    font-display: fallback;
 }
 
 
@@ -121,6 +126,11 @@ html *::-webkit-scrollbar-track {
     text-decoration: underline;
 }
 
+//captcha modal
+
+
+
+//navbar
 nav.navbar {
     padding: 0;
 

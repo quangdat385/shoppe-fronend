@@ -30,6 +30,9 @@ import Rating from './pages/NotifiCations/Rating';
 import ShopUpdate from './pages/NotifiCations/ShopUpdate';
 import WalletUpdate from './pages/NotifiCations/WalletUpdate';
 
+import MyVouCher from "./pages/MyVouCher";
+import MyCoin from "./pages/MyCoin";
+
 
 const cx = className.bind(styles);
 
@@ -57,13 +60,13 @@ function Profile() {
 
             <Routes>
                 <Route path="/" element={<UserContent />}>
-
+                    {/* user details */}
                     <Route path="/profile" index element={<UserDetails />}>
                     </Route>
                     <Route path="/bank" element={<Bank />}></Route>
                     <Route path="/password" element={<ChangePwd />}></Route>
                     <Route path="/address" element={<Address />}></Route>
-
+                    {/* user gift */}
                     <Route path="/shop/birthday" element={<ShopSpecial />}></Route>
 
                     <Route path="/gift/voucher" element={<Gift />}>
@@ -73,15 +76,19 @@ function Profile() {
                     <Route path="/gift/saleoff" element={<SaleOff />}></Route>
                     <Route path="/gift/code" element={<CodeSaleOff />}></Route>
                     <Route path="/gift/freeship" element={<FreeShip />}></Route>
-
+                    {/* user order */}
                     <Route path="/order/list" element={<OrderList />}></Route>
-
+                    {/* user notifications */}
                     <Route path="/notify/order/updates" element={<NotifiCation />}></Route>
                     <Route path="/notify/promotions" element={<PromoTion />}></Route>
                     <Route path="/notify/wallet/update" element={<WalletUpdate />}></Route>
                     <Route path="/notify/activities" element={<Activities />}></Route>
                     <Route path="/notify/rating" element={<Rating />}></Route>
                     <Route path="/notify/shop/update" element={<ShopUpdate />}></Route>
+                    {/* user voucher */}
+                    <Route path="/my/voucher" element={<MyVouCher />}></Route>
+                    {/* user coin */}
+                    <Route path="/my/coin" element={<MyCoin />}></Route>
                 </Route>
             </Routes>
 

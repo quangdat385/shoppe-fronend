@@ -27,8 +27,8 @@ const authRoutes = [
 ]
 //privateRouters
 const privateRouters = [
-    { path: config.routes.admin, component: Admin, allowedRoles: true },
-    { path: config.routes.profile, component: Profile },
+    { path: config.routes.admin, component: Admin, allowedRoles: "admin" },
+    { path: config.routes.profile, component: Profile, allowedRoles: "user" },
 ]
 
 

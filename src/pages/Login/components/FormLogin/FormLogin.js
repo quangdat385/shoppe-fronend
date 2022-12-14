@@ -10,12 +10,16 @@ import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import { Link, useNavigate } from 'react-router-dom';
-import PulseLoader from 'react-spinners/PulseLoader'
+import PulseLoader from 'react-spinners/PulseLoader';
 
 
 import { setCredentials } from '~/features/auth/authSlice';
 import { useLoginMutation } from '~/features/auth/authApiSlice';
+import { facebook, google, loginSocial } from '~/until/fire';
 import usePersist from '~/hooks/usePersists';
+import FormLoginByPhone from './FomLoginByPhone';
+import ForfotPassword from './ForgotPassword';
+
 
 
 
@@ -26,16 +30,25 @@ const cx = className.bind(styles);
 
 
 function FormLogin() {
+    const PHONE_REGEX = /^[0-9]+$/;
+    const MAIL_REGEX = /^[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,4}$/;
+
     const [validated, setValidated] = useState(false);
     const [user_name, setUserName] = useState('');
+
+    const metho_login = PHONE_REGEX.test(user_name) ? "phone_number" : MAIL_REGEX.test(user_name) ? "email" : "user_name";;
+
     const [password, setPassword] = useState('');
-    const [persist, setPersist] = usePersist()
+    const [persist, setPersist] = usePersist();
+    const [status, setStatus] = useState("login");
 
     const [errMsg, setErrMsg] = useState('');
 
 
 
     const userRef = useRef();
+
+
     const errRef = useRef();
 
 
@@ -45,13 +58,18 @@ function FormLogin() {
 
     const [login, { isLoading }] = useLoginMutation();
 
-    useEffect(() => {
-        userRef.current.focus()
-    }, []);
 
     useEffect(() => {
+        userRef.current.focus()
+
+    }, []);
+
+    // eslint-disable-next-line
+    useEffect(() => {
         setErrMsg('');
+        // eslint-disable-next-line
     }, [user_name, password]);
+
 
     const handleUserInput = e => {
         const user = e.target.value;
@@ -73,7 +91,7 @@ function FormLogin() {
         setValidated(true);
         event.preventDefault();
         try {
-            const { accessToken } = await login({ phone_number: user_name, password }).unwrap()
+            const { accessToken } = await login({ [metho_login]: user_name, password }).unwrap()
 
 
             dispatch(setCredentials({ accessToken }));
@@ -81,9 +99,10 @@ function FormLogin() {
 
             setUserName('');
             setPassword('');
-            navigate("/user");
+            navigate("/user/profile");
         } catch (err) {
             if (!err.status) {
+
                 setErrMsg('No Server Response');
             } else if (err.status === 400) {
                 setErrMsg('Missing Username or Password');
@@ -96,14 +115,126 @@ function FormLogin() {
         };
 
     };
+    const handlerSociolLogin = async (provider) => {
+        const result = await loginSocial(provider);
+        console.log(result)
+
+    }
     const errClass = errMsg ? "errmsg" : "d-none";
     let content;
     if (isLoading) {
         content = <PulseLoader />
-    } else {
+    } else if (status === "login") {
 
 
-        content = (
+        content = (<>
+            <div ref={errRef} className={cx(`${errClass}`)}>{errMsg}</div>
+            <Form noValidate validated={validated} onSubmit={handleSubmit} >
+                <Row className="mb-4">
+                    <Form.Group as={Col} sm='12' controlId="user" >
+
+                        <Form.Control
+                            ref={userRef}
+                            required
+                            type="text"
+                            placeholder="Email/Phone Number/User Name"
+                            autoComplete="of"
+                            value={user_name}
+                            onChange={handleUserInput}
+                            autoFocus
+
+
+                        />
+                        <div className="padding-invalid"></div>
+                        <Form.Control.Feedback type="invalid">Vui lòng điền vào mục này</Form.Control.Feedback>
+                    </Form.Group>
+                </Row >
+
+                <Row className="mb-4">
+                    <Form.Group as={Col} sm={12} controlId="password" >
+
+                        <Form.Control
+                            required
+                            type="password"
+                            placeholder="Password"
+                            suggested="current-password"
+                            value={password}
+                            onChange={handlePwdInput}
+
+                        />
+                        <div className="padding-invalid"></div>
+                        <Form.Control.Feedback type="invalid">Vui lòng điền vào mục này</Form.Control.Feedback>
+                    </Form.Group>
+
+                </Row>
+                <Row className="mb-4">
+                    <Form.Group >
+                        <Form.Check
+
+                            label="Trust This Device"
+                            checked={persist}
+                            onChange={handlePerSitInput}
+                        />
+                    </Form.Group>
+
+                </Row>
+                <Row>
+                    <Col size={12} sm={12}>
+                        <Button type="submit" className="login-button">ĐĂNG NHẬP</Button>
+                    </Col>
+                </Row>
+
+
+            </Form>
+            <Container fluid>
+
+                <Row>
+                    <Col
+                        className="d-flex justify-content-between align-items-center"
+                        size={12}
+                        sm={12}
+                        style={
+                            {
+                                paddingLeft: 0,
+                                paddingRight: 0
+                            }
+                        }
+
+                    >
+                        <Button
+                            className="fs-5 text-primary  my-3 bg-transparent border-0"
+                            onClick={() => setStatus("forgot password")}
+                        >
+                            Quên mật khẩu
+                        </Button>
+
+                        <Button
+                            className="fs-5 text-primary  my-3 bg-transparent border-0"
+                            onClick={() => setStatus("login by SMS")}
+
+                        >
+                            Đăng nhập với SMS
+                        </Button>
+
+                    </Col>
+
+                </Row>
+
+            </Container>
+
+        </>
+        )
+
+    } else if (status === "login by SMS") {
+        content = <FormLoginByPhone setStatus={setStatus} />
+    } else if (status === "forgot password") {
+        content = <ForfotPassword setStatus={setStatus} />
+    }
+
+
+    return (
+
+        <div className={cx('wrapper')}>
             <Container fluid>
                 <Row >
                     <Col lg={6} md="auto" className={cx('d-none d-lg-block')}>
@@ -116,7 +247,7 @@ function FormLogin() {
                                     <Row className="px-5 py-4" >
                                         <Col size={12} sm={12}>
                                             <div className={cx('header')}>
-                                                <div className={cx('text')}>Đăng Nhập</div>
+                                                <div className={cx('text')}>{status === "forgot password" ? "Mật Khẩu ?" : "Đăng Nhập"}</div>
                                                 <div className={cx('main')}>
                                                     <div className={cx('banner')} >
                                                         Đăng nhập với mă QR
@@ -136,94 +267,9 @@ function FormLogin() {
                                     <Row className="px-5 pb-4 " >
                                         <Col size={12} sm={12}>
                                             <div className="login-body">
-                                                <div ref={errRef} className={cx(`${errClass}`)}>{errMsg}</div>
-                                                <Form noValidate validated={validated} onSubmit={handleSubmit} >
-                                                    <Row className="mb-4">
-                                                        <Form.Group as={Col} sm='12' controlId="user" >
 
-                                                            <Form.Control
-                                                                ref={userRef}
-                                                                required
-                                                                type="text"
-                                                                placeholder="Email/Phone Number/User Name"
-                                                                autoComplete="of"
-                                                                value={user_name}
-                                                                onChange={handleUserInput}
-
-
-                                                            />
-                                                            <div className="padding-invalid"></div>
-                                                            <Form.Control.Feedback type="invalid">Vui lòng điền vào mục này</Form.Control.Feedback>
-                                                        </Form.Group>
-                                                    </Row >
-
-                                                    <Row className="mb-4">
-                                                        <Form.Group as={Col} sm={12} controlId="password" >
-
-                                                            <Form.Control
-                                                                required
-                                                                type="password"
-                                                                placeholder="Password"
-                                                                suggested="current-password"
-                                                                value={password}
-                                                                onChange={handlePwdInput}
-
-                                                            />
-                                                            <div className="padding-invalid"></div>
-                                                            <Form.Control.Feedback type="invalid">Vui lòng điền vào mục này</Form.Control.Feedback>
-                                                        </Form.Group>
-
-                                                    </Row>
-                                                    <Row className="mb-4">
-                                                        <Form.Group >
-                                                            <Form.Check
-
-                                                                label="Trust This Device"
-                                                                checked={persist}
-                                                                onChange={handlePerSitInput}
-                                                            />
-                                                        </Form.Group>
-
-                                                    </Row>
-                                                    <Row>
-                                                        <Col size={12} sm={12}>
-                                                            <Button type="submit" className="login-button">ĐĂNG NHẬP</Button>
-                                                        </Col>
-                                                    </Row>
-
-
-                                                </Form>
+                                                {content}
                                                 <Container fluid>
-                                                    <Row>
-                                                        <Col
-                                                            className="d-flex justify-content-between align-items-center"
-                                                            size={12}
-                                                            sm={12}
-                                                            style={
-                                                                {
-                                                                    paddingLeft: 0,
-                                                                    paddingRight: 0
-                                                                }
-                                                            }
-
-                                                        >
-                                                            <Link
-                                                                className="fs-5 text-primary  my-3"
-                                                                href=""
-                                                            >
-                                                                Quên mật khẩu
-                                                            </Link>
-
-                                                            <Link
-                                                                className="fs-5 text-primary  my-3"
-                                                                href=""
-                                                            >
-                                                                Đăng nhập với SMS
-                                                            </Link>
-
-                                                        </Col>
-
-                                                    </Row>
                                                     <Row>
                                                         <Col
                                                             className="d-flex justify-content-center align-items-center"
@@ -258,13 +304,15 @@ function FormLogin() {
                                                         >
                                                             <Button className="m-1  flex-grow-1 d-flex justify-content-center align-items-center" as="a"
                                                                 variant="outline-secondary"
-
+                                                                onClick={() => handlerSociolLogin(facebook)}
                                                             >
                                                                 <div className={cx('fa-icon')}></div>
                                                                 <div className="fs-4 d-inline ms-2 ">Facebook</div>
                                                             </Button>
                                                             <Button className="m-1 btn-outline-secondary flex-grow-1 d-flex justify-content-center align-items-center" as="a"
                                                                 variant="outline-secondary"
+                                                                onClick={() => handlerSociolLogin(google)}
+
                                                             >
                                                                 <div className={cx('google-icon')}></div>
                                                                 <div className="fs-4 d-inline ms-2">Google</div>
@@ -312,14 +360,6 @@ function FormLogin() {
                     </Col>
                 </Row>
             </Container >
-        )
-    }
-
-
-    return (
-
-        <div className={cx('wrapper')}>
-            {content}
         </div>
 
 

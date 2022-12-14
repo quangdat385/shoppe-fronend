@@ -21,7 +21,7 @@ import Prefetch from '~/features/auth/Prefetch';
 
 function App() {
 
-
+  console.log(Object.values(config.ROLES))
 
 
 
@@ -84,7 +84,7 @@ function App() {
 
 
             <Prefetch>
-              {route.allowedRoles ?
+              {route.allowedRoles === "user" ?
                 <RequireAuth allowedRoles={[...Object.values(config.ROLES)]}>
                   <Layout>
 

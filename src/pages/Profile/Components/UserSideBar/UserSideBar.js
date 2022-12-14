@@ -17,6 +17,8 @@ import MyAccount from "~/assets/images/myaccout.png";
 import SaleBirth from "~/assets/images/sieusale12.12.png";
 import OderList from "~/assets/images/donmua.png";
 import NotifiImg from "~/assets/images/thongbao.png"
+import Voucher from "~/assets/images/voucher.png"
+import Coin from "~/assets/images/coin.png"
 
 import styles from './UserSideBar.module.scss';
 import useAuth from '~/hooks/useAuth';
@@ -28,7 +30,7 @@ const UserSideBar = () => {
     const navigate = useNavigate();
     const { user_name } = useAuth();
     const [show, setShow] = useState(JSON.parse(localStorage.getItem("user_page")) || 3);
-    console.log(show);
+
 
     const toggleShowC = () => {
         setShow(3)
@@ -58,6 +60,18 @@ const UserSideBar = () => {
         setShow(5)
         localStorage.setItem("user_page", 5)
         navigate("notify/order/updates")
+
+    }
+    const toggleShowF = () => {
+        setShow(6)
+        localStorage.setItem("user_page", 6)
+        navigate("my/voucher")
+
+    }
+    const toggleShowG = () => {
+        setShow(7)
+        localStorage.setItem("user_page", 7)
+        navigate("my/coin")
 
     }
 
@@ -115,10 +129,10 @@ const UserSideBar = () => {
                             variant="light"
                             to="user/gift"
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
-                            <Col sm={3} className="align-items-start">
+                            <Col xs={2} sm={3} className="align-items-start">
                                 <img className="rounded-circle bg-white" height="20px" width="20px" src={Gift} alt="Gift" />
                             </Col>
-                            <Col sm={9} className="align-items-start">
+                            <Col xs={10} sm={9} className="align-items-start">
                                 <span className="lh-1 text-start d-block ">
                                     Ưu Đãi Dành Riêng Cho Bạn
                                 </span>
@@ -128,7 +142,7 @@ const UserSideBar = () => {
 
                             <NavLink aria-current={(isActive) => (isActive === true) ? "page" : null} className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/voucher">Kho Voucher Của Bạn</NavLink>
                             <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/offer">Tặng Đến 400K</NavLink>
-                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/saleoff">Gì Cững Rẻ</NavLink>
+                            <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/saleoff">Gì Cũng Rẻ</NavLink>
                             <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/code">Mã Giảm Giá</NavLink>
                             <NavLink className={(nav) => cx('my-link', { active: nav.isActive })} to="/user/gift/freeship">Miễn Phí Vận Chuyển</NavLink>
 
@@ -144,10 +158,10 @@ const UserSideBar = () => {
                             onClick={toggleShowB}
 
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
-                            <Col sm={3} className="align-items-start">
+                            <Col xs={2} sm={3} className="align-items-start">
                                 <img height="20px" width="20px" src={SaleBirth} alt="Gift" />
                             </Col>
-                            <Col sm={9} className="align-items-start">
+                            <Col xs={10} sm={9} className="align-items-start">
                                 <span className="lh-1 text-start d-block ">
                                     12.12 Siêu Sale Sinh Nhật
                                 </span>
@@ -162,10 +176,10 @@ const UserSideBar = () => {
                             onClick={toggleShowC}
 
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
-                            <Col sm={3} className="align-items-start">
+                            <Col xs={2} sm={3} className="align-items-start">
                                 <img height="20px" width="20px" src={MyAccount} alt="Gift" />
                             </Col>
-                            <Col sm={9} className="align-items-start">
+                            <Col xs={10} sm={9} className="align-items-start">
                                 <span className="lh-1 text-start d-block ">
                                     Tài Khoản Của Tôi
                                 </span>
@@ -191,10 +205,10 @@ const UserSideBar = () => {
                             onClick={toggleShowD}
 
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
-                            <Col sm={3} className="align-items-start">
+                            <Col xs={2} sm={3} className="align-items-start">
                                 <img height="20px" width="20px" src={OderList} alt="Gift" />
                             </Col>
-                            <Col sm={9} className="align-items-start">
+                            <Col xs={10} sm={9} className="align-items-start">
                                 <span className="lh-1 text-start d-block ">
                                     Đơn Mua
                                 </span>
@@ -209,10 +223,10 @@ const UserSideBar = () => {
                             onClick={toggleShowE}
 
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
-                            <Col sm={3} className="align-items-start">
+                            <Col xs={2} sm={3} className="align-items-start">
                                 <img height="20px" width="20px" src={NotifiImg} alt="Gift" />
                             </Col>
-                            <Col sm={9} className="align-items-start">
+                            <Col xs={10} sm={9} className="align-items-start">
                                 <span className="lh-1 text-start d-block ">
                                     Thông Báo
                                 </span>
@@ -232,34 +246,43 @@ const UserSideBar = () => {
 
                         </Container>
                     </Col>
+                    <Col md={12}>
+                        <Button
 
 
-                </Row>
-                <Row>
+                            variant="light"
+                            onClick={toggleShowF}
+
+                            className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
+                            <Col xs={2} sm={3} className="align-items-start">
+                                <img height="20px" width="20px" src={Voucher} alt="Gift" />
+                            </Col>
+                            <Col xs={10} sm={9} className="align-items-start">
+                                <span className="lh-1 text-start d-block ">
+                                    Kho Voucher
+                                </span>
+                            </Col>
+                        </Button>
+                    </Col>
+                    <Col md={12}>
+                        <Button
 
 
+                            variant="light"
+                            onClick={toggleShowG}
 
-                </Row>
+                            className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
+                            <Col xs={2} sm={3} className="align-items-start">
+                                <img height="20px" width="20px" src={Coin} alt="Gift" />
+                            </Col>
+                            <Col xs={10} sm={9} className="align-items-start">
+                                <span className="lh-1 text-start d-block ">
+                                    Shopee Xu
+                                </span>
+                            </Col>
+                        </Button>
+                    </Col>
 
-
-
-
-                <Row>
-
-
-
-
-                </Row>
-                <Row>
-
-                </Row>
-                <Row>
-
-                </Row>
-                <Row>
-
-                </Row>
-                <Row>
 
                 </Row>
 

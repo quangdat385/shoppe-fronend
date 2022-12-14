@@ -1,7 +1,7 @@
 
 import className from 'classnames/bind';
 import Container from 'react-bootstrap/Container';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import avatar from "~/assets/images/20210214_092405.jpg";
 import storage from '~/until/storage';
@@ -11,25 +11,35 @@ import Navbar from 'react-bootstrap/Navbar';
 
 
 
-
+import useAuth from "~/hooks/useAuth"
 import { useSendLogoutMutation } from "~/features/auth/authApiSlice";
 import { useEffect } from "react";
+
+
+
+import {
+    signOut
+
+} from 'firebase/auth';
+import { auth } from '~/until/fire'
 
 
 
 
 import styles from './Header.module.scss';
 
+const USER_ROUTE_REGEX = /^\/user\/profile(\/)?$/;
 
 
-const cx = className.bind(styles)
+const cx = className.bind(styles);
 
 
 
 function Header() {
 
-
+    const { user_name } = useAuth()
     const navigate = useNavigate();
+    const { pathname } = useLocation()
 
     const [sendLogout, {
 
@@ -43,12 +53,14 @@ function Header() {
         if (isSuccess) {
             localStorage.removeItem('persist')
             storage.delete('user')
+            signOut(auth)
             navigate('/')
 
         }
     }, [isSuccess, navigate])
 
-    const user = storage.get('user');
+    const user = USER_ROUTE_REGEX.test(pathname) ? user_name : storage.get('user');
+
 
 
 
@@ -115,7 +127,7 @@ function Header() {
                             </Link>
                             {user ? (
                                 <>
-                                    <Link className={cx("user", "nav_link")}>
+                                    <Link className={cx("user", "nav_link")} to="/user/profile">
 
                                         <div className={cx("avatar")}>
                                             <div className={cx("avatar-placeholder")}>
