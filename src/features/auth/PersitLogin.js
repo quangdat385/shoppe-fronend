@@ -37,8 +37,8 @@ function PersitLogin({ children }) {
         if (effectRan.current === true || process.env.NODE_ENV !== 'development') {
             const verifyRefreshToken = async () => {
                 try {
-                    const result = await refresh()
-                    console.log(result);
+                    await refresh()
+
 
                     setTrueSucceed(true)
                 } catch (err) {

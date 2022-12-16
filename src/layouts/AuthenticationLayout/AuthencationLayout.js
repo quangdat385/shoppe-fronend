@@ -10,10 +10,10 @@ import Footer from '~/layouts/components/Footer'
 
 const cx = className.bind(styles)
 
-function AuthencationLayout({ children }) {
+function AuthencationLayout({ children, status }) {
     return (
         <div className={cx('wrapper')}>
-            <AuthHeader />
+            <AuthHeader status={status} />
             {children}
             <Footer />
 

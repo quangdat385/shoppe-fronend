@@ -12,6 +12,7 @@ const RequireAuth = ({ allowedRoles, children }) => {
 
 
 
+
     const content = (
         roles.some(role => allowedRoles.includes(role))
             ? children

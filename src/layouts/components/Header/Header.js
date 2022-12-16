@@ -18,10 +18,13 @@ import { useEffect } from "react";
 
 
 import {
-    signOut
+    signOut,
 
 } from 'firebase/auth';
 import { auth } from '~/until/fire'
+
+
+
 
 
 
@@ -39,7 +42,8 @@ function Header() {
 
     const { user_name } = useAuth()
     const navigate = useNavigate();
-    const { pathname } = useLocation()
+    const { pathname } = useLocation();
+
 
     const [sendLogout, {
 
@@ -60,6 +64,7 @@ function Header() {
     }, [isSuccess, navigate])
 
     const user = USER_ROUTE_REGEX.test(pathname) ? user_name : storage.get('user');
+
 
 
 

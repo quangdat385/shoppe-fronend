@@ -21,7 +21,7 @@ import Prefetch from '~/features/auth/Prefetch';
 
 function App() {
 
-  console.log(Object.values(config.ROLES))
+
 
 
 
@@ -61,7 +61,7 @@ function App() {
           const Page = route.component;
 
           return <Route key={route.component} path={`${route.path}/*`} element={
-            <Layout>
+            <Layout status={route.status}>
               <Page />
             </Layout>
           } />;

@@ -16,7 +16,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: { ...credentials },
             })
         }),
-        resister: builder.mutation({
+        register: builder.mutation({
             query: (phone_number) => ({
                 url: "/auth/register",
                 method: "POST",
@@ -106,7 +106,7 @@ export const {
     useSendLogoutMutation,
     useRefreshMutation,
     useLoginAndUpdateMutation,
-    useResisterMutation,
+    useRegisterMutation,
     useConfirmPasswordMutation,
     useForgotPasswordMutation
 } = authApiSlice 

@@ -3,11 +3,11 @@ import className from 'classnames/bind';
 import { useState, useRef, useEffect, memo } from 'react';
 import { useDispatch } from 'react-redux';
 
-import styles from './FormLogin.module.scss';
+import styles from './FormSignUp.module.scss';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
+
 
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ import {
     RecaptchaVerifier,
     signInWithPhoneNumber,
 } from 'firebase/auth';
-import AuthModal from '../AuthModal';
+
 import { useRegisterMutation, useLoginAndUpdateMutation } from '~/features/auth/authApiSlice';
 import { setCredentials } from '~/features/auth/authSlice';
 
@@ -34,13 +34,13 @@ import usePersist from '~/hooks/usePersists';
 
 
 const cx = className.bind(styles)
-function FormLoginByPhone({ setStatus }) {
+function FormLoginByPhone() {
     const [phone_number, setPhoneNumber] = useState('');
-    console.log(phone_number);
+
     const [password, setPassword] = useState('');
     const [confirm_password, setConfirmPassword] = useState('')
 
-    const [modalShow, setModalShow] = useState(false);
+
 
     const [register,] = useRegisterMutation()
     const [loginAndUpdate,] = useLoginAndUpdateMutation()
@@ -98,21 +98,28 @@ function FormLoginByPhone({ setStatus }) {
     }
 
     const handleSignin = async (event) => {
+        event.preventDefault();
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
+            return;
 
         }
         setValidated(true);
-        event.preventDefault();
 
-        if (!validated) {
-            return;
+        const phone = phone_number.length > 11 ? phone_number : `(+84)${phone_number.slice(1)}`;
+
+
+        try {
+            const result = await signin(phone);
+            setResult(result);
+            setStep("VERIFY_OTP");
+        } catch (err) {
+            setErrMsg(err)
         }
 
-        setModalShow(true);
-        setValidated(false);
+
+
+
 
 
 
@@ -210,16 +217,7 @@ function FormLoginByPhone({ setStatus }) {
     const errClass = errMsg ? "errmsg" : "d-none";
 
     return (<>
-        <AuthModal
-            show={modalShow}
-            onHide={() => setModalShow(false)}
-            signin={signin}
-            captcha="true"
-            setResult={setResult}
-            phone={phone_number}
-            setStep={setStep}
 
-        />
         <div ref={errRef} className={cx(`${errClass}`)}>{errMsg}</div>
         {
             step === "INPUT_PHONE_NUMBER" &&
@@ -243,7 +241,11 @@ function FormLoginByPhone({ setStatus }) {
                         <Form.Control.Feedback type="invalid">Vui lòng điền vào mục này</Form.Control.Feedback>
                     </Form.Group>
                 </Row >
-
+                <Row>
+                    <Col size={12} sm={12}>
+                        <div id="recaptcha-container" className="captcha"></div>
+                    </Col>
+                </Row>
 
                 <Row className="mb-4">
                     <Form.Group >
@@ -390,38 +392,7 @@ function FormLoginByPhone({ setStatus }) {
 
             </Form>
         }
-        <Container fluid >
-            <Row>
-                <Col
-                    className="d-flex justify-content-between align-items-center"
-                    size={12}
-                    sm={12}
-                    style={
-                        {
-                            paddingLeft: 0,
-                            paddingRight: 0
-                        }
-                    }
 
-                >
-                    <Button
-                        className="fs-5 text-primary  my-3 bg-transparent border-0"
-                        onClick={() => setStatus("forgot password")}
-                    >
-                        Quên mật khẩu
-                    </Button>
-
-                    <Button
-                        className="fs-5 text-primary  my-3 bg-transparent border-0"
-                        onClick={() => setStatus("login")}
-
-                    >
-                        Đăng nhập với mật khẩu
-                    </Button>
-
-                </Col>
-            </Row>
-        </Container>
 
 
     </>);

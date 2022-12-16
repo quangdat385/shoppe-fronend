@@ -22,8 +22,8 @@ const publicRouters = [
 ]
 
 const authRoutes = [
-    { path: config.routes.login, component: Login, layout: AuthenticationLayout, },
-    { path: config.routes.signup, component: SignUp, layout: AuthenticationLayout, },
+    { path: config.routes.login, component: Login, layout: AuthenticationLayout, status: "login" },
+    { path: config.routes.signup, component: SignUp, layout: AuthenticationLayout, status: "signup" },
 ]
 //privateRouters
 const privateRouters = [
