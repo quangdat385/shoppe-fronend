@@ -22,6 +22,7 @@ import Coin from "~/assets/images/coin.png"
 
 import styles from './UserSideBar.module.scss';
 import useAuth from '~/hooks/useAuth';
+import Avatar from '~/components/Avatar'
 
 
 const cx = className.bind(styles);
@@ -32,50 +33,13 @@ const UserSideBar = () => {
     const [show, setShow] = useState(JSON.parse(localStorage.getItem("user_page")) || 3);
 
 
-    const toggleShowC = () => {
-        setShow(3)
-        localStorage.setItem("user_page", 3)
-        navigate("/user/profile")
+
+    const toggleShow = (showNumber, url) => {
+        setShow(showNumber)
+        localStorage.setItem("user_page", showNumber)
+        navigate(url)
 
     }
-    const toggleShowB = () => {
-        setShow(2)
-        localStorage.setItem("user_page", 2)
-        navigate("shop/birthday")
-
-    }
-    const toggleShowA = () => {
-        setShow(1)
-        localStorage.setItem("user_page", 1)
-        navigate("gift/voucher")
-
-    }
-    const toggleShowD = () => {
-        setShow(4)
-        localStorage.setItem("user_page", 4)
-        navigate("order/list")
-
-    }
-    const toggleShowE = () => {
-        setShow(5)
-        localStorage.setItem("user_page", 5)
-        navigate("notify/order/updates")
-
-    }
-    const toggleShowF = () => {
-        setShow(6)
-        localStorage.setItem("user_page", 6)
-        navigate("my/voucher")
-
-    }
-    const toggleShowG = () => {
-        setShow(7)
-        localStorage.setItem("user_page", 7)
-        navigate("my/coin")
-
-    }
-
-
 
 
 
@@ -85,21 +49,13 @@ const UserSideBar = () => {
             <Container fluid>
                 <Row className="py-4">
                     <Col xs={4} sm={4}>
-                        <div className={cx("avatar")}>
-                            <div className={cx("avatar-placeholder")}>
-                                <svg enableBackground="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" className={cx("avatar-icon")}>
-                                    <g>
-                                        <circle cx="7.5" cy="4.5" fill="none" r="3.8" strokeMiterlimit="10"></circle>
-                                        <path d="m1.5 14.2c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" strokeLinecap="round" strokeMiterlimit="10">
-                                        </path>
-                                    </g>
-                                </svg>
-                                {user_name ? <img className={cx("avatar-img")} src={avatar} alt="avatar" /> : null}
+                        <Avatar
+                            className={cx('avatar')}
+                            src={avatar}
+                            user={user_name ? user_name : null}
 
+                        />
 
-
-                            </div>
-                        </div>
                     </Col>
                     <Col xs={8} sm={8}>
                         <div className={cx("ps-2 d-flex flex-column justify-content-center align-items-start fs-4")}>
@@ -123,9 +79,9 @@ const UserSideBar = () => {
 
 
                         <Button
-                            onClick={toggleShowA}
+                            onClick={() => toggleShow(1, "gift/voucher")}
 
-                            data-toggle="1"
+
                             variant="light"
                             to="user/gift"
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
@@ -155,7 +111,7 @@ const UserSideBar = () => {
 
 
                             variant="light"
-                            onClick={toggleShowB}
+                            onClick={() => toggleShow(2, "shop/birthday")}
 
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
                             <Col xs={2} sm={3} className="align-items-start">
@@ -173,7 +129,7 @@ const UserSideBar = () => {
 
 
                             variant="light"
-                            onClick={toggleShowC}
+                            onClick={() => toggleShow(3, "/user/profile")}
 
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
                             <Col xs={2} sm={3} className="align-items-start">
@@ -202,7 +158,7 @@ const UserSideBar = () => {
 
 
                             variant="light"
-                            onClick={toggleShowD}
+                            onClick={() => toggleShow(4, "order/list")}
 
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
                             <Col xs={2} sm={3} className="align-items-start">
@@ -220,7 +176,7 @@ const UserSideBar = () => {
 
 
                             variant="light"
-                            onClick={toggleShowE}
+                            onClick={() => toggleShow(5, "notify/order/updates")}
 
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
                             <Col xs={2} sm={3} className="align-items-start">
@@ -251,7 +207,7 @@ const UserSideBar = () => {
 
 
                             variant="light"
-                            onClick={toggleShowF}
+                            onClick={() => toggleShow(6, "my/voucher")}
 
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
                             <Col xs={2} sm={3} className="align-items-start">
@@ -269,7 +225,7 @@ const UserSideBar = () => {
 
 
                             variant="light"
-                            onClick={toggleShowG}
+                            onClick={() => toggleShow(7, "my/coin")}
 
                             className={cx("mb-4 fs-4 fw-normal mb-2 w-100 bg-transparent border-0 d-flex justify-content-start align-items-center")}>
                             <Col xs={2} sm={3} className="align-items-start">

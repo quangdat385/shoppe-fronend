@@ -17,10 +17,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
             })
         }),
         register: builder.mutation({
-            query: (phone_number) => ({
+            query: (client) => ({
                 url: "/auth/register",
                 method: "POST",
-                body: { ...phone_number },
+                body: { ...client },
             })
         }),
         loginAndUpdate: builder.mutation({

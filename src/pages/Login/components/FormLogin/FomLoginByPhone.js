@@ -36,7 +36,7 @@ import usePersist from '~/hooks/usePersists';
 const cx = className.bind(styles)
 function FormLoginByPhone({ setStatus }) {
     const [phone_number, setPhoneNumber] = useState('');
-    console.log(phone_number);
+
     const [password, setPassword] = useState('');
     const [confirm_password, setConfirmPassword] = useState('')
 
@@ -138,7 +138,7 @@ function FormLoginByPhone({ setStatus }) {
 
 
             const data = await register({ phone_number: phone_number }).unwrap();
-            console.log(data);
+
 
             const { next_step, accessToken } = data;
             if (next_step === "views") {

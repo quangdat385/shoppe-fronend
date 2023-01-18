@@ -141,7 +141,7 @@ function FormLogin() {
             return;
         }
         setValidated(true);
-        event.preventDefault();
+
         try {
 
             await loginAndUpdate({ id: id, method: method, password: password });

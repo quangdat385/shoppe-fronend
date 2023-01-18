@@ -20,12 +20,12 @@ import usePersist from '~/hooks/usePersists';
 import FormLoginByPhone from './FomLoginByPhone';
 import ForfotPassword from './ForgotPassword';
 
-import {
+// import {
 
-    onAuthStateChanged,
-} from 'firebase/auth';
+//     onAuthStateChanged,
+// } from 'firebase/auth';
 
-import { auth, } from '~/until/fire';
+// import { auth, } from '~/until/fire';
 
 
 
@@ -65,17 +65,17 @@ function FormLogin() {
     const dispatch = useDispatch();
 
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
-            console.log("Auth", currentuser?.email,);
-            console.log(currentuser?.photoURL)
+    // useEffect(() => {
+    //     const unsubscribe = onAuthStateChanged(auth, (currentuser) => {
+    //         console.log("Auth", currentuser?.email,);
+    //         console.log(currentuser?.photoURL)
 
-        });
+    //     });
 
-        return () => {
-            unsubscribe();
-        };
-    }, []);
+    //     return () => {
+    //         unsubscribe();
+    //     };
+    // }, []);
 
 
     const [login, { isLoading }] = useLoginMutation();
@@ -104,10 +104,11 @@ function FormLogin() {
     const handlePerSitInput = () => setPersist(pre => !pre);
 
     const handleSubmit = async (event) => {
+        event.preventDefault();
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
+
+            return;
         }
 
         setValidated(true);

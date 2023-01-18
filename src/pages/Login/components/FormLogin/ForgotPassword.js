@@ -42,15 +42,15 @@ const cx = className.bind(styles)
 function FormLoginByPhone({ setStatus }) {
     const PHONE_REGEX = /^[+?\s\- 0-9]{10,15}$/
     const [phone_number, setPhoneNumber] = useState('');
-    console.log(phone_number);
+
     const [validPhone, setValidPhone] = useState(false);
-    console.log(validPhone)
+
     const [password, setPassword] = useState('');
     const [confirm_password, setConfirmPassword] = useState('')
 
     const [modalShow, setModalShow] = useState(false);
     const [user, setUser] = useState('');
-    console.log(user);
+
 
 
 
@@ -65,7 +65,7 @@ function FormLoginByPhone({ setStatus }) {
 
 
     const [result, setResult] = useState('');
-    console.log(result);
+
 
 
     const [validated, setValidated] = useState(false);
@@ -152,14 +152,15 @@ function FormLoginByPhone({ setStatus }) {
 
     }
     const verifyOtp = async (event) => {
+        event.preventDefault();
         const form = event.currentTarget;
         if (form.checkValidity() === false) {
-            event.preventDefault();
+            return;
 
         }
 
         setValidated(true);
-        event.preventDefault();
+
 
 
 
@@ -236,7 +237,7 @@ function FormLoginByPhone({ setStatus }) {
 
     }
 
-    console.log(errMsg)
+
 
     const errClass = errMsg ? "errmsg" : "d-none";
 
