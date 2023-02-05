@@ -1,0 +1,212 @@
+.slider {
+    background-color: white;
+    margin: 40px 0 20px;
+
+    .page-info-wrapper {
+        height: 154px;
+
+    }
+}
+
+.page-info {
+    height: 100%;
+
+    .brand {
+        height: 134px;
+        position: relative;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .brand-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-image: url("../../../../assets/images/pagegrand.jfif");
+        background-position: 50%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        filter: blur(2px);
+        margin: -4px;
+
+    }
+
+    .brand-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .brand-content {
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        right: 14px;
+        bottom: 10px;
+    }
+
+    .logo-wrapper {
+        width: 100%;
+        height: 80px;
+        display: flex;
+    }
+
+    .logo-link {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+        text-decoration: none;
+        user-select: none;
+    }
+
+    .favorite-box {
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #ee4d2d;
+        border-radius: 2px;
+
+
+    }
+
+    .favorite {
+        position: relative;
+        display: inline-block;
+        color: #fff;
+        font-size: 1.1rem;
+        width: 55px;
+        font-weight: 500;
+        text-align: center;
+        margin: auto;
+    }
+
+    .logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        position: relative;
+        border: 4px solid hsla(0, 0%, 100%, .4);
+    }
+
+    .img-wrapper {
+        height: 72px;
+        width: 72px;
+        border-radius: 50%;
+        position: relative;
+        background-color: #59503b;
+        overflow: hidden;
+    }
+
+    .img {
+        display: block;
+        height: 72px;
+        width: 72px;
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }
+
+    .logo-title {
+        margin: 10px 0 0 10px;
+        color: #fff;
+    }
+
+    .title-header {
+        font-size: 2rem;
+        line-height: 2.4rem;
+        max-height: 48px;
+        margin: 0 0 5px 0;
+    }
+
+    .title-body {
+        font-size: 1.2rem;
+        color: hsla(0, 0%, 100%, .7);
+        margin: 5px 0 6px;
+        vertical-align: middle;
+    }
+
+    .like-link {
+        display: block;
+        width: 100%;
+        margin-top: 12px;
+        color: var(--white-color);
+    }
+
+    .like-button {
+        width: 100%;
+        padding: 4px 12px;
+        font-size: 1.2rem;
+        background-color: rgba(0, 0, 0, 0.2);
+        border: 1px solid white;
+        color: white;
+        border-radius: 3px;
+
+        p {
+            display: inline-block;
+            padding-right: 4px;
+
+        }
+    }
+
+    .detail {
+        padding: 0 0 0 30px;
+
+
+    }
+
+    @media (max-width: 991.98px) {
+        .detail {
+            padding: 0;
+
+            .detail-item {
+                padding: 0;
+            }
+        }
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        height: 43px;
+        font-size: 1.4rem;
+        color: rgba(0, 0, 0, 0.8);
+
+        .detail-icon-wrapper {
+            stroke: #000;
+        }
+
+        .detail-value {
+            margin-left: 3px;
+            color: rgb(238, 77, 45);
+
+
+            svg {
+                margin-left: 3px;
+                color: rgb(0, 0, 0, 0.54);
+                stroke: #000;
+            }
+        }
+    }
+
+    .detail-icon {
+        height: 15px;
+        width: 15px;
+    }
+
+    .detail-text {
+        margin-left: 8px;
+
+    }
+
+
+}

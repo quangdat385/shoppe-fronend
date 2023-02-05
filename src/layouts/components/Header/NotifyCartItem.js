@@ -10,7 +10,7 @@ const cx = className.bind(styles)
 
 function NotifyCartItem({ src, alt }, ref) {
     return (
-        <div fluid className={cx("notify-cart-item")}>
+        <div className={cx("notify-cart-item")}>
             <img ref={ref} src={src} alt={alt} className={cx("notify-cart-img")} />
             <div className={cx("notify-cart-item-info")}>
                 <div className={cx("notify-cart-item__header")}>

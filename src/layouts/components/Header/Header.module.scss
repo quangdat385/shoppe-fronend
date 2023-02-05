@@ -148,6 +148,42 @@ $textColor: rgba(0, 0, 0, 0.8);
         .shopping-cart-link .number-of-orders {
             top: 0;
         }
+
+        .nav_qr .my-toast {
+            left: 50%;
+            top: 75%;
+        }
+
+        .notify .my-notify {
+            top: 75%;
+            left: 12%;
+            right: inherit;
+            transform-origin: top left;
+        }
+
+        .my-notify .my-notify-content {
+            &::before {
+                display: none;
+            }
+        }
+
+        .user {
+            .user-menu-wrapper {
+                transform-origin: top left;
+                top: 100%;
+                right: inherit;
+                left: 20%;
+
+            }
+
+            .user-menu-list {
+                &::before {
+                    display: none;
+                }
+            }
+        }
+
+
     }
 
 
@@ -388,6 +424,7 @@ $textColor: rgba(0, 0, 0, 0.8);
         position: relative;
         background-color: $whiteColor;
         border-radius: 3px;
+        box-shadow: 0 1px 4px rgb(0 0 0 / 10%);
 
         &::before {
             position: absolute;
@@ -611,7 +648,7 @@ $textColor: rgba(0, 0, 0, 0.8);
         background-color: $whiteColor;
         width: 160px;
         border-radius: 3px;
-        box-shadow: 0 1px 2px #e3e3e3;
+        box-shadow: 1px 1px 1px 2px #e3e3e3;
         transform-origin: top right;
         animation: headerNotiGrowth ease-in 0.25;
         will-change: opacity, transfom;
@@ -951,7 +988,52 @@ $textColor: rgba(0, 0, 0, 0.8);
         }
     }
 
+}
+
+@media (max-width: 991px) {
+    .search-btn-wrapper {
+        .search-btn {
+            width: 50%;
+        }
+    }
+}
+
+@media (max-width:767px) {
+    .header .search-btn-wrapper {
+        .search-btn {
+            width: 70%;
+        }
+    }
+}
 
 
+
+
+.emty-order {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 50px 0;
+    z-index: 1;
+
+    .emty-order-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .emty-order-img {
+            display: block;
+            height: 100px;
+            width: 100px;
+        }
+    }
+
+    .emty-order-text {
+        margin-top: 8px;
+        color: $textColor;
+    }
 
 }

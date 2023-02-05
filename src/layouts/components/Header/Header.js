@@ -25,8 +25,9 @@ import {
     signOut,
 
 } from 'firebase/auth';
-import { auth } from '~/until/fire'
-import NotifyCart from "./NotifyCart"
+import { auth } from '~/until/fire';
+import NotifyCart from "./NotifyCart";
+import EmtyOrder from "./EmtyOrder";
 
 import Qrcode from '~/assets/images/QR code.png';
 import GoogleLay from '~/assets/images/Goole play.png';
@@ -38,6 +39,7 @@ import ApppGalleri from '~/assets/images/Appgalleri.png';
 
 
 import styles from './Header.module.scss';
+
 
 
 const USER_ROUTE_REGEX = /^\/user\/profile(\/)?$/;
@@ -52,6 +54,7 @@ function Header() {
     const { user_name } = useAuth()
     const navigate = useNavigate();
     const { pathname } = useLocation();
+
 
 
     const [sendLogout, {
@@ -74,7 +77,7 @@ function Header() {
 
     const user = USER_ROUTE_REGEX.test(pathname) ? user_name : storage.get('user');
 
-
+    console.log(user)
 
 
 
@@ -90,7 +93,7 @@ function Header() {
         <div className={cx('header')}>
             <Navbar collapseOnSelect expand="lg" className={cx('header_navbar')}>
                 <Container>
-                    <Navbar.Brand >
+                    <Navbar.Brand as={Link} to="/">
 
                         <svg viewBox="0 0 192 65" className={cx('logo-1')}>
                             <g fillRule="evenodd">
@@ -269,7 +272,7 @@ function Header() {
 
                         xl={2}
                         lg={2}
-                        className={cx('logo-wrapper', "d-sm-none d-lg-block")}
+                        className={cx('logo-wrapper', "d-none d-lg-block")}
                     >
                         <Link className={cx('to-home')} to="/">
                             <svg viewBox="0 0 192 65" className={cx('logo')}>
@@ -279,17 +282,17 @@ function Header() {
                             </svg>
                         </Link>
                     </Col>
-                    <Col xl={8} lg={9} sm={10} >
+                    <Col xl={8} lg={9} sm={10} xs={9} >
                         <Container fluid className={cx("p-0")}>
                             <Row className={cx("flex-column")}>
                                 <Col>
                                     <div className={cx("search-input-wrapper")}>
-                                        <Col className={cx("search-input")} lg={11} md={11} sm={11}>
+                                        <Col className={cx("search-input")} lg={11} md={10} sm={10} xs={10}>
                                             <input type="text" className={cx("search-input-btn")} placeholder="Nhập để tìm kiếm sản phẩm" />
 
                                         </Col>
 
-                                        <Col className={cx("search-btn-wrapper")} lg={1} md={1} sm={1}>
+                                        <Col className={cx("search-btn-wrapper")} lg={1} md={2} sm={2} xs={2}>
                                             <Button className={cx("search-btn")}>
                                                 <svg height="16" viewBox="0 0 19 19" width="16" className={cx("search-icon")}>
                                                     <g fillRule="evenodd" stroke="none" strokeWidth="1">
@@ -311,7 +314,7 @@ function Header() {
                                     </div>
                                 </Col>
                                 <Col>
-                                    <div className={cx("search-suggest-list", "d-sm-none d-lg-block")}>
+                                    <div className={cx("search-suggest-list", "d-none d-lg-block")}>
                                         <Link className={cx("search-suggest-item")}>
                                             Dép
                                         </Link>
@@ -343,7 +346,7 @@ function Header() {
                         </Container>
                     </Col>
 
-                    <Col xl={2} lg={1} sm={2}  >
+                    <Col xl={2} lg={1} sm={2} xs={3} >
                         <div className={cx("shopping-cart")}>
 
                             <Link className={cx("shopping-cart-link")}>
@@ -358,7 +361,9 @@ function Header() {
                                 </svg>
                                 <div className={cx("number-of-orders")}>3</div>
                                 <div className={cx("notify-cart-wrapper")}>
-                                    <NotifyCart />
+                                    {
+                                        user ? <NotifyCart /> : <EmtyOrder />
+                                    }
                                 </div>
 
                             </Link>
