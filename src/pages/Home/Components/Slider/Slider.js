@@ -183,6 +183,7 @@ function Slider({ ...props }, ref) {
                                 </Col>
 
 
+
                             </Row>
                         </Container>
 

@@ -47,7 +47,6 @@
 
 
 
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -267,4 +266,125 @@ form {
 
 .nav .nav-link.nav-dark {
     font-weight: 300;
+}
+
+
+//vourcher 
+
+
+.slide-vourcher {
+    .carousel-control-next {
+        right: -70px;
+        width: 5%;
+
+        .carousel-control-next-icon {
+            display: none;
+        }
+
+
+
+    }
+
+    .carousel-control-prev {
+        left: -70px;
+        width: 5%;
+
+        .carousel-control-prev-icon {
+            display: none;
+        }
+
+
+    }
+
+    .carousel-indicators {
+        display: none;
+    }
+}
+
+//about-shop 
+.about-shop {
+    .carousel-control-next {
+
+        width: 5%;
+
+        .carousel-control-next-icon {
+            display: none;
+        }
+
+
+    }
+
+    .carousel-control-prev {
+
+        width: 5%;
+
+        .carousel-control-prev-icon {
+            display: none;
+        }
+
+
+
+    }
+
+    .carousel-indicators {
+        display: none;
+    }
+}
+
+
+.butn {
+    min-width: 136px;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 3px;
+    outline: none;
+    font-size: 1.6rem;
+    border: none;
+    user-select: none;
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+
+
+    &.butn-normal {
+        border-radius: 1px;
+        line-height: 34px;
+        margin-left: 10px;
+        padding: 0 10px;
+        min-width: 90px;
+        text-align: center;
+    }
+
+    &.butn-primary {
+        background-color: #ee4d2d;
+        color: #fff;
+    }
+
+    &.butn-lg {
+        border-radius: 1px;
+        line-height: 34px;
+        margin-left: 10px;
+        padding: 0;
+        min-width: 170px;
+        position: relative;
+    }
+
+    &.butn-white {
+        background-color: #fff;
+        color: rgba(0, 0, 0, 0.8);
+    }
+
+    @media (max-width: 767px) {
+        &.butn-normal {
+            margin-left: 2px;
+            padding: 8px 0;
+
+        }
+
+        &.butn-lg {
+            min-width: 130px;
+            margin-left: 2px;
+            padding: 8px 0;
+        }
+    }
 }

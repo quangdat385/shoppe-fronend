@@ -648,7 +648,7 @@ $textColor: rgba(0, 0, 0, 0.8);
         background-color: $whiteColor;
         width: 160px;
         border-radius: 3px;
-        box-shadow: 1px 1px 1px 2px #e3e3e3;
+        box-shadow: 0 1px 2px #e3e3e3;
         transform-origin: top right;
         animation: headerNotiGrowth ease-in 0.25;
         will-change: opacity, transfom;

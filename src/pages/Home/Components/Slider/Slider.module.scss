@@ -3,8 +3,13 @@
     margin: 40px 0 20px;
 
     .page-info-wrapper {
-        height: 154px;
+        padding-bottom: 24px;
+    }
 
+    @media (max-width: 991.98px) {
+        .page-info-wrapper {
+            padding-bottom: 0;
+        }
     }
 }
 
@@ -172,6 +177,8 @@
                 padding: 0;
             }
         }
+
+
     }
 
     .detail-item {

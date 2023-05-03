@@ -1,0 +1,278 @@
+.wrapper {
+    display: block;
+    background-color: #f5f5f5;
+
+    .menu-bar {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        height: 51px;
+        position: relative;
+
+        .menu-wrapper {
+            position: absolute;
+            top: 51px;
+            left: 0;
+            display: none;
+            background-color: #fff;
+            border-radius: 2px;
+            box-shadow: 0 1px 2px #e3e3e3;
+            width: 200px;
+            padding: 0 8px;
+            z-index: 9999;
+
+            .menu-item {
+                padding: 8px 10px 8px 0;
+                text-align: left;
+                font-size: 1.4rem;
+                color: rgba(0, 0, 0, 0.8);
+                cursor: pointer;
+
+
+                span {
+                    margin-left: 8px;
+                }
+
+                &.active {
+                    color: #ee3d34;
+
+                    .icon {
+                        color: #ee3d34 !important;
+                    }
+
+                }
+            }
+
+        }
+
+        p {
+            margin-left: 8px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+    }
+
+    .short-bar {
+        padding: 13px 20px;
+        background-color: rgba(0, 0, 0, 0.03);
+
+        .soft-by {
+            flex: 0 0 auto;
+            max-width: 120px;
+            display: flex;
+            align-items: center;
+
+        }
+
+        .bar-soft {
+            font-size: 1.4rem;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+
+            .price {
+                display: inline-flex;
+                justify-content: space-between;
+                align-items: center;
+                position: relative;
+
+                span {
+                    margin-left: 10px;
+                }
+
+                .soft-price {
+                    position: absolute;
+                    top: calc(100% + 2px);
+                    right: 0;
+                    background-color: #fff;
+                    width: 170px;
+                    padding: 8px;
+                    box-shadow: 0 1px 2px #e3e3e3;
+                    border-radius: 2px;
+                    display: none;
+
+                    .soft-price-item {
+                        padding: 0 8px
+                    }
+
+                    .soft-price-item:hover {
+                        color: rgb(238, 77, 45);
+                    }
+                }
+
+                &:hover {
+                    .soft-price {
+                        display: block;
+                        z-index: 9999;
+                    }
+                }
+
+                &::after {
+                    content: "";
+                    display: block;
+                    width: 100%;
+                    height: 8px;
+                    position: absolute;
+                    top: 100%;
+                    right: 0;
+                }
+
+            }
+        }
+
+        .controller {
+            flex: 0 0 auto;
+            max-width: 120px;
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+
+            .controller-state {
+                line-height: 34px;
+                letter-spacing: -2.5px;
+                min-width: 36px;
+                font-size: 1.4rem;
+
+                & span:nth-child(1) {
+                    color: #cc3d2e;
+                }
+            }
+
+            .btn-controller {
+                border-radius: 2px;
+                line-height: 34px;
+                margin-left: 2px;
+                padding: 0 15px;
+                min-width: 36px;
+                text-align: center;
+                color: #ccc;
+                font-size: 1.2rem;
+                cursor: default;
+                border: none;
+                outline: none;
+
+                &.active {
+                    background-color: #fff;
+                }
+            }
+
+        }
+    }
+
+    .list-menu {
+        display: block;
+
+        .menu-item {
+            padding: 8px 10px 8px 0;
+            text-align: left;
+            font-size: 1.4rem;
+            color: rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+
+
+            span {
+                margin-left: 8px;
+            }
+
+            &.active {
+                color: #ee3d34;
+
+                .icon {
+                    color: #ee3d34 !important;
+                }
+
+            }
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .config {
+            width: 20%;
+        }
+    }
+
+    @media (max-width:991px) {
+        .short-bar {
+            .soft-by {
+                display: none;
+            }
+
+            .bar-soft {
+                justify-content: flex-start;
+            }
+
+
+        }
+
+        .list-menu {
+            display: none;
+        }
+
+        .menu-bar {
+            &:hover {
+                .menu-wrapper {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 767px) {
+        .short-bar {
+            padding: 13px 0;
+
+            .bar-soft {
+                padding: 0;
+
+            }
+
+
+        }
+    }
+
+
+    .product-paginal {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 40px;
+
+        .pre-paginal,
+        .next-paginal {
+            border: none;
+            outline: none;
+            border-radius: 2px;
+            display: block;
+            line-height: 34px;
+            margin-left: 2px;
+            padding: 0 15px;
+            min-width: 36px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.8);
+            font-size: 1.6rem;
+            margin: 0 15px;
+            background-color: #f5f5f5;
+        }
+
+        .number-paginal {
+            border: none;
+            outline: none;
+            border-radius: 2px;
+            display: block;
+            line-height: 34px;
+            margin-left: 2px;
+            padding: 0 15px;
+            min-width: 36px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.8);
+            font-size: 1.6rem;
+            margin: 0 15px;
+            background-color: #f5f5f5;
+
+            &.active {
+                background-color: rgb(238, 77, 45) !important;
+            }
+        }
+    }
+
+}

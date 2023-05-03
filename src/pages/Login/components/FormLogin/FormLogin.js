@@ -95,7 +95,7 @@ function FormLogin() {
 
     const handleUserInput = e => {
         const user = e.target.value;
-        setUserName(user.trim())
+        setUserName(user)
     };
     const handlePwdInput = e => {
         const pass = e.target.value;

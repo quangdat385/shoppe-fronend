@@ -7,11 +7,11 @@ import RequireAuth from '~/features/auth/RequireAuth';
 import config from '~/config';
 import React from 'react';
 
-// import { useEffect } from 'react';
+import { useEffect } from 'react';
 
 
-// import { store } from '~/app/store';
-// import { usersApiSlice } from '~/features/users/usersApiSlice';
+import { store } from '~/app/store';
+import { productsApiSlice } from '~/features/products/productsApiSlice';
 
 import Prefetch from '~/features/auth/Prefetch';
 
@@ -27,11 +27,10 @@ function App() {
 
 
 
-  // useEffect(() => {
-  //   // store.dispatch(productsApiSlice.util.prefetch('getProducs', 'productsList', { force: true }))
-  //   // store.dispatch(usersApiSlice.util.prefetch('getUsers', 'usersList', { force: true }))
-  //   //   store.dispatch(cartApiSlice.util.prefetch('getCart', 'cartList', { force: true }))
-  // }, [])
+  useEffect(() => {
+    store.dispatch(productsApiSlice.util.prefetch('getProducts', 'productsList', { force: true }))
+
+  }, [])
 
 
   return (

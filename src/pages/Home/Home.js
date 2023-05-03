@@ -7,6 +7,8 @@ import styles from "./Home.module.scss";
 
 
 import Slider from './Components/Slider';
+import MainContent from './Components/MainContent.js';
+
 
 const cx = className.bind(styles);
 
@@ -16,6 +18,8 @@ function Home() {
 
     return <div className={cx("wrapper")}>
         <Slider />
+        <MainContent />
+
     </div>
 }
 
