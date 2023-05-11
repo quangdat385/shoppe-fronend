@@ -1,24 +1,67 @@
 import className from 'classnames/bind';
 import styles from "./Home.module.scss";
 
-// import Container from "react-bootstrap/Container";
-// import Row from "react-bootstrap/Row";
-// import Col from "react-bootstrap/Col";
+
+import { Routes, Route, useLocation, useNavigate, } from "react-router-dom";
+import { useEffect, } from 'react';
 
 
-import Slider from './Components/Slider';
+
 import MainContent from './Components/MainContent.js';
+
+import ProductCatalogue from './Components/ProductCatalogue/ProductCatalogue';
+import NotFound from './Components/ProductCatalogue/SubPages/NotFound';
+
+import useHomePage from '~/hooks/useHomPage';
+
 
 
 const cx = className.bind(styles);
 
+
+
 function Home() {
 
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+
+    // eslint-disable-next-line
+    const [homePage] = useHomePage()
+
+
+
+
+
+    useEffect(() => {
+        let order, price, collect;
+        homePage.popular === "Phổ Biến" ? order = "" : homePage.popular === "Bán Chạy" ? order = "new" : order = "sale";
+        homePage.price === "none" ? price = "" : homePage.price === "increase" ? price = "asc" : price = "desc";
+        homePage.menu === 0 ? collect = "" : collect = homePage.menu;
+
+        if (pathname === "/home") {
+            navigate(`/home/0/sort?${order}${price}${collect}`);
+        }
+
+
+        // eslint-disable-next-line
+    }, [pathname, navigate]);
 
 
     return <div className={cx("wrapper")}>
-        <Slider />
-        <MainContent />
+
+        <Routes >
+            <Route path="/" element={<MainContent />}>
+                <Route path=":page/*" element={<ProductCatalogue />}>
+
+                </Route>
+
+            </Route>
+
+            <Route path="/*" element={<NotFound />}></Route>
+
+
+        </Routes>
+
 
     </div>
 }

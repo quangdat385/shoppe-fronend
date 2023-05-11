@@ -14,7 +14,7 @@ import { store } from '~/app/store';
 import { productsApiSlice } from '~/features/products/productsApiSlice';
 
 import Prefetch from '~/features/auth/Prefetch';
-
+import { useNavigate, useLocation } from "react-router-dom";
 
 
 
@@ -22,6 +22,15 @@ import Prefetch from '~/features/auth/Prefetch';
 function App() {
 
 
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (pathname === '/') {
+      navigate("/home")
+    }
+    // eslint-disable-next-line
+  }, [navigate]);
 
 
 

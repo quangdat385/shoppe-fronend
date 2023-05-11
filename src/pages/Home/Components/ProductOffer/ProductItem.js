@@ -1,5 +1,7 @@
 import className from "classnames/bind";
-import { Container } from "react-bootstrap";
+
+import { memo } from "react"
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStarHalfStroke, faStar } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,6 +16,7 @@ const cx = className.bind(styles);
 
 
 function ProductItem({ product }, ref) {
+    console.log("day la item")
     return (<Link className={cx("product-item")}>
         <div className={cx("product-img-wrapper")}>
             <img ref={ref} className={cx("img")}
@@ -104,4 +107,4 @@ function ProductItem({ product }, ref) {
     </Link>);
 }
 
-export default forwardRef(ProductItem);
+export default memo(forwardRef(ProductItem));

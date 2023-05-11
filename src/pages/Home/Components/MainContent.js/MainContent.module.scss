@@ -1,3 +1,10 @@
+.wrapper {
+    background-color: #f5f5f5;
+    border-bottom: 4px solid rgb(238, 77, 45);
+    padding-bottom: 50px;
+}
+
+
 .sub-menu {
     // display: flex;
     // margin-top: 20px;
@@ -177,7 +184,7 @@
 
         .menu-list-item {
             display: block;
-            color: var(--black-color);
+            color: #000;
             padding: 16px 20px;
             text-align: left;
             text-decoration: none;

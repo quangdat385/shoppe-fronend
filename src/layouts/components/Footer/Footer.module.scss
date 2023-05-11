@@ -1,3 +1,364 @@
 .wrapper {
     display: block;
+
+    .footer-white {
+        height: 60px;
+        margin: 60px auto 0;
+        border-bottom: 1px solid #ccc;
+        background-color: #fff;
+    }
+
+    .about-shop {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .help-title {
+        margin: 40px 0 20px;
+        font-size: 1.2rem;
+        color: rgba(0, 0, 0, 0.54);
+        font-weight: 420;
+    }
+
+    .help-list {
+        list-style: none;
+        font-size: 1.2rem;
+        margin-bottom: 25px;
+    }
+
+    .help-item {
+        margin-bottom: 12px;
+
+        .help-link {
+            text-decoration: none;
+            color: rgba(0, 0, 0, 0.54);
+            font-weight: 400;
+        }
+
+    }
+
+    .payment {
+        width: 190px;
+        margin: 0 auto 17px 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .payment-item {
+        height: 29px;
+        width: 55px;
+        margin: 0 8px 8px 0;
+        list-style: none;
+        display: flex;
+        align-items: center;
+
+        .item {
+            width: 55px;
+            margin: 0;
+            background-image: url(../../../assets/images/thuonghieu.png);
+        }
+
+        .item-img1 {
+            height: 18px;
+            background-position: 75.86666666666666% 6.289308176100629%;
+        }
+
+        .item-img2 {
+            height: 29px;
+            background-position: 51.2% 68.91891891891892%;
+        }
+
+        .item-img3 {
+            height: 23px;
+            background-position: 51.2% 38.311688311688314%;
+        }
+
+        .item-img4 {
+            height: 24px;
+            background-position: 1.3245033112582782% 6.451612903225806%
+        }
+
+        .item-img5 {
+            height: 29px;
+            background-position: 80.39735099337749% 32.432432432432435%;
+        }
+
+        .item-img6 {
+            height: 29px;
+            background-position: 80.93333333333334% 65.54054054054055%;
+        }
+
+        .item-img7 {
+            background-size: 805% 931.578947368421%;
+            height: 12px;
+            background-position: 63.687943262411345% 6.329113924050633%;
+        }
+    }
+
+    .transport {
+        margin: 0 0 20px;
+        font-size: 1.2rem;
+        color: rgba(0, 0, 0, 0.54);
+        font-weight: 420;
+    }
+
+    .transport-list {
+        width: 190px;
+        margin: 0 auto 17px 0;
+        display: flex;
+        flex-wrap: wrap;
+
+        .transport-item {
+            height: 29px;
+            width: 55px;
+            margin: 0 8px 8px 0;
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .bg-item {
+            width: 55px;
+            margin: 0;
+            background-image: url(../../../assets/images/thuonghieu.png);
+        }
+
+        .img-item1 {
+            height: 12px;
+            background-size: 725.2252252252252% 983.3333333333334%;
+            background-position: 16.42651296829971% 82.38993710691824%;
+
+        }
+
+        .img-item2 {
+            height: 18px;
+            background-position: 34.266666666666666% 51.57232704402516%;
+
+        }
+
+        .img-item3 {
+            height: 29px;
+            background-position: 24.266666666666666% 55.4054054054054%;
+
+        }
+
+        .img-item4 {
+            height: 40px;
+            background-size: 628.90625% 138.28125%;
+            background-position: 67.79911373707533% 100%;
+        }
+
+        .img-item5 {
+            height: 27px;
+            background-size: 1463.6363636363637% 655.5555555555555%;
+            background-position: 100% 6.666666666666667%;
+        }
+
+        .img-item6 {
+            height: 16px;
+            background-size: 1463.6363636363637% 1106.25%;
+            background-position: 85.86666666666666% 6.211180124223603%;
+        }
+
+        .img-item7 {
+            height: 17px;
+            background-size: 600.7462686567164% 610.3448275862069%;
+            background-position: 45.45454545454545% 6.756756756756757%;
+        }
+
+        .img-item8 {
+            height: 20px;
+            background-size: 1341.6666666666667% 680.7692307692307%;
+            background-position: 34.49664429530201% 79.47019867549669%;
+        }
+
+        .img-item9 {
+            height: 22px;
+            background-size: 865.5913978494624% 340.38461538461536%;
+            background-position: 26.96629213483146% 8%;
+        }
+
+        .img-item10 {
+            width: 29px;
+            height: 29px;
+            background-size: 1118.0555555555557% 245.83333333333334%;
+            background-position: 12.278308321964529% 9.523809523809524%;
+            margin: 0 auto;
+        }
+    }
+
+    .social-shop {
+        list-style: none;
+        font-size: 1.2rem;
+        font-weight: 400;
+    }
+
+    .social-item {
+        margin-bottom: 12px;
+        display: flex;
+    }
+
+    .social-link {
+        text-decoration: none;
+        color: rgba(0, 0, 0, 0.54);
+        display: flex;
+
+        .social-icon-1 {
+            background-size: 2515.625% 553.125%;
+            background-position: 1.2936610608020698% 35.86206896551724%
+        }
+
+        .social-icon-2 {
+            background-size: 2515.625% 553.125%;
+            background-position: 42.949547218628716% 40.689655172413794%;
+        }
+
+        .social-icon-3 {
+            background-size: 2515.625% 553.125%;
+            background-position: 8.020698576972833% 70.34482758620689%;
+        }
+    }
+
+    .social-icon {
+        height: 16px;
+        width: 16px;
+        margin: 0 10px 4px 0;
+        background-image: url(../../../assets/images/thuonghieu.png);
+
+
+    }
+
+    .shop-application {
+        display: flex;
+        text-decoration: none;
+    }
+
+    .qr-img {
+        height: 86px;
+        width: 86px;
+        box-shadow: 0 1px 2px #e3e3e3;
+        border-radius: 2px;
+        margin-right: 15px;
+        display: block;
+    }
+
+    .shop-app {
+        display: flex;
+        height: 84px;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    .app-img {
+        width: 80px;
+        height: 20px;
+
+    }
+
+
+    .license-country {
+        display: flex;
+        justify-content: space-between;
+        padding: 40px 0;
+        color: rgba(0, 0, 0, 0.54);
+        font-size: 1.4rem;
+    }
+
+    .license {
+        flex: 0 0 26.83333%;
+        max-width: 26.83333%;
+    }
+
+    .country {
+        flex: 0 0 73.16667%;
+        max-width: 73.16667%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .country-title {
+        text-align: right;
+        width: 164px;
+    }
+
+    .country-link {
+        display: block;
+        text-decoration: none;
+        color: rgba(0, 0, 0, 0.54);
+        padding: 0 5px;
+        border-right: 0.5px solid rgba(0, 0, 0, .2);
+    }
+
+
+    .security-title {
+        padding: 0 25px;
+        margin-left: -4px;
+        margin-right: -4px;
+    }
+
+    .security-item {
+
+        display: flex;
+        justify-content: center;
+        margin: 0 auto 40px;
+    }
+
+    .security-link {
+        color: rgba(0, 0, 0, 0.54);
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+
+    .security-register {
+        display: flex;
+        justify-content: center;
+        margin: 0 auto;
+
+    }
+
+    .register-link {
+        display: block;
+        margin: 0 20px;
+
+    }
+
+    .register-img1 {
+        width: 120px;
+        height: 48px;
+        background-image: url(../../../assets/images/thuonghieu.png);
+        background-size: 670.8333333333334% 393.3333333333333%;
+        background-position: 99.56204379562044% 86.36363636363636%;
+    }
+
+
+    .register-img2 {
+        width: 48px;
+        height: 48px;
+        background-image: url(../../../assets/images/thuonghieu.png);
+        background-size: 1677.0833333333333% 368.75%;
+        background-position: 90.09247027741083% 35.65891472868217%;
+    }
+
+    .shopee-company {
+        text-align: center;
+        font-size: 1.2rem;
+        margin: 8px 0 25px;
+        color: rgba(0, 0, 0, 0.65);
+    }
+
+    .shopee-address {
+        max-width: 100%;
+        display: block;
+        text-align: center;
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        color: rgba(0, 0, 0, 0.65);
+    }
+
+    @media (min-width: 992px) {
+        .config {
+            width: 20%;
+        }
+    }
 }

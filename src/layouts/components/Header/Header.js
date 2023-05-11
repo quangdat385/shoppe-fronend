@@ -77,7 +77,7 @@ function Header() {
 
     const user = USER_ROUTE_REGEX.test(pathname) ? user_name : storage.get('user');
 
-    console.log(user)
+
 
 
 
@@ -93,7 +93,7 @@ function Header() {
         <div className={cx('header')}>
             <Navbar collapseOnSelect expand="lg" className={cx('header_navbar')}>
                 <Container>
-                    <Navbar.Brand as={Link} to="/">
+                    <Navbar.Brand as={Link} to="/home">
 
                         <svg viewBox="0 0 192 65" className={cx('logo-1')}>
                             <g fillRule="evenodd">

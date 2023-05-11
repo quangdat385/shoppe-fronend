@@ -7,9 +7,11 @@ import styles from './DefaultLayout.module.scss';
 import Header from '~/layouts/components/Header';
 import Footer from '~/layouts/components/Footer';
 
-const cx = className.bind(styles)
+const cx = className.bind(styles);
+
 
 function DefaultLayout({ children }) {
+
 
 
 
