@@ -1,7 +1,7 @@
 import ClassName from "classnames/bind";
 import { Container, Row, Col } from "react-bootstrap";
 
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo, Fragment } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList, faAngleDown, faCaretRight, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
@@ -30,7 +30,8 @@ function ProductCatalogue() {
     } = useGetProductsQuery('productsList', {
         pollingInterval: 60000,
         refetchOnFocus: true,
-        refetchOnMountOrArgChange: true
+        refetchOnMountOrArgChange: true,
+
     })
 
     if (isSuccess) {
@@ -43,11 +44,18 @@ function ProductCatalogue() {
     const { page } = useParams();
     const [homePage, setHomePage] = useHomePage()
     const navigate = useNavigate()
-    const pages = [0, 1, 2, 3, 4];
+    const pages = [0, 1, 2, 3, 4, 5, 6, 7, 8];
     const listSort = ["Phổ Biến", "Bán Chạy", "Mới Nhất"];
     const [isNotFound, setIsNotFound] = useState(false);
     const [menu, setMenu] = useState(homePage.menu);
-
+    const [paginal, setPaginal] = useState(JSON.parse(localStorage.getItem('set_paginal')) || [
+        0, 1, 2, 3, 4, pages.length - 1
+    ]);
+    const [btnPoint, seBtnPoint] = useState({
+        first: false,
+        last: true
+    });
+    console.log(btnPoint);
     const [smallOrder, setSmallOrder] = useState(Number(page));
     const [sort, setSort] = useState({
         popular: homePage.popular,
@@ -55,12 +63,72 @@ function ProductCatalogue() {
     })
 
 
-    let menuPages;
 
-
-    if (pages.length === 5) {
-        menuPages = [0, 1, 2, 3, 4]
+    let content;
+    if (pages.length <= 5) {
+        content = pages.map(item => {
+            let isActive = item.toString() === page;
+            let numberOfPages = item + 1;
+            return <button
+                key={numberOfPages + "paginal"}
+                className={cx("number-paginal", isActive ? "active" : "")}
+                onClick={() => { setSmallOrder(item) }}
+            >{numberOfPages}
+            </button>
+        })
     }
+    else {
+        content = pages.map(item => {
+            let isActive = item.toString() === page;
+            let numberOfPages = item + 1;
+
+            let isVisible = paginal.includes(item);
+            if (item === 1) {
+                return <Fragment key={"first"} >
+                    <button
+                        key={numberOfPages + "first"}
+                        className={cx("number-paginal", isActive ? "active" : "", isVisible ? "" : "hidden")}
+                        onClick={() => { setSmallOrder(item) }}
+                    >{numberOfPages}
+                    </button>
+                    <button
+                        key={numberOfPages + "..."}
+                        className={cx("number-paginal", btnPoint.first ? "" : "hidden")}
+
+                    >{"..."}
+                    </button>
+                </Fragment>
+            } else if (item === pages.length - 2) {
+                return <Fragment key={"last"}>
+
+                    <button
+                        key={numberOfPages + "..."}
+                        className={cx("number-paginal", btnPoint.last ? "" : "hidden")}
+
+                    >{"..."}
+                    </button>
+                    <button
+                        key={numberOfPages + "last"}
+                        className={cx("number-paginal", isActive ? "active" : "", isVisible ? "" : "hidden")}
+                        onClick={() => { setSmallOrder(item) }}
+                    >{numberOfPages}
+                    </button>
+                </Fragment>
+            } else {
+                return <button
+                    key={numberOfPages}
+                    className={cx("number-paginal", isActive ? "active" : "", isVisible ? "" : "hidden")}
+                    onClick={() => { setSmallOrder(item) }}
+                >{numberOfPages}
+                </button>
+            }
+        })
+
+
+    };
+
+
+
 
 
 
@@ -79,7 +147,7 @@ function ProductCatalogue() {
         byOrder: null,
         byPrice: null,
         byCollection: null
-    })
+    });
 
 
     useEffect(() => {
@@ -98,7 +166,7 @@ function ProductCatalogue() {
             return { ...sortBy, byOrder: order, byPrice: price, byCollection: collect }
         })
         // eslint-disable-next-line
-    }, [sort, menu])
+    }, [sort, menu]);
 
 
 
@@ -109,20 +177,49 @@ function ProductCatalogue() {
         } else {
             setIsNotFound(false);
         }
+
+        let pa = Number(page)
+        let numpage = pages.length - 1
+        let orderpages = [0, 1, pa, pa + 1, numpage];
+        let pageArray = Array.from(new Set(orderpages))
+        localStorage.setItem("set_paginal", JSON.stringify(pageArray));
+        setPaginal(pageArray);
+
+        if (pa >= 3 && pa < numpage - 2) {
+            seBtnPoint(pre => {
+                return {
+                    ...pre, first: true
+                }
+            })
+        } else if (pa >= numpage - 1) {
+            seBtnPoint(pre => {
+                return {
+                    ...pre, first: true, last: false
+                }
+            })
+        } else {
+            seBtnPoint(pre => {
+                return {
+                    ...pre, first: false, last: true
+                }
+            })
+        }
+
+
         // eslint-disable-next-line
-    }, [page])
+    }, [page]);
 
 
     useEffect(() => {
-        let byOrder = sortBy.byOrder === null ? "" : `byOrder=${sortBy.byOrder}`
-        let byPrice = sortBy.byPrice === null ? "" : `&byPrice=${sortBy.byPrice}`
-        let byCollection = sortBy.byCollection === null ? "" : `&byCollection=${sortBy.byCollection}`
+        let byOrder = sortBy.byOrder === null ? "" : `byOrder=${sortBy.byOrder}`;
+        let byPrice = sortBy.byPrice === null ? "" : `&byPrice=${sortBy.byPrice}`;
+        let byCollection = sortBy.byCollection === null ? "" : `&byCollection=${sortBy.byCollection}`;
 
 
 
-        navigate(`/home/${smallOrder}/sort?${byOrder}${byPrice}${byCollection}`)
+        navigate(`/home/${smallOrder}/sort?${byOrder}${byPrice}${byCollection}`);
         // eslint-disable-next-line
-    }, [smallOrder, sortBy])
+    }, [smallOrder, sortBy]);
 
 
 
@@ -179,7 +276,7 @@ function ProductCatalogue() {
                     <div className={cx("menu-bar")}>
                         <FontAwesomeIcon icon={faList} style={{ color: "#000000", }} />
                         <p> Danh Mục </p>
-                        <MenuProduct />
+                        <MenuProduct menu={menu} setMenu={setMenu} />
                     </div>
                 </Col>
                 <Col lg={10} md={12} >
@@ -192,7 +289,7 @@ function ProductCatalogue() {
                                 {
                                     listSort.map(item => {
                                         return <div
-                                            key={item}
+                                            key={item + "sort"}
                                             onClick={() => {
                                                 setSort((sort) => {
                                                     return { ...sort, popular: item }
@@ -290,8 +387,7 @@ function ProductCatalogue() {
                 <Col lg={10} md={12} >
                     {isNotFound ? <NotFound /> : pages.map(item => {
                         let isTrue = item.toString() === page
-                        console.log(typeof item)
-                        console.log(isTrue)
+
 
                         return <SubPages
                             key={"subpage" + item}
@@ -303,35 +399,23 @@ function ProductCatalogue() {
                 </Col>
             </Row>
             <Row >
-                <div className={cx("product-paginal")}>
-                    <button className={cx("pre-paginal")} onClick={handlerPreBtn}>
-                        <FontAwesomeIcon icon={faAngleLeft} />
-                    </button>
-                    {menuPages.map(item => {
-                        let isActive = item.toString() === page;
-                        console.log(isActive);
-                        let numberOfPages = item + 1
-                        return <button
-                            key={numberOfPages}
-                            className={cx("number-paginal", isActive ? "active" : "")}
-                            onClick={() => { setSmallOrder(item) }}
-                        >{numberOfPages}
+
+                <Col lg={{ span: 10, offset: 2 }} md={12} className={cx("product-paginal-wrapper")}>
+                    <div className={cx("product-paginal")}>
+                        <button className={cx("pre-paginal")} onClick={handlerPreBtn}>
+                            <FontAwesomeIcon icon={faAngleLeft} />
                         </button>
+                        <div className={cx("content")}>
 
-                    })}
+                            {content}
+                        </div>
 
-                    {/* <button className={cx("number-paginal", "active")}>1</button>
-                    <button className={cx("number-paginal")}>2</button>
-                    <button className={cx("number-paginal")}>3</button>
-                    <button className={cx("number-paginal")}>4</button>
-                    <button className={cx("number-paginal")}>5</button>
-                    <button className={cx("number-paginal")}>...</button>
-                    <button className={cx("number-paginal")}>14</button> */}
+                        <button className={cx("next-paginal")} onClick={handlerNextBtn}>
+                            <FontAwesomeIcon icon={faAngleRight} />
+                        </button>
+                    </div>
+                </Col>
 
-                    <button className={cx("next-paginal")} onClick={handlerNextBtn}>
-                        <FontAwesomeIcon icon={faAngleRight} />
-                    </button>
-                </div>
             </Row>
         </Container>
     </div>);

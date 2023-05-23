@@ -16,9 +16,7 @@ import ProductItem from "../../ProductOffer/ProductItem";
 const cx = ClassName.bind(styles);
 
 function SubPages({ page, isTrue }) {
-    const a = useParams()
-    console.log(a)
-    console.log(page)
+
 
 
 

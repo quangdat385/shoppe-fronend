@@ -6,7 +6,7 @@ import ShopVourChers from "../ShopVourChers/ShopVourChers";
 import ProductOffer from "../ProductOffer/ProductOffer";
 import Banner from "../Banner/Banner";
 import AboutShop from "../AboutShop/AboutShop";
-
+import images from "~/assets/images";
 
 
 
@@ -30,8 +30,20 @@ function MainContent() {
         <ShopVourChers />
         <ProductOffer title="GỢI Ý DÀNH CHO BẠN " more className="primary" />
         <AboutShop />
-        <Banner src="https://down-aka-vn.img.susercontent.com/vn-11134210-23030-lt429zb654nv4f.webp"
+        <Banner src={images.aboutShop}
         />
+        <ProductOffer title="HOT" />
+        <Banner src={images.saleoff} />
+        <Banner src={images.newproduct} />
+        <ProductOffer title="HÀNG MỚI VỀ" />
+        <Banner src={images.croptop} />
+        <ProductOffer title="ÁO CROPTOP BA LỖ" />
+        <Banner src={images.vaydamnu} />
+        <ProductOffer title="VÁY ĐẦM NỮ" />
+        <Banner src={images.setbo} />
+        <ProductOffer title="SET BỘ" />
+        <Banner src={images.dolot} />
+        <ProductOffer title="ÁO BRA_QUẦN LÓT NỮ" />
         <Outlet />
     </>)
 

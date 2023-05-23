@@ -16,13 +16,13 @@ const cx = className.bind(styles);
 
 
 function ProductItem({ product }, ref) {
-    console.log("day la item")
+
     return (<Link className={cx("product-item")}>
         <div className={cx("product-img-wrapper")}>
             <img ref={ref} className={cx("img")}
                 src="https://down-vn.img.susercontent.com/file/aa4ec13c4b912e89fe337eb284d7a4ae_tn" alt="" />
             <img ref={ref} className={cx("img-bg")}
-                src="https://down-vn.img.susercontent.com/file/vn-50009109-1818c62778a54bb3131b6c9ba5061ca9" alt="" />
+                src="http://localhost:3500/img/imgProduct552a45acbf3766ae6c8e066a3f0d0305_tn" alt="" />
             <p className={cx("favourite-logo")}>Yêu Thích</p>
             <div className={cx("stick-sale")}>
                 <p > 50%</p>

@@ -37,24 +37,6 @@ function ProductList() {
             <Col xl={2} lg={3} md={4} sm={6} xs={12}>
                 <ProductItem />
             </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
         </Row>
 
 

@@ -228,6 +228,12 @@
 
 
         }
+
+        .product-paginal {
+            justify-content: space-between !important;
+        }
+
+
     }
 
 
@@ -236,6 +242,16 @@
         justify-content: center;
         width: 100%;
         margin-top: 40px;
+        align-items: center;
+
+
+
+        .content {
+            display: flex;
+            justify-content: center;
+            width: 50%;
+
+        }
 
         .pre-paginal,
         .next-paginal {
@@ -268,9 +284,14 @@
             font-size: 1.6rem;
             margin: 0 15px;
             background-color: #f5f5f5;
+            animation: linear ease-in 0.3s;
 
             &.active {
                 background-color: rgb(238, 77, 45) !important;
+            }
+
+            &.hidden {
+                display: none;
             }
         }
     }

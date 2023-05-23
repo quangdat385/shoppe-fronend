@@ -84,6 +84,14 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [{ type: 'Product', id: arg.id }]
         }),
+        postImgProduct: builder.mutation({
+            query: initialproduct => ({
+                url: "product/post/img/url",
+                method: 'POST',
+                body: { ...initialproduct }
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: 'Product', id: arg.id }]
+        }),
 
         //soft delete product method delete product/:id/soft/delete
         softDelete: builder.mutation({
@@ -128,4 +136,5 @@ export const {
     useSoftDeleteMutation,
     useDeleteproductMutation,
     useRestoreproductMutation,
+    usePostImgProductMutation
 } = productsApiSlice

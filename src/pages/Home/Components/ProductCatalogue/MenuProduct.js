@@ -1,4 +1,5 @@
 import ClassName from "classnames/bind";
+import axios from "axios";
 
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,52 +11,45 @@ import styles from "./ProductCatalogue.module.scss";
 
 const cx = ClassName.bind(styles);
 
-function MenuProduct() {
+function MenuProduct({ menu, setMenu }) {
+    const listMenu = [
+        "Sản Phẩm", "Sale Shock", "Hàng Mới Về", "Áo Croptop Ba Lỗ", "Áo Croptop Có Tay",
+        "Váy Hot Trend", "Sét Đồ Hot Trend", "Quần Đùi - Short",
+        "Quần Dài Hot Trend", "Áo Bra-Quần Lót Nữ", "Quần"
+    ];
+
+
+
+    // fetch({
+    //     method: "GET",
+    //     url: "https://down-vn.img.susercontent.com/file/vn-11134201-23030-8wv50s62ocove0_tn"
+    // }).then(res => res.blob()).then(file => {
+    //     console.log(file);
+    //     let tempUrl = URL.createObjectURL(file);
+    //     file.name = tempUrl
+    //     console.log(file)
+    //     const form = new FormData();
+    //     form.append("files", file)
+    //     console.log(form)
+
+
+    // }).catch(() => {
+    //     console.log("Failed to create")
+
+    // });
+
+
+
     return (<div className={cx("menu-wrapper")}>
-        <div className={cx("menu-item", "active")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span> Sản Phẩm</span>
-        </div>
-        <div className={cx("menu-item")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span> Sale Shock</span>
-        </div>
-        <div className={cx("menu-item")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span> Hàng mới về</span>
-        </div>
-        <div className={cx("menu-item")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span> Áo Croptop Ba Lỗ</span>
-        </div>
-        <div className={cx("menu-item")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span> Áo Croptop Có Tay</span>
-        </div>
-        <div className={cx("menu-item")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span> Váy Hot Trend</span>
-        </div>
-        <div className={cx("menu-item")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span> Sét Đồ Hot Trend</span>
-        </div>
-        <div className={cx("menu-item")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span> Quần Đùi - Short</span>
-        </div>
-        <div className={cx("menu-item")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span> Quần Dài Hot Trend</span>
-        </div>
-        <div className={cx("menu-item")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span>Áo Bra - Quần Lót Nữ</span>
-        </div>
-        <div className={cx("menu-item")}>
-            <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
-            <span>Quần</span>
-        </div>
+        {
+            listMenu.map((item, index) => {
+                return <div key={item + "menu"} className={cx("menu-item", index === menu ? "active" : "")}
+                    onClick={() => setMenu(index)}>
+                    <FontAwesomeIcon key={item + "menu-icon"} className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
+                    <span key={item + "text"}>{item}</span>
+                </div>
+            })
+        }
     </div>
     );
 }
