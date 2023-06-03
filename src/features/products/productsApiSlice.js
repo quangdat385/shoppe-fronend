@@ -86,7 +86,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         }),
         postImgProduct: builder.mutation({
             query: initialproduct => ({
-                url: "product/post/img/url",
+                url: "product/post/img/url",                    
                 method: 'POST',
                 body: { ...initialproduct }
             }),

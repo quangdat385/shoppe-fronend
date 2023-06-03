@@ -22,7 +22,7 @@ function ProductItem({ product }, ref) {
             <img ref={ref} className={cx("img")}
                 src="https://down-vn.img.susercontent.com/file/aa4ec13c4b912e89fe337eb284d7a4ae_tn" alt="" />
             <img ref={ref} className={cx("img-bg")}
-                src="http://localhost:3500/img/imgProduct552a45acbf3766ae6c8e066a3f0d0305_tn" alt="" />
+                src="http://localhost:3500/img/imgProductvn-50009109-3228badda6d4cf1bd3d62704f01b779e" alt="" />
             <p className={cx("favourite-logo")}>Yêu Thích</p>
             <div className={cx("stick-sale")}>
                 <p > 50%</p>
