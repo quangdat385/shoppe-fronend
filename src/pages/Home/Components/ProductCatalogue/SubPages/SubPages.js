@@ -1,69 +1,59 @@
 import ClassName from "classnames/bind";
 import { Container, Row, Col } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useState, useEffect, memo } from "react";
 
-// import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom"
 
 
 
 
 
 import styles from "../ProductCatalogue.module.scss";
-import ProductItem from "../../ProductOffer/ProductItem";
+import ProductSearchItem from "../../ProductOffer/ProductSearchItem";
+import NotFound from './NotFound';
 
 
 
 const cx = ClassName.bind(styles);
 
-function SubPages({ page, isTrue }) {
+function SubPages({ isTrue, products, isLoading, isSuccess, pages }) {
+    const { page } = useParams()
+
+    const [isNotFound, setIsNotFound] = useState(false);
+    useEffect(() => {
+        if (!pages.includes(Number(page))) {
+            setIsNotFound(true)
+        }
+    }, [page, pages])
+    let content;
+    if (isLoading) {
+        return content = (<Container className={cx("px-0", isTrue ? "" : "d-none")}>
+            <h1> Loading... </h1>
+        </Container>)
+    }
+    if (isSuccess) {
+        const { ids, entities } = products;
+
+        return content = isNotFound ? <NotFound /> : <Container className={cx("px-0", isTrue ? "" : "d-none")}>
+            <Row className={cx("g-3")}>
+                {ids?.length && ids?.map((id, index) => {
+                    const product = entities[id];
+                    return (<Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12} key={index}>
+                        <ProductSearchItem product={product} key={id} />
+                    </Col>)
+                })}
+            </Row>
 
 
+        </Container>
+    }
 
 
-
-
-    let content = (<Container className={cx("px-0", isTrue ? "" : "d-none")}>
-        <Row className={cx("g-3")}>
-            <Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-
-        </Row>
-
-    </Container>)
-
-    return (<Container className="px-0" >
+    return (<Container className={cx("px-0", "product-list")} >
         {content}
     </Container>
 
     );
 }
 
-export default SubPages;
+export default memo(SubPages);

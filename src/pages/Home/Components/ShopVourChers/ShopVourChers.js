@@ -12,7 +12,7 @@ import DetailVourCher from "./DetailVourCher";
 const cx = className.bind(styles);
 
 function ShopVourChers() {
-    console.log("đây la voucher")
+
     return (<div className={cx("wrapper")}>
         <Container
             className="px-0"

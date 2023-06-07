@@ -10,8 +10,7 @@ import React from 'react';
 import { useEffect } from 'react';
 
 
-import { store } from '~/app/store';
-import { productsApiSlice } from '~/features/products/productsApiSlice';
+
 
 import Prefetch from '~/features/auth/Prefetch';
 import { useNavigate, useLocation } from "react-router-dom";
@@ -36,10 +35,7 @@ function App() {
 
 
 
-  useEffect(() => {
-    store.dispatch(productsApiSlice.util.prefetch('getProducts', 'productsList', { force: true }))
 
-  }, [])
 
 
   return (

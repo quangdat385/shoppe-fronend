@@ -11,9 +11,11 @@ import styles from "./ProductCatalogue.module.scss";
 import MenuProduct from "./MenuProduct";
 import useHomePage from "~/hooks/useHomPage";
 
-import { useGetProductsQuery } from "~/features/products/productsApiSlice";
+import { useGetSearchProductsQuery } from "~/features/products/productsApiSlice";
 import SubPages from "./SubPages/SubPages";
-import NotFound from "./SubPages/NotFound";
+
+
+
 
 
 
@@ -21,33 +23,47 @@ const cx = ClassName.bind(styles);
 
 
 function ProductCatalogue() {
-    const {
-        data: products,
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    } = useGetProductsQuery('productsList', {
-        pollingInterval: 60000,
-        refetchOnFocus: true,
-        refetchOnMountOrArgChange: true,
-
-    })
-
-    if (isSuccess) {
-
-        const { ids } = products;
-        console.log(ids);
-
-    }
 
     const { page } = useParams();
+
+
+
     const [homePage, setHomePage] = useHomePage()
     const navigate = useNavigate()
-    const pages = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
     const listSort = ["Phổ Biến", "Bán Chạy", "Mới Nhất"];
-    const [isNotFound, setIsNotFound] = useState(false);
+
+
     const [menu, setMenu] = useState(homePage.menu);
+    const [query, setQuery] = useState({
+        page: 0, colection: 0, order: null, price: null
+    })
+    const [sort, setSort] = useState({
+        popular: homePage.popular,
+        price: homePage.price,
+    })
+    const [smallOrder, setSmallOrder] = useState(Number(page));
+    const { data: products, isLoading, isSuccess } = useGetSearchProductsQuery(query, {
+        pollingInterval: 60000,
+        refetchOnMountOrArgChange: true,
+        refetchOnFocus: true,
+    });
+    let totalPages;
+    let pages = [];
+    if (isSuccess) {
+
+        totalPages = JSON.parse(localStorage.getItem("total_pages"));
+        for (var i = 0; i < totalPages; i++) {
+            pages.push(i);
+        };
+    }
+    useEffect(() => {
+        setQuery(pre => {
+            return { ...pre, page: Number(page), colection: menu, order: sort.popular, price: sort.price, }
+        })
+
+    }, [page, menu, sort])
+
     const [paginal, setPaginal] = useState(JSON.parse(localStorage.getItem('set_paginal')) || [
         0, 1, 2, 3, 4, pages.length - 1
     ]);
@@ -55,12 +71,9 @@ function ProductCatalogue() {
         first: false,
         last: true
     });
-    console.log(btnPoint);
-    const [smallOrder, setSmallOrder] = useState(Number(page));
-    const [sort, setSort] = useState({
-        popular: homePage.popular,
-        price: homePage.price,
-    })
+
+
+
 
 
 
@@ -157,7 +170,7 @@ function ProductCatalogue() {
             }
         })
         let order, price, collect;
-        sort.popular === "Phổ Biến" ? order = null : sort.popular === "Bán Chạy" ? order = "new" : order = "sale";
+        sort.popular === "Phổ Biến" ? order = null : sort.popular === "Bán Chạy" ? order = "sale" : order = "new";
         sort.price === "none" ? price = null : sort.price === "increase" ? price = "asc" : price = "desc";
         menu === 0 ? collect = null : collect = menu;
 
@@ -171,12 +184,6 @@ function ProductCatalogue() {
 
 
     useEffect(() => {
-
-        if (page > (pages.length - 1).toString()) {
-            setIsNotFound(true);
-        } else {
-            setIsNotFound(false);
-        }
 
         let pa = Number(page)
         let numpage = pages.length - 1
@@ -348,7 +355,7 @@ function ProductCatalogue() {
                                 <div className={cx("controller-state")}>
                                     <span>{smallOrder + 1 ? smallOrder + 1 : `#`}</span>
                                     <span>/</span>
-                                    <span>{pages.length}</span>
+                                    <span >{pages.length}</span>
                                 </div>
                                 <button
                                     onClick={handlerPreBtn}
@@ -360,7 +367,11 @@ function ProductCatalogue() {
                                 <button
                                     onClick={handlerNextBtn}
 
-                                    className={cx("btn-controller", "active")}>
+                                    className={cx("btn-controller", "active")}
+
+
+                                >
+
                                     <FontAwesomeIcon icon={faAngleRight} style={{ color: "#ccc" }} />
                                 </button>
                             </div>
@@ -385,15 +396,17 @@ function ProductCatalogue() {
                     </div>
                 </Col>
                 <Col lg={10} md={12} >
-                    {isNotFound ? <NotFound /> : pages.map(item => {
+                    {pages.map(item => {
                         let isTrue = item.toString() === page
 
 
                         return <SubPages
                             key={"subpage" + item}
-                            page={item}
                             isTrue={isTrue}
-                            sort={sort}
+                            isLoading={isLoading}
+                            isSuccess={isSuccess}
+                            products={isSuccess ? products : null}
+                            pages={pages}
                         />
                     })}
                 </Col>

@@ -1,17 +1,19 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
 
+
 import { apiSlice } from '~/app/api/apiSlice';
 
 const productsAdapter = createEntityAdapter({});
 
 const initialState = productsAdapter.getInitialState();
 
+
 export const productsApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         //get api/product
         getProducts: builder.query({
             query: () => ({
-                url: '/product',
+                url: "/product",
                 validateStatus: (response, result) => {
                     return response.status === 200 && !result.isError
                 },
@@ -22,17 +24,47 @@ export const productsApiSlice = apiSlice.injectEndpoints({
                     product.id = product._id
                     return product
                 });
-                return productsAdapter.setAll(initialState, loadedproducts)
+
+                return productsAdapter.setAll(initialState, loadedproducts);
             },
             providesTags: (result, error, arg) => {
+
                 if (result?.ids) {
                     return [
                         { type: 'Product', id: 'LIST' },
-                        ...result.ids.map(id => ({ type: 'product', id }))
+                        ...result.ids.map(id => ({ type: 'product', id })),
                     ]
                 } else return [{ type: 'Product', id: 'LIST' }]
             },
 
+
+
+        }),
+        getSearchProducts: builder.query({
+            query: ({ page, colection, order, price }) => ({
+                url: `/product/search?page=${page}&colection=${colection}&price=${price}&order=${order}`,
+                validateStatus: (response, result) => {
+                    return response.status === 200 && !result.isError
+                },
+            }),
+            transformResponse: responseData => {
+                localStorage.setItem("total_pages", JSON.stringify(responseData.totalPages));
+                const loadedproducts = responseData.data?.map(product => {
+                    product.id = product._id
+                    return product
+                });
+
+                return productsAdapter.setAll(initialState, loadedproducts);
+            },
+            providesTags: (result, error, arg) => {
+
+                if (result?.ids) {
+                    return [
+                        { type: 'Product', id: 'LIST' },
+                        ...result.ids.map(id => ({ type: 'product', id })),
+                    ]
+                } else return [{ type: 'Product', id: 'LIST' }]
+            },
 
 
 
@@ -86,7 +118,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         }),
         postImgProduct: builder.mutation({
             query: initialproduct => ({
-                url: "product/post/img/url",                    
+                url: "product/post/img/url",
                 method: 'POST',
                 body: { ...initialproduct }
             }),
@@ -130,11 +162,13 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useGetProductsQuery,
+    useGetSearchProductsQuery,
     useGetSoftDeleteproductsMutation,
     useAddNewproductMutation,
     useUpdateproductMutation,
     useSoftDeleteMutation,
     useDeleteproductMutation,
     useRestoreproductMutation,
-    usePostImgProductMutation
+    usePostImgProductMutation,
+    usePrefetch
 } = productsApiSlice
