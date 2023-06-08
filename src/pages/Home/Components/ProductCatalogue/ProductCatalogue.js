@@ -36,7 +36,7 @@ function ProductCatalogue() {
 
     const [menu, setMenu] = useState(homePage.menu);
     const [query, setQuery] = useState({
-        page: 0, colection: 0, order: null, price: null
+        page: 0, collection: 0, order: null, price: null
     })
     const [sort, setSort] = useState({
         popular: homePage.popular,
@@ -59,10 +59,10 @@ function ProductCatalogue() {
     }
     useEffect(() => {
         setQuery(pre => {
-            return { ...pre, page: Number(page), colection: menu, order: sort.popular, price: sort.price, }
+            return { ...pre, page: Number(page), collection: homePage.menu, order: homePage.popular, price: homePage.price, }
         })
-
-    }, [page, menu, sort])
+        // eslint-disable-next-line
+    }, [page, homePage])
 
     const [paginal, setPaginal] = useState(JSON.parse(localStorage.getItem('set_paginal')) || [
         0, 1, 2, 3, 4, pages.length - 1
@@ -170,9 +170,9 @@ function ProductCatalogue() {
             }
         })
         let order, price, collect;
-        sort.popular === "Phổ Biến" ? order = null : sort.popular === "Bán Chạy" ? order = "sale" : order = "new";
-        sort.price === "none" ? price = null : sort.price === "increase" ? price = "asc" : price = "desc";
-        menu === 0 ? collect = null : collect = menu;
+        homePage.popular === "Phổ Biến" ? order = null : sort.popular === "Bán Chạy" ? order = "sale" : order = "new";
+        homePage.price === "none" ? price = null : sort.price === "increase" ? price = "asc" : price = "desc";
+        homePage.menu === 0 ? collect = null : collect = menu;
 
 
         setSortBy(sortBy => {
@@ -184,7 +184,9 @@ function ProductCatalogue() {
 
 
     useEffect(() => {
-
+        if (smallOrder < 0) {
+            setSmallOrder(0)
+        }
         let pa = Number(page)
         let numpage = pages.length - 1
         let orderpages = [0, 1, pa, pa + 1, numpage];
@@ -214,7 +216,7 @@ function ProductCatalogue() {
 
 
         // eslint-disable-next-line
-    }, [page]);
+    }, [page, smallOrder]);
 
 
     useEffect(() => {
@@ -247,6 +249,9 @@ function ProductCatalogue() {
         } else if (smallOrder > pages.length - 1) {
             Order = pages.length - 1
 
+        } else if (smallOrder < 0) {
+            Order = 0
+
         } else {
 
 
@@ -276,7 +281,7 @@ function ProductCatalogue() {
 
     }
 
-    return (<div className={cx("wrapper")}>
+    return (<div className={cx("wrapper")} id="product-list">
         <Container className={cx("px-0")}>
             <Row >
                 <Col lg={2}  >
@@ -312,7 +317,9 @@ function ProductCatalogue() {
                                 }
 
                                 <div className={cx("price", "butn butn-lg butn-white")}>
-                                    <span > Giá</span>
+                                    <span >{
+                                        sort.price === "none" ? "Giá : Mặc Định" : sort.price === "increase" ? "Giá : Thấp Đến Cao" : "Giá : Cao Đến thấp"
+                                    }</span>
                                     <FontAwesomeIcon icon={faAngleDown}
                                         style={{ color: "#555", display: "block", marginRight: "10px" }} />
                                     <div className={cx("soft-price")}>
@@ -353,7 +360,7 @@ function ProductCatalogue() {
                             <div xs={3} md={3} className={cx("controller")}>
 
                                 <div className={cx("controller-state")}>
-                                    <span>{smallOrder + 1 ? smallOrder + 1 : `#`}</span>
+                                    <span>{smallOrder + 1 ? smallOrder + 1 : 1}</span>
                                     <span>/</span>
                                     <span >{pages.length}</span>
                                 </div>
@@ -395,7 +402,7 @@ function ProductCatalogue() {
                         }
                     </div>
                 </Col>
-                <Col lg={10} md={12} >
+                <Col lg={10} md={12} className={cx("product-list")} >
                     {pages.map(item => {
                         let isTrue = item.toString() === page
 

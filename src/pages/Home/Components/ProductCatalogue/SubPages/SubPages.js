@@ -49,9 +49,9 @@ function SubPages({ isTrue, products, isLoading, isSuccess, pages }) {
     }
 
 
-    return (<Container className={cx("px-0", "product-list")} >
+    return (<div className="px-0" >
         {content}
-    </Container>
+    </div>
 
     );
 }

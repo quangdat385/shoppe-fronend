@@ -41,8 +41,8 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
         }),
         getSearchProducts: builder.query({
-            query: ({ page, colection, order, price }) => ({
-                url: `/product/search?page=${page}&colection=${colection}&price=${price}&order=${order}`,
+            query: ({ page, collection, order, price }) => ({
+                url: `/product/_search?page=${page}&collection=${collection}&price=${price}&order=${order}`,
                 validateStatus: (response, result) => {
                     return response.status === 200 && !result.isError
                 },

@@ -14,13 +14,18 @@ import images from "~/assets/images";
 import styles from "./MainContent.module.scss";
 import { Outlet } from "react-router-dom";
 import Slider from "../Slider/Slider";
+import { useGetProductsQuery } from "~/features/products/productsApiSlice";
 
 
 const cx = className.bind(styles);
 
 function MainContent() {
 
-
+    const { data: products, isLoading, isSuccess } = useGetProductsQuery("productsList", {
+        pollingInterval: 60000,
+        refetchOnMountOrArgChange: true,
+        refetchOnFocus: true,
+    });
 
 
 

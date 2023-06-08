@@ -78,6 +78,7 @@
 
                 span {
                     margin-left: 10px;
+                    margin-right: 10px;
                 }
 
                 .soft-price {
@@ -183,6 +184,11 @@
 
             }
         }
+    }
+
+    .product-list {
+        animation: linear ease-in-out 0.15s;
+
     }
 
     @media (min-width: 1200px) {
@@ -301,9 +307,8 @@
 
 }
 
-.product-list {
-    animation: ease-in-out 2s;
-}
+
+
 
 .not-found-wrapper {
     .not-found {
