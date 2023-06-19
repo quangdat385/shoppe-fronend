@@ -11,32 +11,15 @@ const cx = className.bind(styles)
 
 
 
-function ProductList() {
-
-
-
+function ProductList({ products }) {
 
     return (<Container className={cx("px-0")}>
         <Row className={cx("g-3")}>
-
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
-            <Col xl={2} lg={3} md={4} sm={6} xs={12}>
-                <ProductItem />
-            </Col>
+            {products.map(product => {
+                return (<Col xl={2} lg={3} md={4} sm={6} xs={12} key={product.id}>
+                    <ProductItem product={product} key={product.createdAt} />
+                </Col>)
+            })}
         </Row>
 
 

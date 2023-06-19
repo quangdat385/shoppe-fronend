@@ -6,12 +6,12 @@ import { Routes, Route, useLocation, useNavigate, } from "react-router-dom";
 import { useEffect, } from 'react';
 
 
-
+import SuggestProducts from './Components/MainContent.js/SuggestProducts';
 import MainContent from './Components/MainContent.js';
 import { productsApiSlice } from '~/features/products/productsApiSlice';
 
 import ProductCatalogue from './Components/ProductCatalogue/ProductCatalogue';
-import NotFound from './Components/ProductCatalogue/SubPages/NotFound';
+
 
 import useHomePage from '~/hooks/useHomPage';
 import { store } from '~/app/store';
@@ -28,13 +28,13 @@ function Home() {
     const { pathname } = useLocation();
 
     // eslint-disable-next-line
-    const [homePage] = useHomePage()
+    const [homePage] = useHomePage();
 
 
     useEffect(() => {
         store.dispatch(productsApiSlice.util.prefetch('getProducts', 'productsList', { force: true }))
 
-    }, [])
+    }, []);
 
 
 
@@ -59,14 +59,10 @@ function Home() {
         <Routes >
             <Route path="/" element={<MainContent />}>
                 <Route path=":page/*" element={<ProductCatalogue />}>
-
                 </Route>
 
             </Route>
-
-            <Route path="/*" element={<NotFound />}></Route>
-
-
+            <Route path="/suggest/:page" element={<SuggestProducts />}></Route>
         </Routes>
 
 

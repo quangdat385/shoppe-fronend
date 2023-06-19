@@ -1,6 +1,6 @@
 import className from "classnames/bind";
 
-import { memo } from "react"
+import { memo, } from "react"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStarHalfStroke, faStar } from "@fortawesome/free-solid-svg-icons";
@@ -16,26 +16,75 @@ const cx = className.bind(styles);
 
 
 function ProductItem({ product }, ref) {
+    const img = `http://localhost:3500/img/${product?.img_product[0][0]}`;
+    let rating;
+    let leftrating;
+
+    let rate = product.rating;
+    if (rate === 0) {
+        rating = <FontAwesomeIcon icon={faStar} style={{ color: "#d5d5d5", height: "10px" }} />
+    } else {
+        if (Number.isInteger(rate)) {
+            let term = []
+            for (let i = 0; i < rate; i++) {
+                term.push(i)
+            }
+            rating = term.map(item => {
+                return <FontAwesomeIcon key={"key" + item} icon={faStar} style={{ color: "#ffcc3d", height: "10px" }} />
+
+            })
+        } else {
+
+            let int = Math.floor(rate);
+            let float = rate - int;
+            let term = [];
+            for (let i = 0; i < int; i++) {
+                term.push(i)
+            }
+            rating = term.map(item => {
+                return <FontAwesomeIcon key={"key" + item} icon={faStar} style={{ color: "#ffcc3d", height: "10px" }} />
+
+            })
+            if (float !== 0) {
+                if (float > 0.5) {
+                    leftrating = <i className={cx("icon-after")}>
+                        <FontAwesomeIcon icon={faStarHalfStroke} style={{ color: "#ffcc3d", backGroundColor: "#fff", height: "10px" }} />
+                    </i>
+                } else if (float < 0.5) {
+                    leftrating = <i className={cx("icon-before")}>
+
+                        <FontAwesomeIcon icon={faStar} style={{ color: "#d5d5d5", height: "10px" }} />
+                    </i>
+                } else {
+                    leftrating = <FontAwesomeIcon icon={faStarHalfStroke} style={{ color: "#ffcc3d", height: "10px" }} />
+                }
+            }
+
+
+        }
+    }
+
 
     return (<Link className={cx("product-item")}>
         <div className={cx("product-img-wrapper")}>
             <img ref={ref} className={cx("img")}
-                src="https://down-vn.img.susercontent.com/file/aa4ec13c4b912e89fe337eb284d7a4ae_tn" alt="" />
+                src={img} alt="" />
             <img ref={ref} className={cx("img-bg")}
-                src="http://localhost:3500/img/imgProductvn-50009109-3228badda6d4cf1bd3d62704f01b779e" alt="" />
+                src={`http://localhost:3500/img/${product?.ship_label[0]}`} alt="" />
             <p className={cx("favourite-logo")}>Yêu Thích</p>
-            <div className={cx("stick-sale")}>
-                <p > 50%</p>
+            {product.sale_off > 0 ? <div className={cx("stick-sale")}>
+                <p >{`${product.sale_off * 100}%`}</p>
                 <p >GIẢM</p>
-            </div>
+            </div> : null}
+
         </div>
         <div className={cx("product-content")}>
             <div className={cx("content-title")}>
-                [C424] Áo croptop 3 lỗ cổ polo hở lưng cài cúc sexy - Áo croptop nữ khoét nách hở lưng chất thun freesize C311
+                {product.title}
             </div>
 
             <div className={cx("sale-off-wrapper")}>
-                <div className={cx("sale-off")}>
+                {product.sticky_off ? <div className={cx("sale-off")}>
                     <svg className={cx("sale-off-before")} viewBox="-0.5 -0.5 4 16">
                         <path d="M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3" strokeWidth="1" transform="" stroke="currentColor" fill="#f69113">
 
@@ -46,18 +95,24 @@ function ProductItem({ product }, ref) {
                         <path d="M4 0h-3q-1 0 -1 1a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3v0.333a1.2 1.5 0 0 1 0 3q0 1 1 1h3" strokeWidth="1" transform="rotate(180) translate(-3 -15)" stroke="currentColor" fill="#f69113">
                         </path>
                     </svg>
-                </div>
-                <div className={cx("shop-trend")}>#ShopxuHuong</div>
-                {/* <div className={cx("shop-special")}>ShopDacBiet</div> */}
+                </div> : null}
+                {product.label_id === 0 ?
+                    <div className={cx("shop-trend", product.sticky_off ? "active" : "")}>#ShopxuHuong</div> :
+                    <div className={cx("shop-special", product.sticky_off ? "active" : "")}>ShopDacBiet</div>}
             </div>
             <div className={cx("product-price-ship")}>
 
                 <div className={cx("product-price", "primary")}>
-                    <p className={cx("old-price")}> ₫80.000</p>
-                    <p className={cx("new-price")}>₫60.000</p>
+                    {product.sale_off > 0 ? <p className={cx("old-price")}>{
+                        `₫${product.price}`
+                    }</p> : null}
+
+                    <p className={cx("new-price")}>{
+                        product.sale_off > 0 ? `₫${product.price - product.price * product.sale_off}` : `₫${product.price}`
+                    }</p>
 
                 </div>
-                <svg height="14" viewBox="0 0 20 12" width="20" >
+                {product.ship === 0 ? <svg height="14" viewBox="0 0 20 12" width="20" >
                     <g fill="none" fillRule="evenodd" transform="">
                         <rect fill="#00bfa5" fillRule="evenodd" height="9" rx="1" width="12" x="4">
                         </rect>
@@ -80,31 +135,24 @@ function ProductItem({ product }, ref) {
                         <circle cx="15" cy="10" fill="#047565" r="1">
                         </circle>
                     </g>
-                </svg>
+                </svg> : null}
+
 
             </div>
             <div className={cx("rate-sold")}>
                 <div className={cx("rate")}>
-                    <FontAwesomeIcon icon={faStar} style={{ color: "#ffcc3d", height: "10px" }} />
-                    <FontAwesomeIcon icon={faStar} style={{ color: "#ffcc3d", height: "10px" }} />
-                    <FontAwesomeIcon icon={faStar} style={{ color: "#ffcc3d", height: "10px" }} />
-                    <FontAwesomeIcon icon={faStar} style={{ color: "#ffcc3d", height: "10px" }} />
-                    <i className={cx("icon-after")}>
-                        <FontAwesomeIcon icon={faStarHalfStroke} style={{ color: "#ffcc3d", backGroundColor: "#fff", height: "10px" }} />
-                    </i>
-                    <i className={cx("icon-before")}>
-
-                        <FontAwesomeIcon icon={faStar} style={{ color: "#d5d5d5", height: "10px" }} />
-                    </i>
+                    {rating}
+                    {leftrating}
 
                 </div>
-                <div className={cx("sold")}>34.2k</div>
+                <div className={cx("sold")}>{product.sold}</div>
             </div>
 
 
         </div>
 
     </Link>);
+
 }
 
 export default memo(forwardRef(ProductItem));

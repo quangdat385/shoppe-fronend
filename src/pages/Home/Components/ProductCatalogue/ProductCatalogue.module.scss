@@ -76,9 +76,13 @@
                 align-items: center;
                 position: relative;
 
-                span {
+                .tablet {
                     margin-left: 10px;
                     margin-right: 10px;
+                }
+
+                .mobile {
+                    display: none;
                 }
 
                 .soft-price {
@@ -137,6 +141,32 @@
                 & span:nth-child(1) {
                     color: #cc3d2e;
                 }
+
+                & span:nth-child(3) {
+                    position: relative;
+
+                    .loading {
+                        left: 0;
+                        top: 50%;
+                        transform: translateY(-25%);
+                        color: rgba(22, 24, 35, 0.34);
+                        position: absolute;
+                        display: inline-block;
+                        animation: spinner 0.8s linear infinite;
+                    }
+                }
+
+
+
+                @keyframes spinner {
+                    from {
+                        transform: translateY(-50%) rotate(0);
+                    }
+
+                    to {
+                        transform: translateY(-50%) rotate(360deg);
+                    }
+                }
             }
 
             .btn-controller {
@@ -186,10 +216,7 @@
         }
     }
 
-    .product-list {
-        animation: linear ease-in-out 0.15s;
-
-    }
+    .product-list {}
 
     @media (min-width: 1200px) {
         .config {
@@ -230,6 +257,19 @@
             .bar-soft {
                 padding: 0;
 
+                .tablet {
+                    display: none;
+                }
+
+                .price {
+                    min-width: 80px;
+
+                    .mobile {
+                        display: block;
+                        margin-left: 10px;
+                        margin-right: 10px;
+                    }
+                }
             }
 
 

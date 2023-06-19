@@ -2,10 +2,12 @@ import { createEntityAdapter } from '@reduxjs/toolkit';
 
 
 import { apiSlice } from '~/app/api/apiSlice';
+import { setSearch, SearchHistory, setKeyWords } from "~/features/search/searchSlice";
 
 const productsAdapter = createEntityAdapter({});
 
 const initialState = productsAdapter.getInitialState();
+
 
 
 export const productsApiSlice = apiSlice.injectEndpoints({
@@ -37,6 +39,45 @@ export const productsApiSlice = apiSlice.injectEndpoints({
                 } else return [{ type: 'Product', id: 'LIST' }]
             },
 
+
+
+        }),
+        getSearch: builder.mutation({
+            query: ({ keyword, details }) => ({
+                url: `/product/hot/search?keyword=${keyword}&details=${details}`,
+                method: 'GET',
+                validateStatus: (response, result) => {
+                    return response.status === 200 && !result.isError
+                }
+            }),
+            async onQueryStarted(arg, { dispatch, queryFulfilled, getState }) {
+
+                try {
+                    const { data } = await queryFulfilled
+
+
+                    const { products, history } = data;
+
+                    dispatch(setSearch({ products }))
+
+                    if (history.keyword === "") {
+                        return
+                    }
+
+                    dispatch(setKeyWords({ history }))
+                    const listHistory = getState().search.history
+                    let check = listHistory.every((item) => {
+                        return item.keyword !== history.keyword
+                    })
+
+                    if (check) {
+                        dispatch(SearchHistory({ history }))
+                    }
+
+                } catch (err) {
+                    console.log(err)
+                }
+            }
 
 
         }),
@@ -124,6 +165,14 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [{ type: 'Product', id: arg.id }]
         }),
+        updateLikes: builder.mutation({
+            query: (id, initialproduct) => ({
+                url: `product/${id}/update/likes`,
+                method: 'PATCH',
+                body: { ...initialproduct }
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: 'Product', id: arg.id }]
+        }),
 
         //soft delete product method delete product/:id/soft/delete
         softDelete: builder.mutation({
@@ -162,6 +211,8 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useGetProductsQuery,
+    useUpdateLikesMutation,
+    useGetSearchMutation,
     useGetSearchProductsQuery,
     useGetSoftDeleteproductsMutation,
     useAddNewproductMutation,

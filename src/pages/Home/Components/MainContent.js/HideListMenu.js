@@ -5,32 +5,29 @@ import styles from "./MainContent.module.scss";
 
 const cx = className.bind(styles);
 
-function HideListMenu() {
+function HideListMenu({ handleMenu }) {
     return (
         <div className={cx("list-menu-wrapper")}>
             <Container fluid className={cx("menu-list")}>
 
-                <a href="" className={cx("menu-list-item")}>
+                <div onClick={() => handleMenu(5)} className={cx("menu-list-item")}>
                     Váy Hot Trend
-                </a>
-                <a href="" className={cx("menu-list-item")}>
+                </div>
+                <div onClick={() => handleMenu(6)} className={cx("menu-list-item")}>
                     Sét Đồ Hot Trend
-                </a>
-                <a href="" className={cx("menu-list-item")}>
+                </div>
+                <div onClick={() => handleMenu(7)} className={cx("menu-list-item")}>
                     Quần Đùi-Short
-                </a>
-                <a href="" className={cx("menu-list-item")}>
+                </div>
+                <div onClick={() => handleMenu(8)} className={cx("menu-list-item")}>
                     Quần Dài Hot Trend
-                </a>
-                <a href="" className={cx("menu-list-item")}>
+                </div>
+                <div onClick={() => handleMenu(9)} className={cx("menu-list-item")}>
                     Áo Bra-Quần Lót Nữ
-                </a>
-                <a href="" className={cx("menu-list-item")}>
-                    Túi Sách Đi Học-Đi CHơi
-                </a>
-                <a href="" className={cx("menu-list-item")}>
+                </div>
+                <div onClick={() => handleMenu(10)} className={cx("menu-list-item")}>
                     Quần
-                </a>
+                </div>
 
             </Container>
         </div>

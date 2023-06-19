@@ -2,7 +2,7 @@
 import className from 'classnames/bind';
 import Container from 'react-bootstrap/Container';
 
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, } from 'react-router-dom';
 
 import avatar from "~/assets/images/20210214_092405.jpg";
 import notify from "~/assets/images/img_notify.png";
@@ -17,10 +17,10 @@ import Col from "react-bootstrap/Col";
 
 import useAuth from "~/hooks/useAuth"
 import { useSendLogoutMutation } from "~/features/auth/authApiSlice";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Avatar from "~/components/Avatar";
-
+import { useHref } from 'react-router-dom';
 import {
     signOut,
 
@@ -33,16 +33,18 @@ import Qrcode from '~/assets/images/QR code.png';
 import GoogleLay from '~/assets/images/Goole play.png';
 import AppStore from '~/assets/images/App Store.png';
 import ApppGalleri from '~/assets/images/Appgalleri.png';
-
-
+import usePersist from '~/hooks/usePersists';
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from '~/features/auth/authSlice';
+import { selectHistory, selectKeyword } from '~/features/search/searchSlice'
 
 
 
 import styles from './Header.module.scss';
 
+import { useRefreshMutation } from "~/features/auth/authApiSlice";
+import { useGetSearchMutation } from "~/features/products/productsApiSlice"
 
-
-const USER_ROUTE_REGEX = /^\/user\/profile(\/)?$/;
 
 
 const cx = className.bind(styles);
@@ -50,12 +52,45 @@ const cx = className.bind(styles);
 
 
 function Header() {
+    const [persist] = usePersist();
+    const effectRan = useRef(false)
+    const token = useSelector(selectCurrentToken);
+    const [user, setUser] = useState("");
+    const [result, setResult] = useState("");
+    const a = useHref()
+    console.log(a.query)
+
+    console.log(result);
+
+    const [refresh] = useRefreshMutation();
+    const [search] = useGetSearchMutation();
+    // eslint-disable-next-line
+    useEffect(() => {
+        if (effectRan.current === true || process.env.NODE_ENV !== 'development') {
+            const verifyRefreshToken = async () => {
+                try {
+                    await refresh()
+
+
+                } catch (err) {
+                    console.error(err)
+                }
+            }
+
+            if (!token && persist) verifyRefreshToken()
+        }
+
+        return () => effectRan.current = true;
+        // eslint-disable-next-line
+    }, []);
 
     const { user_name } = useAuth()
+
     const navigate = useNavigate();
-    const { pathname } = useLocation();
 
-
+    const history = useSelector(selectHistory)
+    const keyWord = useSelector(selectKeyword)
+    const suggestProducts = ['Quần Dài', 'Đầm', 'Quần Short', 'Đồ Lẻ', 'Áo Bra', 'Quần Chip', 'Áo Croptop Ba Lỗ', 'Áo Croptop Có Tay']
 
     const [sendLogout, {
 
@@ -75,10 +110,23 @@ function Header() {
         }
     }, [isSuccess, navigate])
 
-    const user = USER_ROUTE_REGEX.test(pathname) ? user_name : storage.get('user');
+    useEffect(() => {
+        setUser(user_name)
+    }, [user_name])
+
+
+    const handleSearch = async () => {
+
+        if (result !== "") {
+            const query = { keyword: result, details: false }
+            await search(query);
+            setResult("");
+            navigate(`/0/search?keyword=${keyWord.keyWord}&details=${keyWord.details}`);
 
 
 
+        }
+    }
 
 
 
@@ -93,7 +141,7 @@ function Header() {
         <div className={cx('header')}>
             <Navbar collapseOnSelect expand="lg" className={cx('header_navbar')}>
                 <Container>
-                    <Navbar.Brand as={Link} to="/home">
+                    <Navbar.Brand as={Link} to="/home" >
 
                         <svg viewBox="0 0 192 65" className={cx('logo-1')}>
                             <g fillRule="evenodd">
@@ -288,12 +336,49 @@ function Header() {
                                 <Col>
                                     <div className={cx("search-input-wrapper")}>
                                         <Col className={cx("search-input")} lg={11} md={10} sm={10} xs={10}>
-                                            <input type="text" className={cx("search-input-btn")} placeholder="Nhập để tìm kiếm sản phẩm" />
+                                            <input
+                                                onKeyDown={async (e) => {
+                                                    if (e.key === "Enter") {
+                                                        const query = { keyword: e.target.value, details: false }
+                                                        await search(query)
+                                                        setResult("")
+                                                        navigate(`/0/search?keyword=${keyWord.keyWord}&details=${keyWord.details}`)
+                                                    }
+                                                }}
+                                                value={result} onChange={(e) => {
 
+                                                    setResult(e.target.value)
+                                                }} type="text" className={cx("search-input-btn")} placeholder="Nhập để tìm kiếm sản phẩm" />
+                                            <div className={cx("search-history")}>
+                                                <h3 className={cx("search-history-header")}>Lich sử tìm kiếm</h3>
+                                                <ul>
+                                                    {history?.map((item) => {
+
+                                                        return <li key={item.keyword} className={cx("search-history-item")}>
+                                                            <button
+                                                                key={item.keyword}
+                                                                onMouseDown={async () => {
+                                                                    const query = { keyword: item.keyword, details: item.details }
+                                                                    search(query)
+                                                                    setResult("")
+                                                                    navigate(`/0/search?keyword=${keyWord.keyWord}&details=${keyWord.details}`)
+
+                                                                }}
+                                                            >{item.keyword}</button>
+                                                        </li>
+
+                                                    })}
+
+                                                </ul>
+                                            </div>
                                         </Col>
 
                                         <Col className={cx("search-btn-wrapper")} lg={1} md={2} sm={2} xs={2}>
-                                            <Button className={cx("search-btn")}>
+                                            <Button
+                                                onClick={handleSearch}
+                                                className={cx("search-btn")}
+
+                                            >
                                                 <svg height="16" viewBox="0 0 19 19" width="16" className={cx("search-icon")}>
                                                     <g fillRule="evenodd" stroke="none" strokeWidth="1">
                                                         <g transform="translate(-1016 -32)"><g>
@@ -315,30 +400,23 @@ function Header() {
                                 </Col>
                                 <Col>
                                     <div className={cx("search-suggest-list", "d-none d-lg-block")}>
-                                        <Link className={cx("search-suggest-item")}>
-                                            Dép
-                                        </Link>
-                                        <Link className={cx("search-suggest-item")}>
-                                            Áo Phông
-                                        </Link>
-                                        <Link className={cx("search-suggest-item")}>
-                                            Váy
-                                        </Link>
-                                        <Link className={cx("search-suggest-item")}>
-                                            Áo Khoác
-                                        </Link>
-                                        <Link className={cx("search-suggest-item")}>
-                                            Áo Thun
-                                        </Link>
-                                        <Link className={cx("search-suggest-item")}>
-                                            Áo Croptop
-                                        </Link>
-                                        <Link className={cx("search-suggest-item")}>
-                                            Túi Sách Nữ
-                                        </Link>
-                                        <Link className={cx("search-suggest-item")}>
-                                            Dép Nữ
-                                        </Link>
+
+                                        {suggestProducts.map(product => {
+                                            return <Link
+                                                onClick={async () => {
+                                                    const query = { keyword: product, details: true }
+                                                    await search(query)
+
+                                                    setResult("")
+                                                    navigate(`/0/search?keyword=${product}&details=true`)
+                                                }}
+                                                key={product}
+                                                className={cx("search-suggest-item")}>
+                                                {product}
+                                            </Link>
+                                        })}
+
+
                                     </div>
                                 </Col>
                             </Row>

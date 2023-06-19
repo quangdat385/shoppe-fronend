@@ -1,0 +1,215 @@
+.wrapper {
+    display: block;
+    margin: 24px auto auto;
+
+
+
+
+    @media (min-width: 1200px) {
+        .config {
+            width: 20%;
+        }
+    }
+
+    @media (max-width:991px) {
+        .short-bar {
+            .soft-by {
+                display: none;
+            }
+
+            .bar-soft {
+                justify-content: flex-start;
+
+                .tablet {
+                    display: none
+                }
+
+                .price {
+                    min-width: 80px;
+
+                    .mobile {
+                        display: block;
+                        margin-left: 8px;
+                        margin-right: 8px;
+                    }
+                }
+            }
+
+
+        }
+
+        .list-menu {
+            display: none;
+        }
+
+        .menu-bar {
+            &:hover {
+                .menu-wrapper {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 767px) {
+        .short-bar {
+            padding: 13px 0;
+
+            .bar-soft {
+                padding: 0;
+
+            }
+
+
+        }
+
+        .product-paginal {
+            justify-content: space-between !important;
+        }
+
+
+    }
+
+}
+
+
+
+.search-header {
+    flex-direction: row;
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin: 0 0 1.5rem;
+    color: #555;
+    padding: 0 7.5px;
+
+    .icon-result {
+
+        width: 1.6rem;
+        height: 2.2rem;
+        margin: 0 1.2rem 0 0;
+        color: #555;
+        display: inline-block;
+        fill: currentColor;
+    }
+
+    p {
+        display: inline-block;
+    }
+}
+
+.short-bar {
+    padding: 13px 20px;
+    background-color: rgba(0, 0, 0, 0.03);
+    margin: 24px 0 0 0;
+
+    .soft-by {
+        flex: 0 0 auto;
+        max-width: 120px;
+        display: flex;
+        align-items: center;
+
+    }
+
+    .bar-soft {
+        font-size: 1.4rem;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+
+        .price {
+            display: inline-flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+
+            .tablet {
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            .mobile {
+                display: none;
+            }
+
+            .soft-price {
+                position: absolute;
+                top: calc(100% + 2px);
+                right: 0;
+                background-color: #fff;
+                width: 170px;
+                padding: 8px;
+                box-shadow: 0 1px 2px #e3e3e3;
+                border-radius: 2px;
+                display: none;
+
+                .soft-price-item {
+                    padding: 0 8px
+                }
+
+                .soft-price-item:hover {
+                    color: rgb(238, 77, 45);
+                }
+            }
+
+            &:hover {
+                .soft-price {
+                    display: block;
+                    z-index: 9999;
+                }
+            }
+
+            &::after {
+                content: "";
+                display: block;
+                width: 100%;
+                height: 8px;
+                position: absolute;
+                top: 100%;
+                right: 0;
+            }
+
+        }
+    }
+
+    .controller {
+        flex: 0 0 auto;
+        max-width: 120px;
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+
+        .controller-state {
+            line-height: 34px;
+            letter-spacing: -2.5px;
+            min-width: 36px;
+            font-size: 1.4rem;
+
+            & span:nth-child(1) {
+                color: #cc3d2e;
+            }
+
+
+
+
+        }
+
+        .btn-controller {
+            border-radius: 2px;
+            line-height: 34px;
+            margin-left: 2px;
+            padding: 0 15px;
+            min-width: 36px;
+            text-align: center;
+            color: #ccc;
+            font-size: 1.2rem;
+            cursor: default;
+            border: 1px solid rgba(0, 0, 0, .09);
+            outline: none;
+
+            &.active {
+                background-color: #fff;
+            }
+        }
+
+    }
+}

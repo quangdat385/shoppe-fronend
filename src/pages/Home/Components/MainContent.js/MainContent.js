@@ -21,39 +21,61 @@ const cx = className.bind(styles);
 
 function MainContent() {
 
-    const { data: products, isLoading, isSuccess } = useGetProductsQuery("productsList", {
+    const { data: products, isSuccess } = useGetProductsQuery("productsList", {
         pollingInterval: 60000,
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
+    let hot, offer, newproduct, croptop_bullet, dress, set, underwear;
+    if (isSuccess) {
+        const { entities } = products;
+        let term = [];
+        for (let value of Object.values(entities)) {
+            term.push(value);
+        };
+        hot = term.sort((a, b) => b.sold - a.sold).slice(0, 6);
+        offer = term.slice(0, 6);
+        newproduct = term.sort((a, b) => b.createdAt - a.createdAt).slice(0, 6);
+        croptop_bullet = term.filter(item => item.details === "Áo Croptop Ba Lỗ").slice(0, 6);
+        dress = term.filter(item => item.type_of_product === "Đầm/Váy").slice(0, 6);
+        set = term.filter(item => item.type_of_product === "Sét Bộ").slice(0, 6);
+        underwear = term.filter(item => item.type_of_product === "Đồ Lót").slice(0, 6);
 
-
+    };
 
     let content = (<>
         <Slider />
         <SubMenu />
         <ShopVourChers />
-        <ProductOffer title="GỢI Ý DÀNH CHO BẠN " more className="primary" />
+        {isSuccess && <ProductOffer products={offer} title="GỢI Ý DÀNH CHO BẠN " more className="primary" />}
+
         <AboutShop />
         <Banner src={images.aboutShop}
         />
-        <ProductOffer title="HOT" />
+        {isSuccess && <ProductOffer products={hot} title="HOT" />}
+
         <Banner src={images.saleoff} />
         <Banner src={images.newproduct} />
-        <ProductOffer title="HÀNG MỚI VỀ" />
+        {isSuccess && <ProductOffer products={newproduct} title="HÀNG MỚI VỀ" />}
+
         <Banner src={images.croptop} />
-        <ProductOffer title="ÁO CROPTOP BA LỖ" />
+        {isSuccess && <ProductOffer products={croptop_bullet} title="ÁO CROPTOP BA LỖ" />}
+
         <Banner src={images.vaydamnu} />
-        <ProductOffer title="VÁY ĐẦM NỮ" />
+        {isSuccess && <ProductOffer products={dress} title="VÁY ĐẦM NỮ" />}
+
         <Banner src={images.setbo} />
-        <ProductOffer title="SET BỘ" />
+        {isSuccess && <ProductOffer products={set} title="SET BỘ" />}
+
         <Banner src={images.dolot} />
-        <ProductOffer title="ÁO BRA_QUẦN LÓT NỮ" />
-        <Outlet />
+        {isSuccess && <ProductOffer products={underwear} title="ÁO BRA_QUẦN LÓT NỮ" />}
+
+
     </>)
 
     return (<div className={cx("wrapper")}>
         {content}
+        <Outlet />
     </div>);
 }
 

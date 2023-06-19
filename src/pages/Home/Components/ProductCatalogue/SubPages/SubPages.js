@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useState, useEffect, memo } from "react";
 
 import { useParams } from "react-router-dom"
+import 'animate.css';
 
 
 
@@ -23,7 +24,9 @@ function SubPages({ isTrue, products, isLoading, isSuccess, pages }) {
     useEffect(() => {
         if (!pages.includes(Number(page))) {
             setIsNotFound(true)
-        }
+        } else (
+            setIsNotFound(false)
+        )
     }, [page, pages])
     let content;
     if (isLoading) {
@@ -35,7 +38,7 @@ function SubPages({ isTrue, products, isLoading, isSuccess, pages }) {
         const { ids, entities } = products;
 
         return content = isNotFound ? <NotFound /> : <Container className={cx("px-0", isTrue ? "" : "d-none")}>
-            <Row className={cx("g-3")}>
+            <Row className={cx("g-3 animate__animated animate__fadeIn")}>
                 {ids?.length && ids?.map((id, index) => {
                     const product = entities[id];
                     return (<Col className={cx("config")} xl={2} lg={3} md={3} sm={6} xs={12} key={index}>
@@ -43,13 +46,11 @@ function SubPages({ isTrue, products, isLoading, isSuccess, pages }) {
                     </Col>)
                 })}
             </Row>
-
-
         </Container>
     }
 
 
-    return (<div className="px-0" >
+    return (<div className={cx("sub-page")} >
         {content}
     </div>
 

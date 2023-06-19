@@ -1,11 +1,15 @@
 import ClassName from "classnames/bind";
 import { Container, Row, Col } from "react-bootstrap";
-
+import 'animate.css';
 import { useState, useEffect, memo, Fragment } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList, faAngleDown, faCaretRight, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+    faList, faAngleDown, faCaretRight, faAngleLeft, faAngleRight, faSpinner, faFilter,
+    faArrowUpWideShort, faArrowDownWideShort
+
+} from "@fortawesome/free-solid-svg-icons";
+import { useParams, useNavigate, } from "react-router-dom";
 import styles from "./ProductCatalogue.module.scss";
 
 import MenuProduct from "./MenuProduct";
@@ -27,7 +31,6 @@ function ProductCatalogue() {
     const { page } = useParams();
 
 
-
     const [homePage, setHomePage] = useHomePage()
     const navigate = useNavigate()
 
@@ -43,10 +46,11 @@ function ProductCatalogue() {
         price: homePage.price,
     })
     const [smallOrder, setSmallOrder] = useState(Number(page));
-    const { data: products, isLoading, isSuccess } = useGetSearchProductsQuery(query, {
+    const { data: products, isLoading, isSuccess, refetch } = useGetSearchProductsQuery(query, {
         pollingInterval: 60000,
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
+        forceRefetch: true
     });
     let totalPages;
     let pages = [];
@@ -61,6 +65,8 @@ function ProductCatalogue() {
         setQuery(pre => {
             return { ...pre, page: Number(page), collection: homePage.menu, order: homePage.popular, price: homePage.price, }
         })
+
+
         // eslint-disable-next-line
     }, [page, homePage])
 
@@ -73,9 +79,31 @@ function ProductCatalogue() {
     });
 
 
+    useEffect(() => {
+        const aTag = document.createElement("a");
+        aTag.href = "#product-list";
+        document.body.appendChild(aTag);
+        aTag.click();
+        aTag.remove();
+    }, [homePage, navigate])
+    useEffect(() => {
+        const aTag = document.createElement("a");
+        aTag.href = "#product-list";
+        document.body.appendChild(aTag);
+        aTag.click();
+        aTag.remove();
+    }, [smallOrder])
 
+    //     <script>
+    //     document.addEventListener("DOMContentLoaded", function (event) {
+    //       var scrollpos = localStorage.getItem('scrollpos');
+    //       if (scrollpos) window.scrollTo(0, scrollpos);
+    //     });
 
-
+    //     window.onbeforeunload = function (e) {
+    //       localStorage.setItem('scrollpos', window.scrollY);
+    //     };
+    //   </script>
 
     let content;
     if (pages.length <= 5) {
@@ -161,7 +189,19 @@ function ProductCatalogue() {
         byPrice: null,
         byCollection: null
     });
+    useEffect(() => {
+        setMenu(homePage.menu);
+        let order, price, collect;
+        homePage.popular === "Phổ Biến" ? order = null : homePage.popular === "Bán Chạy" ? order = "sale" : order = "new";
+        homePage.price === "none" ? price = null : homePage.price === "increase" ? price = "asc" : price = "desc";
+        homePage.menu === 0 ? collect = null : collect = homePage.menu;
 
+
+        setSortBy(sortBy => {
+            return { ...sortBy, byOrder: order, byPrice: price, byCollection: collect }
+        })
+
+    }, [homePage])
 
     useEffect(() => {
         setHomePage(homePage => {
@@ -169,15 +209,7 @@ function ProductCatalogue() {
                 ...homePage, popular: sort.popular, price: sort.price, menu: menu
             }
         })
-        let order, price, collect;
-        homePage.popular === "Phổ Biến" ? order = null : sort.popular === "Bán Chạy" ? order = "sale" : order = "new";
-        homePage.price === "none" ? price = null : sort.price === "increase" ? price = "asc" : price = "desc";
-        homePage.menu === 0 ? collect = null : collect = menu;
 
-
-        setSortBy(sortBy => {
-            return { ...sortBy, byOrder: order, byPrice: price, byCollection: collect }
-        })
         // eslint-disable-next-line
     }, [sort, menu]);
 
@@ -187,6 +219,7 @@ function ProductCatalogue() {
         if (smallOrder < 0) {
             setSmallOrder(0)
         }
+
         let pa = Number(page)
         let numpage = pages.length - 1
         let orderpages = [0, 1, pa, pa + 1, numpage];
@@ -220,6 +253,7 @@ function ProductCatalogue() {
 
 
     useEffect(() => {
+
         let byOrder = sortBy.byOrder === null ? "" : `byOrder=${sortBy.byOrder}`;
         let byPrice = sortBy.byPrice === null ? "" : `&byPrice=${sortBy.byPrice}`;
         let byCollection = sortBy.byCollection === null ? "" : `&byCollection=${sortBy.byCollection}`;
@@ -246,19 +280,20 @@ function ProductCatalogue() {
 
         } else if (!smallOrder) {
             Order = pages.length - 1;
-        } else if (smallOrder > pages.length - 1) {
-            Order = pages.length - 1
-
         } else if (smallOrder < 0) {
             Order = 0
 
+        } else if (setSmallOrder > pages.length - 1) {
+            Order = pages.length - 1
         } else {
 
 
             Order = smallOrder => --smallOrder;
 
         }
-        return setSmallOrder(Order)
+
+        setSmallOrder(Order)
+
 
 
     }
@@ -268,7 +303,7 @@ function ProductCatalogue() {
         if (smallOrder === (pages.length - 1)) {
             Order = 0
         } else if (smallOrder > pages.length - 1) {
-            Order = 0
+            Order = pages.length - 1
 
         } else if (!smallOrder && smallOrder !== 0) {
             Order = pages.length - 1
@@ -277,7 +312,8 @@ function ProductCatalogue() {
             Order = smallOrder => ++smallOrder
         }
 
-        return setSmallOrder(Order)
+        setSmallOrder(Order)
+
 
     }
 
@@ -317,9 +353,17 @@ function ProductCatalogue() {
                                 }
 
                                 <div className={cx("price", "butn butn-lg butn-white")}>
-                                    <span >{
+                                    <span className={cx("tablet")} >{
                                         sort.price === "none" ? "Giá : Mặc Định" : sort.price === "increase" ? "Giá : Thấp Đến Cao" : "Giá : Cao Đến thấp"
                                     }</span>
+                                    <span className={cx("mobile")}>
+                                        {sort.price === "none" ? <FontAwesomeIcon icon={faFilter} size="sm" /> :
+                                            sort.price === "increase" ? <FontAwesomeIcon icon={faArrowUpWideShort} size="sm" /> :
+                                                <FontAwesomeIcon icon={faArrowDownWideShort} size="sm" />
+                                        }
+
+                                    </span>
+
                                     <FontAwesomeIcon icon={faAngleDown}
                                         style={{ color: "#555", display: "block", marginRight: "10px" }} />
                                     <div className={cx("soft-price")}>
@@ -359,10 +403,13 @@ function ProductCatalogue() {
                             </Col>
                             <div xs={3} md={3} className={cx("controller")}>
 
-                                <div className={cx("controller-state")}>
-                                    <span>{smallOrder + 1 ? smallOrder + 1 : 1}</span>
+                                <div className={cx("controller-state", "animate__animated animate__fadeIn")}>
+                                    <span >{smallOrder + 1 ? smallOrder + 1 : 1}</span>
                                     <span>/</span>
-                                    <span >{pages.length}</span>
+                                    <span className={cx("animate__animated animate__fadeIn  animate__delay-4s")} >
+                                        {isLoading && < FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
+                                        {isSuccess && pages.length}
+                                    </span>
                                 </div>
                                 <button
                                     onClick={handlerPreBtn}
@@ -393,8 +440,11 @@ function ProductCatalogue() {
                     <div className={cx("list-menu")}>
                         {
                             listMenu.map((item, index) => {
-                                return <div key={item} className={cx("menu-item", index === menu ? "active" : "")}
-                                    onClick={() => setMenu(index)}>
+                                return <div key={item} className={cx("menu-item", index === homePage.menu ? "active" : "")}
+                                    onClick={() => {
+                                        setMenu(index)
+                                        refetch()
+                                    }}>
                                     <FontAwesomeIcon className={cx("icon")} icon={faCaretRight} style={{ color: "transparent" }} />
                                     <span>{item}</span>
                                 </div>
