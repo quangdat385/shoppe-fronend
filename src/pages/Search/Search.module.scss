@@ -3,7 +3,113 @@
     margin: 24px auto auto;
 
 
+    .filter-header {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
 
+
+    }
+
+    .search-by {
+        padding: 20px 0;
+        font-size: 1.4rem;
+        border-bottom: 1px solid rgba(0, 0, 0, .09);
+
+        .title {
+            margin-bottom: 10px;
+        }
+
+        .item {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            position: relative;
+            padding: 8px 0;
+
+            .box {
+                display: block;
+                margin-right: 8px;
+                box-sizing: border-box;
+                background-color: #fff;
+                width: 13px;
+                height: 13px;
+                border: 1px solid rgba(0, 0, 0, .26);
+                border-radius: 2px;
+                box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, .05);
+                color: #cc3d2e;
+
+                .check-icon {
+                    height: 8px;
+                    display: none;
+                    position: absolute;
+                    fill: currentColor;
+                    ;
+                    top: 38%;
+                    left: 2px;
+
+                    &.active {
+                        display: block;
+                    }
+                }
+            }
+
+            .check-box {
+                margin-right: 8px;
+                box-sizing: border-box;
+                background-color: #fff;
+                width: 13px;
+                height: 13px;
+                border: 1px solid rgba(0, 0, 0, .26);
+                border-radius: 2px;
+                box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, .05);
+
+                &:checked {
+                    display: none;
+                }
+            }
+
+            .label {
+                display: block;
+            }
+        }
+
+        .add-item {
+            display: flex;
+            margin-left: 20%;
+            align-items: center;
+            padding: 8px 0;
+
+
+            div {
+                padding-right: 4px;
+            }
+        }
+    }
+
+    .mobile-filter {
+        position: absolute;
+        display: none;
+        top: 100%;
+        left: 0;
+        min-width: 180px;
+        height: 50vh;
+    }
+
+    .search-text {
+        font-size: 1.6rem;
+        font-weight: 400;
+        display: inline-block;
+        color: #000;
+
+    }
+
+    .icon {
+        height: 14px;
+        padding-right: 8px;
+        stroke: currentColor;
+    }
 
     @media (min-width: 1200px) {
         .config {
@@ -12,6 +118,14 @@
     }
 
     @media (max-width:991px) {
+        .search-text {
+            display: none;
+        }
+
+        .search-by {
+            display: none;
+        }
+
         .short-bar {
             .soft-by {
                 display: none;
@@ -46,6 +160,16 @@
             &:hover {
                 .menu-wrapper {
                     display: block;
+                }
+            }
+        }
+
+        .filter-header {
+
+            &:hover {
+                .mobile-filter {
+                    display: block;
+                    z-index: 1;
                 }
             }
         }

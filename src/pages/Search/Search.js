@@ -2,7 +2,7 @@
 import className from 'classnames/bind';
 import { Container, Row, Col } from "react-bootstrap"
 import { useSelector } from "react-redux"
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import "animate.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,16 +13,27 @@ import { selectProducts, selectHistory, selectSortBy, selectKeyword } from '~/fe
 
 import { useGetRatingQuery } from "~/features/Rating/ratingApiSlice";
 import { useGetCatagoryQuery } from "~/features/Catagory/catagoryApiSlice";
-import { useGetSearchMutation } from "~/features/products/productsApiSlice"
-import ProductList from "./ProductList"
-import store from "~/app/store"
-const cx = className.bind(styles)
+import { useGetSearchMutation } from "~/features/products/productsApiSlice";
+import { useGetDetailsQuery } from "~/features/productDetails/productDetailSlice"
+import SearchBy from './SearchBy';
+import ProductList from "./ProductList";
+import store from "~/app/store";
+const cx = className.bind(styles);
 
 function Search() {
+    const { data: detailsProduct, isSuccess: isDetailsSuccess } = useGetDetailsQuery("listDetails", {
+        pollingInterval: 60000,
+        refetchOnMountOrArgChange: true,
+        refetchOnFocus: true,
+    });
     const products = useSelector(selectProducts);
     const sortBy = useSelector(selectSortBy);
     const history = useSelector(selectHistory);
     const KeyWords = useSelector(selectKeyword)
+    const [menu, setMenu] = useState([]);
+    const [place, setPlace] = useState([]);
+    const [deliver, setDeliver] = useState([]);
+
     const { page: numberOfPages } = useParams();
 
     const [query, setQuery] = useState(JSON.parse(localStorage.getItem("search-keywords")) || [])
@@ -57,14 +68,34 @@ function Search() {
         console.log(rating)
 
     }
+    let listMenu;
     if (isCatagorySuccess) {
-        let rate = []
+
+        let details = []
         for (let x of Object.values(catagory.entities)) {
-            rate.push(x.details)
+            details.push({
+                details: x.details,
+                listProduct: x.listProduct.length || 0
+            })
         }
 
-
+        listMenu = details
     }
+    let listComeFrom;
+    if (isDetailsSuccess) {
+        let places = [];
+        for (let x of Object.values(detailsProduct.entities)) {
+            places.push(x.comefrom)
+        }
+        const term = Array.from(new Set(places))
+
+
+        listComeFrom = term.map(item => {
+            return { details: item }
+        });
+    }
+    console.log(listComeFrom)
+
     useEffect(() => {
         setTotalProducts(Array.from(products))
     }, [products])
@@ -84,7 +115,7 @@ function Search() {
 
     useEffect(() => {
         navigate(`/${page}/search?keyword=${query.keyword}&details=${query.details}`);
-
+        // eslint-disable-next-line
     }, [page])
 
 
@@ -139,8 +170,28 @@ function Search() {
     return <div className={cx("wrapper")}>
         <Container>
             <Row className={cx("px-0")}>
-                <Col lg={2}></Col>
-                <Col lg={10} >
+                <Col lg={2} xs={1}>
+                    <div className={cx("filter-header")}>
+                        <svg enableBackground="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" className={cx("icon")}>
+                            <g>
+                                <polyline fill="none" points="5.5 13.2 5.5 5.8 1.5 1.2 13.5 1.2 9.5 5.8 9.5 10.2" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10">
+                                </polyline>
+                            </g>
+                        </svg>
+                        <div className={cx("search-text")}>SẮP XẾP THEO</div>
+                        <div className={cx("mobile-filter")}>
+                            <SearchBy title={"Theo Danh Mục"} menu={menu} setMenu={setMenu} content={listMenu} />
+                            <SearchBy title={"Nơi Bán"} menu={place} setMenu={setPlace} content={listComeFrom} />
+                            <SearchBy title={"Đơn Vị Vận Chuyển"} menu={deliver} setMenu={setDeliver} content={[{ details: "Hỏa Tốc" }, { details: "Nhanh" }, { details: "Tiết Kiệm" }]} />
+
+                        </div>
+                    </div>
+                    <SearchBy title={"Theo Danh Mục"} menu={menu} setMenu={setMenu} content={listMenu} />
+                    <SearchBy title={"Nơi Bán"} menu={place} setMenu={setPlace} content={listComeFrom} />
+                    <SearchBy title={"Đơn Vị Vận Chuyển"} menu={deliver} setMenu={setDeliver} content={[{ details: "Hỏa Tốc" }, { details: "Nhanh" }, { details: "Tiết Kiệm" }]} />
+
+                </Col>
+                <Col lg={10} xs={11} >
                     <Container >
                         <Row>
                             <h1 className={cx("search-header")}>
@@ -275,27 +326,22 @@ function Search() {
                             </div>
 
                         </Row>
+                        <Row>
+                            {
+                                totalPages > 0 ?
+                                    <ProductList
+                                        pageProducts={pageProducts}
+                                        isNotFound={page > totalPages - 1 ? true : false}
 
+                                    /> :
+                                    <h2 className={cx("pt-4")}>Không tìm thấy sản phẩm</h2>
+                            }
+                        </Row>
 
                     </Container>
                 </Col>
             </Row>
-            <Row className={cx("px-0")}>
-                <Col lg={2}></Col>
-                <Col lg={10} md={12} >
-                    <Row>
-                        {
-                            totalPages > 0 ?
-                                <ProductList
-                                    pageProducts={pageProducts}
-                                    isNotFound={page > totalPages - 1 ? true : false}
 
-                                /> :
-                                <h2 className={cx("pt-4")}>Không tìm thấy sản phẩm</h2>
-                        }
-                    </Row>
-                </Col>
-            </Row>
         </Container>
     </div>
 }

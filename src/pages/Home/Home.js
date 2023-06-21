@@ -8,13 +8,16 @@ import { useEffect, } from 'react';
 
 import SuggestProducts from './Components/MainContent.js/SuggestProducts';
 import MainContent from './Components/MainContent.js';
-import { productsApiSlice } from '~/features/products/productsApiSlice';
+
+
+
+
 
 import ProductCatalogue from './Components/ProductCatalogue/ProductCatalogue';
 
 
 import useHomePage from '~/hooks/useHomPage';
-import { store } from '~/app/store';
+
 
 
 
@@ -31,10 +34,7 @@ function Home() {
     const [homePage] = useHomePage();
 
 
-    useEffect(() => {
-        store.dispatch(productsApiSlice.util.prefetch('getProducts', 'productsList', { force: true }))
 
-    }, []);
 
 
 

@@ -12,7 +12,7 @@ const cx = className.bind(styles);
 
 function ProductList({ pageProducts, isNotFound }) {
     return (
-        <Container className={cx("")}>
+        <Container className={cx("px-0")}>
             {isNotFound ? <NotFound title={"Không Tìm Thấy Sản Phẩm"} height={"50vh"} /> :
                 <Row className={cx("g-3 pb-5 mt-4")}>
                     {pageProducts?.length ? pageProducts.map((product) => {
