@@ -43,27 +43,28 @@ export const productsApiSlice = apiSlice.injectEndpoints({
 
         }),
         getSearch: builder.mutation({
-            query: ({ keyword, details }) => ({
-                url: `/product/hot/search?keyword=${keyword}&details=${details}`,
-                method: 'GET',
+            query: initialProduct => ({
+                url: `/product/hot/search?keyword=${initialProduct.keyword}&details=${initialProduct.details}`,
+                method: 'POST',
+                body: { ...initialProduct },
                 validateStatus: (response, result) => {
                     return response.status === 200 && !result.isError
-                }
+                },
             }),
             async onQueryStarted(arg, { dispatch, queryFulfilled, getState }) {
 
                 try {
-                    const { data } = await queryFulfilled
+                    const { data } = await queryFulfilled;
 
 
                     const { products, history } = data;
 
                     dispatch(setSearch({ products }))
 
-                    if (history.keyword === "") {
+                    if (!history.keyword) {
                         return
                     }
-
+                    console.log(history)
                     dispatch(setKeyWords({ history }))
                     const listHistory = getState().search.history
                     let check = listHistory.every((item) => {

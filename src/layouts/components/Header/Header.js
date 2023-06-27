@@ -17,7 +17,7 @@ import Col from "react-bootstrap/Col";
 
 import useAuth from "~/hooks/useAuth"
 import { useSendLogoutMutation } from "~/features/auth/authApiSlice";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 import Avatar from "~/components/Avatar";
 import { useHref } from 'react-router-dom';
@@ -118,7 +118,12 @@ function Header() {
     const handleSearch = async () => {
 
         if (result !== "") {
-            const query = { keyword: result, details: false }
+            const query = {
+                keyword: result, details: false, more: {
+                    popular: "Liên Quan",
+                    price: "none"
+                }
+            }
             await search(query);
             setResult("");
             navigate(`/0/search?keyword=${keyWord.keyWord}&details=${keyWord.details}`);
@@ -126,6 +131,7 @@ function Header() {
 
 
         }
+        // eslint-disable-next-line 
     }
 
 
@@ -335,11 +341,16 @@ function Header() {
                             <Row className={cx("flex-column")}>
                                 <Col>
                                     <div className={cx("search-input-wrapper")}>
-                                        <Col className={cx("search-input")} lg={11} md={10} sm={10} xs={10}>
+                                        <Col className={cx("search-input")} lg={11} md={10} sm={10} xs={9}>
                                             <input
                                                 onKeyDown={async (e) => {
                                                     if (e.key === "Enter") {
-                                                        const query = { keyword: e.target.value, details: false }
+                                                        const query = {
+                                                            keyword: e.target.value, details: false, more: {
+                                                                popular: "Liên Quan",
+                                                                price: "none"
+                                                            }
+                                                        }
                                                         await search(query)
                                                         setResult("")
                                                         navigate(`/0/search?keyword=${keyWord.keyWord}&details=${keyWord.details}`)
@@ -358,7 +369,12 @@ function Header() {
                                                             <button
                                                                 key={item.keyword}
                                                                 onMouseDown={async () => {
-                                                                    const query = { keyword: item.keyword, details: item.details }
+                                                                    const query = {
+                                                                        keyword: item.keyword, details: item.details, more: {
+                                                                            popular: "Liên Quan",
+                                                                            price: "none"
+                                                                        }
+                                                                    }
                                                                     search(query)
                                                                     setResult("")
                                                                     navigate(`/0/search?keyword=${keyWord.keyWord}&details=${keyWord.details}`)
@@ -373,7 +389,7 @@ function Header() {
                                             </div>
                                         </Col>
 
-                                        <Col className={cx("search-btn-wrapper")} lg={1} md={2} sm={2} xs={2}>
+                                        <Col className={cx("search-btn-wrapper")} lg={1} md={2} sm={2} xs={3}>
                                             <Button
                                                 onClick={handleSearch}
                                                 className={cx("search-btn")}
@@ -399,12 +415,17 @@ function Header() {
                                     </div>
                                 </Col>
                                 <Col>
-                                    <div className={cx("search-suggest-list", "d-none d-lg-block")}>
+                                    <div className={cx("search-suggest-list")}>
 
                                         {suggestProducts.map(product => {
                                             return <Link
                                                 onClick={async () => {
-                                                    const query = { keyword: product, details: true }
+                                                    const query = {
+                                                        keyword: product, details: true, more: {
+                                                            popular: "Liên Quan",
+                                                            price: "none"
+                                                        }
+                                                    }
                                                     await search(query)
 
                                                     setResult("")

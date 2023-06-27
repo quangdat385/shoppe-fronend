@@ -44,7 +44,7 @@ function ProductCatalogue() {
     const [sort, setSort] = useState({
         popular: homePage.popular,
         price: homePage.price,
-    })
+    });
     const [smallOrder, setSmallOrder] = useState(Number(page));
     const { data: products, isLoading, isSuccess, refetch } = useGetSearchProductsQuery(query, {
         pollingInterval: 60000,
@@ -68,7 +68,7 @@ function ProductCatalogue() {
 
 
         // eslint-disable-next-line
-    }, [page, homePage])
+    }, [page, homePage]);
 
     const [paginal, setPaginal] = useState(JSON.parse(localStorage.getItem('set_paginal')) || [
         0, 1, 2, 3, 4, pages.length - 1
@@ -213,12 +213,16 @@ function ProductCatalogue() {
         // eslint-disable-next-line
     }, [sort, menu]);
 
-
+    useEffect(() => {
+        if (smallOrder < 0 || !smallOrder) {
+            setSmallOrder(0)
+        } else if (smallOrder > pages.length - 1) {
+            setSmallOrder(pages.length - 1)
+        }
+    }, [pages])
 
     useEffect(() => {
-        if (smallOrder < 0) {
-            setSmallOrder(0)
-        }
+
 
         let pa = Number(page)
         let numpage = pages.length - 1
@@ -406,7 +410,7 @@ function ProductCatalogue() {
                                 <div className={cx("controller-state", "animate__animated animate__fadeIn")}>
                                     <span >{smallOrder + 1 ? smallOrder + 1 : 1}</span>
                                     <span>/</span>
-                                    <span className={cx("animate__animated animate__fadeIn  animate__delay-4s")} >
+                                    <span className={cx("animate__animated animate__fadeIn  animate__delay-2s")} >
                                         {isLoading && < FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
                                         {isSuccess && pages.length}
                                     </span>

@@ -21,6 +21,7 @@ function ProductItem({ product }, ref) {
     let leftrating;
     let rate = product.rating;
     if (rate === 0) {
+
         rating = <FontAwesomeIcon icon={faStar} style={{ color: "#d5d5d5", height: "10px" }} />
     } else {
         if (Number.isInteger(rate)) {

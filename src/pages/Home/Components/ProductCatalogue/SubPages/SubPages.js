@@ -22,7 +22,7 @@ function SubPages({ isTrue, products, isLoading, isSuccess, pages }) {
 
     const [isNotFound, setIsNotFound] = useState(false);
     useEffect(() => {
-        if (!pages.includes(Number(page))) {
+        if (Number(page) > pages?.length || Number(page)) {
             setIsNotFound(true)
         } else (
             setIsNotFound(false)

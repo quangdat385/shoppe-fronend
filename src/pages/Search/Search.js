@@ -1,7 +1,7 @@
 
 import className from 'classnames/bind';
 import { Container, Row, Col } from "react-bootstrap"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import "animate.css";
@@ -9,15 +9,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleLeft, faAngleRight, faFilter, faArrowUpWideShort, faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
 
 import styles from './Search.module.scss';
-import { selectProducts, selectHistory, selectSortBy, selectKeyword } from '~/features/search/searchSlice';
+import { selectProducts, selectSortBy, selectKeyword, setSortBy, } from '~/features/search/searchSlice';
 
 import { useGetRatingQuery } from "~/features/Rating/ratingApiSlice";
 import { useGetCatagoryQuery } from "~/features/Catagory/catagoryApiSlice";
 import { useGetSearchMutation } from "~/features/products/productsApiSlice";
 import { useGetDetailsQuery } from "~/features/productDetails/productDetailSlice"
 import SearchBy from './SearchBy';
+import RangePrice from './RangePrice';
 import ProductList from "./ProductList";
-import store from "~/app/store";
+import ByRating from "./ByRating";
+
 const cx = className.bind(styles);
 
 function Search() {
@@ -26,29 +28,32 @@ function Search() {
         refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
     });
+    const dispatch = useDispatch();
     const products = useSelector(selectProducts);
     const sortBy = useSelector(selectSortBy);
-    const history = useSelector(selectHistory);
     const KeyWords = useSelector(selectKeyword)
-    const [menu, setMenu] = useState([]);
-    const [place, setPlace] = useState([]);
-    const [deliver, setDeliver] = useState([]);
+
+    const [menu, setMenu] = useState(KeyWords.menu);
+    const [place, setPlace] = useState(KeyWords.place);
+    const [deliver, setDeliver] = useState(KeyWords.deliver);
+    const [rangePrice, setRangePrice] = useState(KeyWords.rangePrice);
+    const [voucher, setVoucher] = useState(KeyWords.voucher);
+    const [rate, SetRate] = useState(KeyWords.rate);
+
+
 
     const { page: numberOfPages } = useParams();
 
-    const [query, setQuery] = useState(JSON.parse(localStorage.getItem("search-keywords")) || [])
-    const [search] = useGetSearchMutation();
+
+    const [search, { isSuccess: isSearchSuccess }] = useGetSearchMutation();
+
 
     const navigate = useNavigate()
-    useEffect(() => {
-        const refreshSearch = async () => {
-            await search(query);
-            setQuery(query);
-            navigate(`/${Number(numberOfPages)}/search?keyword=${query.keyword}&details=${query.details}`);
-        }
-        refreshSearch();
-        // eslint-disable-next-line
-    }, [])
+
+
+
+
+
 
 
     const listSort = ["Liên Quan", "Bán Chạy", "Mới Nhất"];
@@ -56,7 +61,66 @@ function Search() {
         popular: sortBy.popular,
         price: sortBy.price
     });
-    const [totalProducts, setTotalProducts] = useState(products ? Array.from(products) : []);
+
+    useEffect(() => {
+        dispatch(setSortBy(sort))
+
+        //eslint-disable-next-line
+    }, [sort]);
+    useEffect(() => {
+        const term = JSON.parse(localStorage.getItem('search-keywords'))
+        const query = {
+            ...term,
+            menu,
+            place,
+            deliver,
+            rangePrice,
+            voucher, rate
+        }
+        search(query);
+
+        if (isSearchSuccess) {
+            localStorage.setItem("search-more", JSON.stringify({
+                menu,
+                place,
+                deliver,
+                rangePrice,
+                voucher, rate
+
+            }))
+            navigate(`/${Number(numberOfPages)}/search?keyword=${query.keyword}&details=${query.details}`);
+        }
+
+
+
+    }, [menu, place, deliver, rangePrice, voucher, rate])
+
+
+    useEffect(() => {
+        const refreshSearch = async () => {
+            let term = JSON.parse(localStorage.getItem('search-keywords'));
+            let search_more = JSON.parse(localStorage.getItem('search-more'));
+            const query = {
+                keyword: term.keyword,
+                details: term.details,
+                more: {
+                    popular: sort.popular,
+                    price: sort.price
+                },
+                ...search_more
+            }
+            await search(query);
+
+            navigate(`/${Number(numberOfPages)}/search?keyword=${query.keyword}&details=${query.details}`);
+        }
+        refreshSearch();
+        // eslint-disable-next-line
+    }, [])
+
+
+
+
+    const [totalProducts, setTotalProducts] = useState(products);
 
     const { data: rating,
         isSuccess: isRatingSuccess,
@@ -65,7 +129,8 @@ function Search() {
         isSuccess: isCatagorySuccess,
     } = useGetCatagoryQuery()
     if (isRatingSuccess) {
-        console.log(rating)
+
+        let term = rating
 
     }
     let listMenu;
@@ -81,6 +146,7 @@ function Search() {
 
         listMenu = details
     }
+
     let listComeFrom;
     if (isDetailsSuccess) {
         let places = [];
@@ -94,16 +160,11 @@ function Search() {
             return { details: item }
         });
     }
-    console.log(listComeFrom)
+
 
     useEffect(() => {
         setTotalProducts(Array.from(products))
     }, [products])
-
-    useEffect(() => {
-
-    }, [sort])
-
 
 
 
@@ -114,7 +175,7 @@ function Search() {
     const pageProducts = totalProducts?.slice(12 * page, (12 * page + 12));
 
     useEffect(() => {
-        navigate(`/${page}/search?keyword=${query.keyword}&details=${query.details}`);
+        navigate(`/${page}/search?keyword=${KeyWords.keyword}&details=${KeyWords.details}`);
         // eslint-disable-next-line
     }, [page])
 
@@ -170,7 +231,7 @@ function Search() {
     return <div className={cx("wrapper")}>
         <Container>
             <Row className={cx("px-0")}>
-                <Col lg={2} xs={1}>
+                <Col lg={2} >
                     <div className={cx("filter-header")}>
                         <svg enableBackground="new 0 0 15 15" viewBox="0 0 15 15" x="0" y="0" className={cx("icon")}>
                             <g>
@@ -180,18 +241,43 @@ function Search() {
                         </svg>
                         <div className={cx("search-text")}>SẮP XẾP THEO</div>
                         <div className={cx("mobile-filter")}>
-                            <SearchBy title={"Theo Danh Mục"} menu={menu} setMenu={setMenu} content={listMenu} />
-                            <SearchBy title={"Nơi Bán"} menu={place} setMenu={setPlace} content={listComeFrom} />
-                            <SearchBy title={"Đơn Vị Vận Chuyển"} menu={deliver} setMenu={setDeliver} content={[{ details: "Hỏa Tốc" }, { details: "Nhanh" }, { details: "Tiết Kiệm" }]} />
+
+                            <SearchBy title={"Theo Danh Mục"} menu={isSearchSuccess && menu} setMenu={setMenu} content={listMenu} />
+                            <SearchBy title={"Nơi Bán"} menu={isSearchSuccess && place} setMenu={setPlace} content={listComeFrom} />
+                            <SearchBy title={"Đơn Vị Vận Chuyển"} menu={isSearchSuccess && deliver} setMenu={setDeliver} content={[{ details: "Hỏa Tốc" }, { details: "Nhanh" }, { details: "Tiết Kiệm" }]} />
+                            <RangePrice title={"Khoảng Giá"} menu={isSearchSuccess && rangePrice} setMenu={setRangePrice} />
+                            <ByRating title={"Đánh Giá"} setMenu={SetRate} />
+                            <SearchBy
+                                title={"Dịch Vụ & Khuyến Mãi"}
+                                menu={voucher}
+                                setMenu={setVoucher}
+                                content={[{ details: "Voucher Xtra" }, { details: "Đang Giảm Giá" }, { details: "Gì Cũng Rẻ" }, { details: "Hàng Có Sẵn" }, { details: "Mua giá bán buôn/ bán sỉ" }]}
+                            />
+
 
                         </div>
                     </div>
-                    <SearchBy title={"Theo Danh Mục"} menu={menu} setMenu={setMenu} content={listMenu} />
-                    <SearchBy title={"Nơi Bán"} menu={place} setMenu={setPlace} content={listComeFrom} />
-                    <SearchBy title={"Đơn Vị Vận Chuyển"} menu={deliver} setMenu={setDeliver} content={[{ details: "Hỏa Tốc" }, { details: "Nhanh" }, { details: "Tiết Kiệm" }]} />
+                    <div className={cx('search-by-wrapper')}>
+
+                        <SearchBy title={"Theo Danh Mục"} menu={menu} setMenu={setMenu} content={listMenu} />
+                        <SearchBy title={"Nơi Bán"} menu={place} setMenu={setPlace} content={listComeFrom} />
+                        <SearchBy title={"Đơn Vị Vận Chuyển"} menu={deliver} setMenu={setDeliver} content={[{ details: "Hỏa Tốc" }, { details: "Nhanh" }, { details: "Tiết Kiệm" }]} />
+                        <RangePrice title={"Khoảng Giá"} menu={rangePrice} setMenu={setRangePrice} />
+                        <ByRating title={"Đánh Giá"} setMenu={SetRate} />
+
+                        <SearchBy
+                            title={"Dịch Vụ & Khuyến Mãi"}
+                            menu={voucher}
+                            setMenu={setVoucher}
+                            content={[{ details: "Voucher Xtra" }, { details: "Đang Giảm Giá" }, { details: "Gì Cũng Rẻ" }, { details: "Hàng Có Sẵn" }, { details: "Mua giá bán buôn/ bán sỉ" }]}
+                        />
+
+
+                    </div>
+
 
                 </Col>
-                <Col lg={10} xs={11} >
+                <Col lg={10} xs={12} >
                     <Container >
                         <Row>
                             <h1 className={cx("search-header")}>
@@ -214,14 +300,16 @@ function Search() {
                                 <p>
                                     Kết quả tìm kiếm cho từ khóa
                                     '{` `}
-                                    <span style={{ color: '#ee4d2d' }}>
-                                        {KeyWords.keyword}
-                                    </span>
+                                    {isSearchSuccess &&
+                                        <span style={{ color: '#ee4d2d' }}>
+                                            {KeyWords.keyword}
+                                        </span>}
                                     {` `}
                                     '
 
 
                                 </p>
+
 
 
                             </h1>
@@ -235,10 +323,27 @@ function Search() {
                                     listSort.map(item => {
                                         return <div
                                             key={item + "sort"}
-                                            onClick={() => {
+                                            onClick={async () => {
                                                 setSort((sort) => {
                                                     return { ...sort, popular: item }
                                                 })
+                                                let term = JSON.parse(localStorage.getItem('search-keywords'))
+                                                const query = {
+                                                    keyword: term.keyword,
+                                                    details: term.details,
+                                                    more: {
+                                                        popular: item,
+                                                        price: sort.price
+                                                    },
+                                                    menu: term?.menu,
+                                                    place: term?.place,
+                                                    deliver: term?.deliver,
+                                                    rangePrice: term?.rangePrice,
+                                                    voucher: term?.voucher,
+                                                }
+                                                await search(query);
+
+                                                navigate(`/${Number(numberOfPages)}/search?keyword=${query.keyword}&details=${query.details}`);
                                             }}
                                             className={cx("butn butn-normal",
                                                 item === sort.popular ? "butn-primary" : "butn-white")}
@@ -262,32 +367,86 @@ function Search() {
                                     <FontAwesomeIcon icon={faAngleDown}
                                         style={{ color: "#555", display: "block", marginRight: "10px" }} />
                                     <div className={cx("soft-price")}>
-                                        <div onClick={(e) => {
+                                        <div onClick={async (e) => {
                                             e.stopPropagation()
                                             setSort((sort) => {
                                                 return { ...sort, price: "none" }
                                             })
+                                            let term = JSON.parse(localStorage.getItem('search-keywords'))
+                                            const query = {
+                                                keyword: term.keyword,
+                                                details: term.details,
+                                                more: {
+                                                    popular: "none",
+                                                    price: sort.price
+                                                },
+                                                menu: term?.menu,
+                                                place: term?.place,
+                                                deliver: term?.deliver,
+                                                rangePrice: term?.rangePrice,
+                                                voucher: term?.voucher,
+                                            }
+                                            await search(query);
+
+                                            navigate(`/${Number(numberOfPages)}/search?keyword=${query.keyword}&details=${query.details}`);
+
                                         }}
                                             className={cx("soft-price-item")}
                                         >
                                             Giá : Mặc Định
                                         </div>
-                                        <div onClick={(e) => {
+                                        <div onClick={async (e) => {
                                             e.stopPropagation()
                                             setSort((sort) => {
                                                 return { ...sort, price: "increase" }
                                             })
+                                            let term = JSON.parse(localStorage.getItem('search-keywords'))
+                                            const query = {
+                                                keyword: term.keyword,
+                                                details: term.details,
+                                                more: {
+                                                    popular: "increase",
+                                                    price: sort.price
+                                                },
+                                                menu: term?.menu,
+                                                place: term?.place,
+                                                deliver: term?.deliver,
+                                                rangePrice: term?.rangePrice,
+                                                voucher: term?.voucher,
+                                            }
+                                            await search(query);
+
+                                            navigate(`/${Number(numberOfPages)}/search?keyword=${query.keyword}&details=${query.details}`);
+
                                         }}
                                             className={cx("soft-price-item")}
                                         >
                                             Giá : Thấp Đến Cao
                                         </div>
                                         <div
-                                            onClick={(e) => {
+                                            onClick={async (e) => {
                                                 e.stopPropagation()
                                                 setSort((sort) => {
                                                     return { ...sort, price: "decrease" }
                                                 })
+                                                let term = JSON.parse(localStorage.getItem('search-keywords'))
+                                                const query = {
+                                                    keyword: term.keyword,
+                                                    details: term.details,
+                                                    more: {
+                                                        popular: "decrease",
+                                                        price: sort.price
+                                                    },
+                                                    menu: term?.menu,
+                                                    place: term?.place,
+                                                    deliver: term?.deliver,
+                                                    rangePrice: term?.rangePrice,
+                                                    voucher: term?.voucher,
+                                                }
+                                                await search(query);
+
+                                                navigate(`/${Number(numberOfPages)}/search?keyword=${query.keyword}&details=${query.details}`);
+
                                             }}
                                             className={cx("soft-price-item")}
                                         >

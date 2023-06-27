@@ -1,6 +1,6 @@
 import className from 'classnames/bind';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faAngleDown
@@ -13,8 +13,11 @@ const cx = className.bind(styles);
 
 function Searchby({ title, menu, setMenu, content }) {
     const [add, setAdd] = useState(false);
-    console.log(content?.slice(0, 6))
+
+
+
     const [result, setResult] = useState(content?.slice(0, 5))
+
 
     useEffect(() => {
         if (add) {
@@ -34,40 +37,37 @@ function Searchby({ title, menu, setMenu, content }) {
                     return (<div
                         className={cx("item")} key={item.details}
                         onClick={() => {
-                            const index = menu.indexOf(item.details);
-                            console.log(index);
+                            const index = menu?.indexOf(item.details);
+
                             if (index === -1) {
                                 setMenu(pre => [...pre, item.details])
 
                             } else {
                                 setMenu(pre => {
-                                    const index = menu.findIndex(i => i === item.details);
+                                    const index = menu?.findIndex(i => i === item.details);
                                     const result = [...pre]
                                     result.splice(index, 1)
-                                    return result;
+                                    return [...result];
                                 })
 
                             }
-
+                            console.log(menu)
 
                         }}
 
                     >
 
                         <div
-
-
                             className={cx("box")}
                             key={"box" + item.details}>
                             <svg enableBackground="new 0 0 12 12" viewBox="0 0 12 12" x="0" y="0"
-                                className={cx("check-icon", menu.indexOf(item.details) !== -1 ? "active" : "")}>
+                                className={cx("check-icon", menu && menu?.indexOf(item.details) !== -1 ? "active" : "")}>
                                 <g>
                                     <path d="m5.2 10.9c-.2 0-.5-.1-.7-.2l-4.2-3.7c-.4-.4-.5-1-.1-1.4s1-.5 1.4-.1l3.4 3 5.1-7c .3-.4 1-.5 1.4-.2s.5 1 .2 1.4l-5.7 7.9c-.2.2-.4.4-.7.4 0-.1 0-.1-.1-.1z">
                                     </path>
                                 </g>
                             </svg>
                         </div>
-
                         <p >
                             {`${item.details}`}
                             {item.listProduct ? ` (${item.listProduct})` : ""}
@@ -87,4 +87,4 @@ function Searchby({ title, menu, setMenu, content }) {
     </div>);
 }
 
-export default Searchby;
+export default memo(Searchby);

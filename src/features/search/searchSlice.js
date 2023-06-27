@@ -6,11 +6,11 @@ const searchSlice = createSlice({
     initialState: {
         products: [],
         history: JSON.parse(localStorage.getItem("search-history")) || [],
-        sortBy: {
+        sortBy: JSON.parse(localStorage.getItem("search-sortBy")) || {
             popular: "Liên Quan",
             price: "none"
         },
-        keyword: JSON.parse(localStorage.getItem("search-keyword")) || [],
+        keyword: JSON.parse(localStorage.getItem("search-keyword")) || {},
 
     },
     reducers: {
@@ -28,11 +28,13 @@ const searchSlice = createSlice({
         },
         setSortBy: (state, action) => {
             const sort = action.payload;
+            localStorage.setItem("search-sortBy", JSON.stringify(sort))
             state.sortBy = { ...sort };
         },
         setKeyWords: (state, action) => {
-            localStorage.setItem("search-keywords", JSON.stringify(action.payload.history))
+
             state.keyword = action.payload.history;
+            localStorage.setItem("search-keywords", JSON.stringify(action.payload.history))
         }
 
     }

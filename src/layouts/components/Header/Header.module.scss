@@ -130,9 +130,7 @@ $textColor: rgba(0, 0, 0, 0.8);
             display: none;
         }
 
-        .search {
-            height: 62px;
-        }
+
 
         .search-box {
             padding: 13px 0;
@@ -143,7 +141,7 @@ $textColor: rgba(0, 0, 0, 0.8);
 
 @media (max-width: 991px) {
     .header {
-        height: 96px;
+
 
         .shopping-cart-link .number-of-orders {
             top: 0;
@@ -995,8 +993,10 @@ $textColor: rgba(0, 0, 0, 0.8);
     --suggest-list-hieght: 24px;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     margin: 3px 0 0;
     height: var(--suggest-list-hieght);
+    overflow: hidden;
 }
 
 .search-suggest-item:first-child {
