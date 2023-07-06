@@ -218,7 +218,8 @@ function FormLoginByPhone({ setStatus }) {
 
             setStep('INPUT_PHONE_NUMBER');
 
-            navigate("/user/profile")
+            let term = JSON.parse(localStorage.getItem("path_name"));
+            navigate(`${term}`);
 
         } catch (err) {
             if (!err.status) {

@@ -96,7 +96,8 @@ function FormLogin() {
 
             if (next_step === "views") {
                 dispatch(setCredentials({ accessToken }));
-                navigate("/user/profile");
+                let term = JSON.parse(localStorage.getItem("path_name"));
+                navigate(`${term}`);
             } else {
                 setResult(data);
                 setStatus("update password");
@@ -150,7 +151,8 @@ function FormLogin() {
             setConfirmPassword('')
             setValidated(false);
             setStatus("register")
-            navigate("/user/profile")
+            let term = JSON.parse(localStorage.getItem("path_name"));
+            navigate(`${term}`);
 
         } catch (err) {
             if (!err.status) {

@@ -10,10 +10,10 @@ import styles from './Search.module.scss';
 const cx = className.bind(styles);
 
 
-function RangePrice({ title, setMenu }) {
+function RangePrice({ title, menu, setMenu }) {
 
-    const [rangeFrom, setRangeFrom] = useState();
-    const [rangeTo, setRangeTo] = useState();
+    const [rangeFrom, setRangeFrom] = useState(menu?.from || "");
+    const [rangeTo, setRangeTo] = useState(menu?.to || "");
     const [visible, setVisible] = useState(false);
 
     const hanleRangeFrom = (e) => {
@@ -43,6 +43,7 @@ function RangePrice({ title, setMenu }) {
             <input
                 type="number"
                 placeholder="₫ TỪ"
+                value={rangeTo}
                 maxLength={13}
                 onChange={(e) => {
                     if (Number(e.target.value) >= 0) {
@@ -66,6 +67,7 @@ function RangePrice({ title, setMenu }) {
                 maxLength={13}
                 onChange={hanleRangeFrom}
                 step={1000}
+                value={rangeFrom}
             />
 
         </div>

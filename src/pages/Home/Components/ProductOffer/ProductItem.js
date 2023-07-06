@@ -16,7 +16,7 @@ const cx = className.bind(styles);
 
 
 function ProductItem({ product }, ref) {
-    const img = `http://localhost:3500/img/${product?.img_product[0][0]}`;
+
     let rating;
     let leftrating;
 
@@ -69,10 +69,10 @@ function ProductItem({ product }, ref) {
     }
 
 
-    return (<Link className={cx("product-item")}>
+    return (<Link className={cx("product-item")} to={`/detail/@:${product?.id ? product?.id : product?._id}`}>
         <div className={cx("product-img-wrapper")}>
             <img ref={ref} className={cx("img")}
-                src={img} alt="" />
+                src={`http://localhost:3500/img/${product?.img_product[0][0]}`} alt="" />
             <img ref={ref} className={cx("img-bg")}
                 src={`http://localhost:3500/img/${product?.ship_label[0]}`} alt="" />
             <p className={cx("favourite-logo")}>Yêu Thích</p>

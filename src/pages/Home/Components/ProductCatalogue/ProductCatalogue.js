@@ -17,6 +17,7 @@ import useHomePage from "~/hooks/useHomPage";
 
 import { useGetSearchProductsQuery } from "~/features/products/productsApiSlice";
 import SubPages from "./SubPages/SubPages";
+import NotFound from "./SubPages/NotFound";
 
 
 
@@ -216,14 +217,12 @@ function ProductCatalogue() {
     useEffect(() => {
         if (smallOrder < 0 || !smallOrder) {
             setSmallOrder(0)
-        } else if (smallOrder > pages.length - 1) {
-            setSmallOrder(pages.length - 1)
         }
     }, [pages])
 
     useEffect(() => {
 
-
+        // eslint-disable-next-line
         let pa = Number(page)
         let numpage = pages.length - 1
         let orderpages = [0, 1, pa, pa + 1, numpage];
@@ -457,18 +456,18 @@ function ProductCatalogue() {
                     </div>
                 </Col>
                 <Col lg={10} md={12} className={cx("product-list")} >
-                    {pages.map(item => {
+                    {smallOrder > pages.length ? <NotFound /> : pages.map(item => {
                         let isTrue = item.toString() === page
 
 
-                        return <SubPages
+                        return isSuccess ? <SubPages
                             key={"subpage" + item}
                             isTrue={isTrue}
                             isLoading={isLoading}
                             isSuccess={isSuccess}
-                            products={isSuccess ? products : null}
-                            pages={pages}
-                        />
+                            products={products}
+
+                        /> : null
                     })}
                 </Col>
             </Row>

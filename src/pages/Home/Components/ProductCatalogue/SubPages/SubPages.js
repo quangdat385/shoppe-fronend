@@ -1,8 +1,8 @@
 import ClassName from "classnames/bind";
 import { Container, Row, Col } from "react-bootstrap";
-import { useState, useEffect, memo } from "react";
+import { memo } from "react";
 
-import { useParams } from "react-router-dom"
+
 import 'animate.css';
 
 
@@ -11,23 +11,13 @@ import 'animate.css';
 
 import styles from "../ProductCatalogue.module.scss";
 import ProductSearchItem from "../../ProductOffer/ProductSearchItem";
-import NotFound from './NotFound';
 
 
 
 const cx = ClassName.bind(styles);
 
-function SubPages({ isTrue, products, isLoading, isSuccess, pages }) {
-    const { page } = useParams()
+function SubPages({ isTrue, products, isLoading, isSuccess }) {
 
-    const [isNotFound, setIsNotFound] = useState(false);
-    useEffect(() => {
-        if (Number(page) > pages?.length || Number(page)) {
-            setIsNotFound(true)
-        } else (
-            setIsNotFound(false)
-        )
-    }, [page, pages])
     let content;
     if (isLoading) {
         return content = (<Container className={cx("px-0", isTrue ? "" : "d-none")}>
@@ -37,7 +27,7 @@ function SubPages({ isTrue, products, isLoading, isSuccess, pages }) {
     if (isSuccess) {
         const { ids, entities } = products;
 
-        return content = isNotFound ? <NotFound /> : <Container className={cx("px-0", isTrue ? "" : "d-none")}>
+        return content = <Container className={cx("px-0", isTrue ? "" : "d-none")}>
             <Row className={cx("g-3 animate__animated animate__fadeIn")}>
                 {ids?.length && ids?.map((id, index) => {
                     const product = entities[id];

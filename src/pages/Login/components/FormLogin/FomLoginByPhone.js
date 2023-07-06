@@ -148,7 +148,8 @@ function FormLoginByPhone({ setStatus }) {
                 setPassword('');
                 setOtp("");
                 setStep("INPUT_PHONE_NUMBER");
-                navigate("/user/profile");
+                let term = JSON.parse(localStorage.getItem("path_name"));
+                navigate(`${term}`);
 
             } else {
                 setResult(data)
@@ -184,7 +185,8 @@ function FormLoginByPhone({ setStatus }) {
             setPassword('');
             setConfirmPassword('')
             setValidated(false);
-            navigate("/user/profile")
+            let term = JSON.parse(localStorage.getItem("path_name"));
+            navigate(`${term}`);
 
         } catch (err) {
             if (!err.status) {

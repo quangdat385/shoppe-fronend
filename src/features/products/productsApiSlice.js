@@ -64,7 +64,6 @@ export const productsApiSlice = apiSlice.injectEndpoints({
                     if (!history.keyword) {
                         return
                     }
-                    console.log(history)
                     dispatch(setKeyWords({ history }))
                     const listHistory = getState().search.history
                     let check = listHistory.every((item) => {
@@ -167,11 +166,12 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: (result, error, arg) => [{ type: 'Product', id: arg.id }]
         }),
         updateLikes: builder.mutation({
-            query: (id, initialproduct) => ({
-                url: `product/${id}/update/likes`,
+            query: (initialproduct) => ({
+                url: `product/${initialproduct.id}/update/likes`,
                 method: 'PATCH',
                 body: { ...initialproduct }
             }),
+
             invalidatesTags: (result, error, arg) => [{ type: 'Product', id: arg.id }]
         }),
 

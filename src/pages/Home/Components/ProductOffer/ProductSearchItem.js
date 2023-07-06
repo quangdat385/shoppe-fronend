@@ -65,7 +65,7 @@ function ProductItem({ product }, ref) {
     }
 
 
-    return (<Link className={cx("product-item")}>
+    return (<Link className={cx("product-item")} to={`/detail/@:${product?.id ? product?.id : product?._id}`}>
         <div className={cx("product-img-wrapper")}>
             <img ref={ref} className={cx("img")}
                 src={img} alt="" />

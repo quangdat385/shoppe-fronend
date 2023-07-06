@@ -2,7 +2,7 @@
 import className from 'classnames/bind';
 import { Container, Row, Col } from "react-bootstrap"
 import { useSelector, useDispatch } from "react-redux"
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import "animate.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +11,7 @@ import { faAngleDown, faAngleLeft, faAngleRight, faFilter, faArrowUpWideShort, f
 import styles from './Search.module.scss';
 import { selectProducts, selectSortBy, selectKeyword, setSortBy, } from '~/features/search/searchSlice';
 
-import { useGetRatingQuery } from "~/features/Rating/ratingApiSlice";
+
 import { useGetCatagoryQuery } from "~/features/Catagory/catagoryApiSlice";
 import { useGetSearchMutation } from "~/features/products/productsApiSlice";
 import { useGetDetailsQuery } from "~/features/productDetails/productDetailSlice"
@@ -33,19 +33,21 @@ function Search() {
     const sortBy = useSelector(selectSortBy);
     const KeyWords = useSelector(selectKeyword)
 
-    const [menu, setMenu] = useState(KeyWords.menu);
-    const [place, setPlace] = useState(KeyWords.place);
-    const [deliver, setDeliver] = useState(KeyWords.deliver);
-    const [rangePrice, setRangePrice] = useState(KeyWords.rangePrice);
-    const [voucher, setVoucher] = useState(KeyWords.voucher);
-    const [rate, SetRate] = useState(KeyWords.rate);
+    const [searchMore] = useState(JSON.parse(localStorage.getItem("search-more")) || {})
+
+    const [menu, setMenu] = useState(searchMore.menu);
+    const [place, setPlace] = useState(searchMore.place);
+    const [deliver, setDeliver] = useState(searchMore.deliver);
+    const [rangePrice, setRangePrice] = useState(searchMore.rangePrice);
+    const [voucher, setVoucher] = useState(searchMore.voucher);
+    const [rate, SetRate] = useState(searchMore.rate);
 
 
 
     const { page: numberOfPages } = useParams();
 
 
-    const [search, { isSuccess: isSearchSuccess }] = useGetSearchMutation();
+    const [search, { isSuccess: isSearchSuccess, isLoading: isSearchLoading }] = useGetSearchMutation();
 
 
     const navigate = useNavigate()
@@ -67,6 +69,7 @@ function Search() {
 
         //eslint-disable-next-line
     }, [sort]);
+    // eslint-disable-next-line
     useEffect(() => {
         const term = JSON.parse(localStorage.getItem('search-keywords'))
         const query = {
@@ -75,7 +78,8 @@ function Search() {
             place,
             deliver,
             rangePrice,
-            voucher, rate
+            voucher,
+            rate
         }
         search(query);
 
@@ -85,21 +89,23 @@ function Search() {
                 place,
                 deliver,
                 rangePrice,
-                voucher, rate
+                voucher,
+                rate
 
             }))
             navigate(`/${Number(numberOfPages)}/search?keyword=${query.keyword}&details=${query.details}`);
         }
 
 
-
+        // eslint-disable-next-line 
     }, [menu, place, deliver, rangePrice, voucher, rate])
 
 
     useEffect(() => {
         const refreshSearch = async () => {
             let term = JSON.parse(localStorage.getItem('search-keywords'));
-            let search_more = JSON.parse(localStorage.getItem('search-more'));
+
+
             const query = {
                 keyword: term.keyword,
                 details: term.details,
@@ -107,13 +113,15 @@ function Search() {
                     popular: sort.popular,
                     price: sort.price
                 },
-                ...search_more
+                ...searchMore
             }
             await search(query);
 
             navigate(`/${Number(numberOfPages)}/search?keyword=${query.keyword}&details=${query.details}`);
         }
+
         refreshSearch();
+
         // eslint-disable-next-line
     }, [])
 
@@ -122,17 +130,10 @@ function Search() {
 
     const [totalProducts, setTotalProducts] = useState(products);
 
-    const { data: rating,
-        isSuccess: isRatingSuccess,
-    } = useGetRatingQuery()
     const { data: catagory,
         isSuccess: isCatagorySuccess,
     } = useGetCatagoryQuery()
-    if (isRatingSuccess) {
 
-        let term = rating
-
-    }
     let listMenu;
     if (isCatagorySuccess) {
 
@@ -163,7 +164,7 @@ function Search() {
 
 
     useEffect(() => {
-        setTotalProducts(Array.from(products))
+        setTotalProducts(Array.from(products) || [])
     }, [products])
 
 
@@ -174,17 +175,123 @@ function Search() {
     const totalPages = Math.ceil(totalProducts?.length / 12) || 0;
     const pageProducts = totalProducts?.slice(12 * page, (12 * page + 12));
 
+    let pages = []
+    for (let i = 0; i < totalPages; i++) {
+        pages.push(i)
+    };
     useEffect(() => {
         navigate(`/${page}/search?keyword=${KeyWords.keyword}&details=${KeyWords.details}`);
         // eslint-disable-next-line
     }, [page])
 
+    const [paginal, setPaginal] = useState(JSON.parse(localStorage.getItem('set_SearchPages')) || [
+        0, 1, 2, 3, 4, pages.length - 1
+    ]);
+    const [btnPoint, seBtnPoint] = useState({
+        first: false,
+        last: true
+    });
+
+    let content;
+    if (pages.length <= 5) {
+        content = pages.map(item => {
+            let isActive = item.toString() === numberOfPages;
+            let numberOfPage = item + 1;
+            return <button
+                key={numberOfPage + "paginal"}
+                className={cx("number-paginal", isActive ? "active" : "")}
+                onClick={() => { setPage(item) }}
+            >{numberOfPage}
+            </button>
+        })
+    } else {
+        content = pages.map(item => {
+            let isActive = item.toString() === numberOfPages;
+            let numberOfPage = item + 1;
+
+            let isVisible = paginal.includes(item);
+            if (item === 1) {
+                return <Fragment key={"first"} >
+                    <button
+                        key={numberOfPage + "first"}
+                        className={cx("number-paginal", isActive ? "active" : "", isVisible ? "" : "hidden")}
+                        onClick={() => { setPage(item) }}
+                    >{numberOfPage}
+                    </button>
+                    <button
+                        key={numberOfPage + "..."}
+                        className={cx("number-paginal", btnPoint.first ? "" : "hidden")}
+
+                    >{"..."}
+                    </button>
+                </Fragment>
+            } else if (item === pages.length - 2) {
+                return <Fragment key={"last"}>
+
+                    <button
+                        key={numberOfPage + "..."}
+                        className={cx("number-paginal", btnPoint.last ? "" : "hidden")}
+
+                    >{"..."}
+                    </button>
+                    <button
+                        key={numberOfPage + "last"}
+                        className={cx("number-paginal", isActive ? "active" : "", isVisible ? "" : "hidden")}
+                        onClick={() => { setPage(item) }}
+                    >{numberOfPage}
+                    </button>
+                </Fragment>
+            } else {
+                return <button
+                    key={numberOfPage}
+                    className={cx("number-paginal", isActive ? "active" : "", isVisible ? "" : "hidden")}
+                    onClick={() => { setPage(item) }}
+                >{numberOfPage}
+                </button>
+            }
+        })
 
 
+    };
+    useEffect(() => {
 
+        let pa = Number(page)
+        let numpage = pages.length - 1
+        let orderpages = [0, 1, pa, pa + 1, numpage];
+        let pageArray = Array.from(new Set(orderpages))
+        localStorage.setItem("set_SearchPages", JSON.stringify(pageArray));
+        setPaginal(pageArray);
 
+        if (pa >= 3 && pa < numpage - 2) {
+            seBtnPoint(pre => {
+                return {
+                    ...pre, first: true
+                }
+            })
+        } else if (pa >= numpage - 1) {
+            seBtnPoint(pre => {
+                return {
+                    ...pre, first: true, last: false
+                }
+            })
+        } else {
+            seBtnPoint(pre => {
+                return {
+                    ...pre, first: false, last: true
+                }
+            })
+        }
+    }
+        // eslint-disable-next-line 
+        , [page, numberOfPages])
 
-
+    useEffect(() => {
+        const aTag = document.createElement("a");
+        aTag.href = "#search-products";
+        document.body.appendChild(aTag);
+        aTag.click();
+        aTag.remove();
+    }, [page])
 
     const handlerPreBtn = () => {
         let Order;
@@ -242,11 +349,11 @@ function Search() {
                         <div className={cx("search-text")}>SẮP XẾP THEO</div>
                         <div className={cx("mobile-filter")}>
 
-                            <SearchBy title={"Theo Danh Mục"} menu={isSearchSuccess && menu} setMenu={setMenu} content={listMenu} />
-                            <SearchBy title={"Nơi Bán"} menu={isSearchSuccess && place} setMenu={setPlace} content={listComeFrom} />
-                            <SearchBy title={"Đơn Vị Vận Chuyển"} menu={isSearchSuccess && deliver} setMenu={setDeliver} content={[{ details: "Hỏa Tốc" }, { details: "Nhanh" }, { details: "Tiết Kiệm" }]} />
-                            <RangePrice title={"Khoảng Giá"} menu={isSearchSuccess && rangePrice} setMenu={setRangePrice} />
-                            <ByRating title={"Đánh Giá"} setMenu={SetRate} />
+                            <SearchBy menu={menu} title={"Theo Danh Mục"} setMenu={setMenu} content={listMenu} />
+                            <SearchBy menu={place} title={"Nơi Bán"} setMenu={setPlace} content={listComeFrom} />
+                            <SearchBy menu={deliver} title={"Đơn Vị Vận Chuyển"} setMenu={setDeliver} content={[{ details: "Hỏa Tốc" }, { details: "Nhanh" }, { details: "Tiết Kiệm" }]} />
+                            <RangePrice menu={rangePrice} title={"Khoảng Giá"} setMenu={setRangePrice} />
+                            <ByRating menu={rate} title={"Đánh Giá"} setMenu={SetRate} />
                             <SearchBy
                                 title={"Dịch Vụ & Khuyến Mãi"}
                                 menu={voucher}
@@ -263,7 +370,7 @@ function Search() {
                         <SearchBy title={"Nơi Bán"} menu={place} setMenu={setPlace} content={listComeFrom} />
                         <SearchBy title={"Đơn Vị Vận Chuyển"} menu={deliver} setMenu={setDeliver} content={[{ details: "Hỏa Tốc" }, { details: "Nhanh" }, { details: "Tiết Kiệm" }]} />
                         <RangePrice title={"Khoảng Giá"} menu={rangePrice} setMenu={setRangePrice} />
-                        <ByRating title={"Đánh Giá"} setMenu={SetRate} />
+                        <ByRating menu={rate} title={"Đánh Giá"} setMenu={SetRate} />
 
                         <SearchBy
                             title={"Dịch Vụ & Khuyến Mãi"}
@@ -314,7 +421,7 @@ function Search() {
 
                             </h1>
                         </Row>
-                        <Row className={cx("short-bar")} >
+                        <Row className={cx("short-bar")} id="search-products" >
                             <Col className={cx("soft-by")}>
                                 <p > Sắp Xếp Theo </p>
                             </Col>
@@ -485,16 +592,34 @@ function Search() {
                             </div>
 
                         </Row>
-                        <Row>
+                        <Row >
                             {
                                 totalPages > 0 ?
                                     <ProductList
                                         pageProducts={pageProducts}
                                         isNotFound={page > totalPages - 1 ? true : false}
 
-                                    /> :
-                                    <h2 className={cx("pt-4")}>Không tìm thấy sản phẩm</h2>
+                                    /> : isSearchLoading ? null :
+                                        <h2 className={cx("pt-4")}>Không tìm thấy sản phẩm</h2>
                             }
+                            {
+                                totalPages > 0 ? <Col lg={{ span: 8, offset: 2 }} md={12} className={cx("product-paginal-wrapper")}>
+                                    <div className={cx("product-paginal")}>
+                                        <button className={cx("pre-paginal", "d-inline")} onClick={handlerPreBtn}>
+                                            <FontAwesomeIcon icon={faAngleLeft} />
+                                        </button>
+                                        <div className={cx("content")} >
+
+                                            {content}
+                                        </div>
+
+                                        <button className={cx("next-paginal", "d-inline")} onClick={handlerNextBtn}>
+                                            <FontAwesomeIcon icon={faAngleRight} />
+                                        </button>
+                                    </div>
+                                </Col> : null
+                            }
+
                         </Row>
 
                     </Container>

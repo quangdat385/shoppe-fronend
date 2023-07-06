@@ -103,6 +103,7 @@ function FormLogin() {
     };
     const handlePerSitInput = () => setPersist(pre => !pre);
 
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const form = event.currentTarget;
@@ -122,7 +123,8 @@ function FormLogin() {
 
             setUserName('');
             setPassword('');
-            navigate("/user/profile");
+            let term = JSON.parse(localStorage.getItem("path_name"));
+            navigate(`${term}`);
         } catch (err) {
             if (!err.status) {
 
@@ -157,7 +159,8 @@ function FormLogin() {
             console.log(next_step)
             if (next_step === "views") {
                 dispatch(setCredentials({ accessToken }));
-                navigate("/user/profile");
+                let term = JSON.parse(localStorage.getItem("path_name"));
+                navigate(`${term}`);
             } else {
                 setResult(data);
                 setStatus("update password");
@@ -211,7 +214,8 @@ function FormLogin() {
             setConfirmPassword('')
             setValidated(false);
             setStatus("login")
-            navigate("/user/profile")
+            let term = JSON.parse(localStorage.getItem("path_name"));
+            navigate(`${term}`);
 
         } catch (err) {
             if (!err.status) {

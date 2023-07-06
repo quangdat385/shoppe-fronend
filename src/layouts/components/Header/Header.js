@@ -2,7 +2,7 @@
 import className from 'classnames/bind';
 import Container from 'react-bootstrap/Container';
 
-import { Link, useNavigate, } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import avatar from "~/assets/images/20210214_092405.jpg";
 import notify from "~/assets/images/img_notify.png";
@@ -17,10 +17,10 @@ import Col from "react-bootstrap/Col";
 
 import useAuth from "~/hooks/useAuth"
 import { useSendLogoutMutation } from "~/features/auth/authApiSlice";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import Avatar from "~/components/Avatar";
-import { useHref } from 'react-router-dom';
+
 import {
     signOut,
 
@@ -33,18 +33,19 @@ import Qrcode from '~/assets/images/QR code.png';
 import GoogleLay from '~/assets/images/Goole play.png';
 import AppStore from '~/assets/images/App Store.png';
 import ApppGalleri from '~/assets/images/Appgalleri.png';
-import usePersist from '~/hooks/usePersists';
+
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '~/features/auth/authSlice';
+
 import { selectHistory, selectKeyword } from '~/features/search/searchSlice'
 
-
+import { setCredentials } from "~/features/auth/authSlice"
 
 import styles from './Header.module.scss';
 
-import { useRefreshMutation } from "~/features/auth/authApiSlice";
-import { useGetSearchMutation } from "~/features/products/productsApiSlice"
 
+import { useGetSearchMutation } from "~/features/products/productsApiSlice";
+import { useRefreshMutation } from '~/features/auth/authApiSlice';
+import usePersist from '~/hooks/usePersists';
 
 
 const cx = className.bind(styles);
@@ -52,18 +53,20 @@ const cx = className.bind(styles);
 
 
 function Header() {
-    const [persist] = usePersist();
-    const effectRan = useRef(false)
-    const token = useSelector(selectCurrentToken);
-    const [user, setUser] = useState("");
+
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || "");
     const [result, setResult] = useState("");
-    const a = useHref()
-    console.log(a.query)
-
-    console.log(result);
-
+    const effectRan = useRef(false);
+    const [persist] = usePersist()
     const [refresh] = useRefreshMutation();
     const [search] = useGetSearchMutation();
+    const { token } = useSelector(setCredentials);
+
+    const { pathname } = useLocation()
+    useEffect(() => {
+        localStorage.setItem("path_name", JSON.stringify(pathname))
+    }, [pathname])
+
     // eslint-disable-next-line
     useEffect(() => {
         if (effectRan.current === true || process.env.NODE_ENV !== 'development') {
@@ -105,7 +108,8 @@ function Header() {
             localStorage.removeItem('persist')
             storage.delete('user')
             signOut(auth)
-            navigate('/')
+            let term = JSON.parse(localStorage.getItem("path_name"))
+            navigate(`${term}`)
 
         }
     }, [isSuccess, navigate])
@@ -344,7 +348,7 @@ function Header() {
                                         <Col className={cx("search-input")} lg={11} md={10} sm={10} xs={9}>
                                             <input
                                                 onKeyDown={async (e) => {
-                                                    if (e.key === "Enter") {
+                                                    if (e.key === "Enter" && e.target.value !== "") {
                                                         const query = {
                                                             keyword: e.target.value, details: false, more: {
                                                                 popular: "Liên Quan",
