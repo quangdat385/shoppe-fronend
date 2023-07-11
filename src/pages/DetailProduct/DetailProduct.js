@@ -6,14 +6,16 @@ import { Container, Col, Row } from "react-bootstrap"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faStarHalfStroke, faAngleDown, faPlus, faMinus, } from "@fortawesome/free-solid-svg-icons";
 import guarantee from "~/assets/images/guarantee.png"
-import { useGetProductsQuery, useUpdateLikesMutation, usePrefetch } from "~/features/products/productsApiSlice";
+import { useGetProductsQuery, useUpdateLikesMutation } from "~/features/products/productsApiSlice";
 import { useGetDetailsQuery } from "~/features/productDetails/productDetailSlice"
 import NotFound from "~/pages/Home/Components/ProductCatalogue/SubPages/NotFound";
 import AboutShop from "~/pages/DetailProduct/AboutShop";
+import AboutProduct from "~/pages/DetailProduct/AboutProduct";
 import { useGetUsersQuery } from "~/features/users/usersApiSlice";
 
 
 import useAuth from "~/hooks/useAuth";
+
 
 const cx = className.bind(styles)
 
@@ -24,30 +26,29 @@ function DetailProduct() {
     const id = title.split(":")[1]
     const { UserId } = useAuth();
     const navigate = useNavigate()
+    const [query, setQuery] = useState({ q: false })
 
-
-    const { product } = useGetProductsQuery("getProducts", {
-        selectFromResult: ({ data }) => ({
-            product: data?.entities[id]
-        }),
-    }, {
-        pollingInterval: 3000,
+    const { data: products, isLoading: isProductLoading, isSuccess: isProductSuccess } = useGetProductsQuery(query, {
+        pollingInterval: 60000,
         refetchOnMountOrArgChange: true,
-
-        skip: true,
+        refetchOnFocus: true,
+        forceRefetch: true
     });
+    let product;
+    if (isProductSuccess) {
+
+        const term = Object.values(products.entities);
+        product = Array.from(term).filter(item => item.id === id)[0];
+    }
+
+
     const { data: details, isSuccess, isLoading } = useGetDetailsQuery("listDetail", {
         pollingInterval: 60000,
         refetchOnMountOrArgChange: true,
         skip: false,
     }
     );
-    const [updateLikes] = useUpdateLikesMutation("productsList", {
-        pollingInterval: 3000,
-        refetchOnMountOrArgChange: true,
-        skip: true,
-    }
-    );
+    const [updateLikes] = useUpdateLikesMutation("productsList");
     const { user } = useGetUsersQuery('usersList', {
         selectFromResult: ({ data }) => ({
             user: data?.entities[UserId]
@@ -64,7 +65,8 @@ function DetailProduct() {
     }
 
 
-    const lengthImgs = product?.img_product.length || 9
+
+    const lengthImgs = product?.img_product?.length || 9
 
     let listImg = []
     for (let i = 0; i < lengthImgs; i++) {
@@ -81,6 +83,17 @@ function DetailProduct() {
     const [numberOfLikes, setNumberOfLikes] = useState(product?.likes);
 
     useEffect(() => {
+        if (like === true) {
+            setQuery(pre => {
+                return { ...pre, q: true }
+            })
+        } else {
+            setQuery(pre => {
+                return { ...pre, q: false }
+            })
+        }
+    }, [like])
+    useEffect(() => {
         setNumberOfLikes(product?.likes);
     }, [product])
 
@@ -92,16 +105,16 @@ function DetailProduct() {
     useEffect(() => {
         const updateLike = async () => {
             if (like === true && UserId) {
-                await updateLikes({ id: product?.id, userId: UserId, likes: 1 })
-
+                await updateLikes({ id: product?.id, userId: UserId, likes: 1 });
 
 
             } else if (like === false && UserId) {
-                await updateLikes({ id: product?.id, userId: UserId, likes: -1 })
+                await updateLikes({ id: product?.id, userId: UserId, likes: -1 });
 
 
             }
         }
+
         updateLike()
         // eslint-disable-next-line
     }, [like, UserId])
@@ -183,9 +196,9 @@ function DetailProduct() {
         }
     }
 
-    return isLoading ? <Container>
-        <div className={cx("d-flex justify-content-center  align-items-center")}>
-            <h1>Loading...</h1>
+    return isLoading || isProductLoading ? <Container>
+        <div className={cx("d-flex justify-content-center  align-items-center w-100 h-100")}>
+            <h1 className={cx("d-flex")} >Loading...</h1>
         </div>
     </Container> : product && detailsProduct ? <div className={cx("wrapper")}>
         <Container className={cx("menu", "px-0 bg-white")}>
@@ -208,7 +221,7 @@ function DetailProduct() {
         </Container>
         <Container className={cx('page-product', "px-0 bg-white")}>
             <Row>
-                <Col lg={5} xl={4}>
+                <Col lg={6} xl={5}>
                     <div className={cx('img-box')}>
                         <div className={cx('img')}>
                             <div className={cx('img-background')}  >
@@ -280,13 +293,13 @@ function DetailProduct() {
                                     <path d="M19.469 1.262c-5.284-1.53-7.47 4.142-7.47 4.142S9.815-.269 4.532 1.262C-1.937 3.138.44 13.832 12 19.333c11.559-5.501 13.938-16.195 7.469-18.07z" stroke="#FF424F" strokeWidth="1.5" fill={like ? "#ff424f" : "none"} fillRule="evenodd" strokeLinejoin="round">
                                     </path>
                                 </svg>
-                                {`Đã thích(${numberOfLikes < 1000 ? product.likes : (numberOfLikes / 1000).toFixed(1)})`}
+                                {`Đã thích(${numberOfLikes < 1000 ? numberOfLikes : (numberOfLikes / 1000).toFixed(1)} )`}
                             </div>
                         </div>
                     </div>
 
                 </Col>
-                <Col lg={7} xl={8} >
+                <Col lg={6} xl={7}>
                     <div className={cx('details-box')}>
                         <div className={cx('details-title')}>
                             {product.title}
@@ -316,9 +329,12 @@ function DetailProduct() {
                             <Link to="#" className={cx('report', "ms-auto")}>Tố Cáo</Link>
                         </div>
                         <div className={cx('details-price')}>
-                            <div className={cx('old-price')}>{`₫${(product.price / 1000).toFixed(3)}`}</div>
+                            {product.sale_off > 0 ? <div className={cx('old-price')}>{`₫${(product.price / 1000).toFixed(3)}`}</div> : null}
+
                             <div className={cx('new-price')}>
-                                {`₫${(product.price * (1 - product.sale_off) / 1000).toFixed(3)}`}</div>
+                                {product.sale_off > 0 ? `₫${(product.price * (1 - product.sale_off) / 1000).toFixed(3)}` :
+                                    `₫${(product.price / 1000).toFixed(3)}`
+                                }</div>
                             {product.sale_off > 0 ?
                                 <div className={cx('sale-off')}>{`${Math.ceil(product.sale_off * 100)}% GIẢM`}</div> :
                                 null
@@ -537,6 +553,19 @@ function DetailProduct() {
             </Row>
         </Container>
         <AboutShop />
+        {
+            (isProductSuccess && isSuccess) &&
+            <AboutProduct
+                userId={UserId}
+                productId={id}
+                setQuery={setQuery}
+                product={product}
+                details={detailsProduct}
+                products={Object.values(products.entities)}
+
+            />
+        }
+
     </div> : <Container>
         <NotFound title={"Not Found Product"} />
     </Container>
