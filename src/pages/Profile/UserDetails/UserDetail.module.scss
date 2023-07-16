@@ -1,8 +1,214 @@
 .wrapper {
-    padding-left: 27px;
+    padding: 0 30px 10px;
     width: 100%;
     display: flex;
     justify-content: center;
     align-self: center;
+    background-color: #fff;
+    min-height: 100%;
 
+
+}
+
+.header {
+    padding: 18px 0;
+    border-bottom: 0.0625rem solid #efefef;
+
+    .title {
+        font-size: 1.8rem;
+        color: #333;
+    }
+
+    .paragraph {
+        font-size: 1.4rem;
+        margin-top: 3px;
+        color: #555;
+    }
+}
+
+.content {
+    min-height: 500px;
+    padding-right: 30px;
+
+    .label {
+        text-align: right;
+        color: rgba(85, 85, 85, .8);
+        overflow: hidden;
+        padding-bottom: 30px;
+        white-space: nowrap;
+        padding-right: 20px;
+
+    }
+
+    .input-wrapper {
+        .input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid rgba(0, 0, 0, .14);
+            border-radius: 2px;
+            box-shadow: inset 0 2px 0 rgba(0, 0, 0, .02);
+
+            &:focus {
+                outline: none;
+                box-shadow: none;
+            }
+
+        }
+
+        .submit-btn {
+            background-color: #ee4c2d;
+            color: #fff;
+            font-size: 1.4rem;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            white-space: nowrap;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            border-radius: 3px;
+
+            &.disabled {
+                opacity: 0.4;
+            }
+        }
+
+        select {
+            margin: 0 8px;
+            padding: 4px 12px;
+            width: 20%;
+        }
+
+        .sex {
+            display: inline-flex;
+            align-self: center;
+            justify-content: flex-start;
+
+            .radio-box {
+                height: 20px;
+                width: 20px;
+                border-radius: 50%;
+                border: 1px solid #ccc;
+                z-index: 1;
+                display: flex;
+                align-self: center;
+                justify-content: center;
+                position: relative;
+
+                &.active {
+                    border: 2px solid #ee4c2d;
+
+                    &::after {
+                        content: "";
+                        height: 4px;
+                        width: 4px;
+                        border-radius: 50%;
+                        background-color: #ee4c2d;
+                        position: absolute;
+                        top: 6px;
+                        right: 6px;
+                    }
+                }
+            }
+
+            input {
+                display: block;
+                height: 20px;
+                width: 20px;
+                z-index: -1;
+                visibility: hidden;
+
+            }
+
+            .label-sex {
+                display: flex;
+                margin: 0 10px;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        .input-label {
+            width: 100%;
+            padding: 4px;
+            color: #00000066;
+        }
+
+        .add {
+            padding-bottom: 2px;
+            text-decoration: underline;
+            color: #0055aa;
+            cursor: pointer;
+            font-size: 1.4rem;
+        }
+    }
+}
+
+.avatar-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-left: 0.0625rem solid #efefef;
+
+    .avatar {
+        height: 100px;
+        width: 100px;
+        display: block;
+
+
+
+    }
+
+    .change-avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        input {
+            display: none;
+        }
+
+        .change-btn {
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            background: #fff;
+            color: #555;
+            border: 1px solid rgba(0, 0, 0, .09);
+            box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .03);
+            position: relative;
+            padding: 8px 12px;
+            width: 50%;
+            white-space: nowrap;
+            cursor: pointer;
+
+        }
+
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            border: none;
+            outline: none;
+            background-color: #ee4c2d;
+            color: #fff;
+            margin-top: 5px;
+            border-radius: 3px;
+            padding: 8px 12px;
+            white-space: nowrap;
+        }
+
+        .limited {
+            font-size: 1.4rem;
+            color: #999999;
+            padding: 8px 0;
+        }
+    }
 }

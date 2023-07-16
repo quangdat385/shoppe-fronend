@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button';
 
 
 import { useState } from 'react';
-import avatar from "~/assets/images/20210214_092405.jpg";
+
 import Gift from "~/assets/images/97cb82f5dd0a13419b1608c16681df9e.png";
 import MyAccount from "~/assets/images/myaccout.png";
 import SaleBirth from "~/assets/images/sieusale12.12.png";
@@ -27,7 +27,7 @@ import Avatar from '~/components/Avatar'
 
 const cx = className.bind(styles);
 
-const UserSideBar = () => {
+const UserSideBar = ({ user }) => {
     const navigate = useNavigate();
     const { user_name } = useAuth();
     const [show, setShow] = useState(JSON.parse(localStorage.getItem("user_page")) || 3);
@@ -51,7 +51,7 @@ const UserSideBar = () => {
                     <Col xs={4} sm={4}>
                         <Avatar
                             className={cx('avatar')}
-                            src={avatar}
+                            src={`http://localhost:3500/img/avatar/${user?.avatar[0]}`}
                             user={user_name ? user_name : null}
 
                         />

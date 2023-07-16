@@ -123,7 +123,7 @@ function Search() {
         refreshSearch();
 
         // eslint-disable-next-line
-    }, [])
+    }, []);
 
 
 

@@ -10,13 +10,13 @@ import UserSideBar from '../UserSideBar';
 
 const cx = className.bind(styles)
 
-const Content = () => {
+const Content = ({ user }) => {
     return (
         <div className={cx('wrapper')}>
             <Container className={cx('content')}>
                 <Row >
                     <Col xs={7} sm={6} md={3} xl={2}>
-                        <UserSideBar />
+                        <UserSideBar user={user} />
                     </Col>
                     <Col xs={12} sm={12} md={9} xl={10}>
                         <Outlet />

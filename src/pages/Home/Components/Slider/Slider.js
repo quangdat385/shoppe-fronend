@@ -9,7 +9,19 @@ import styles from "./Slider.module.scss"
 
 const cx = className.bind(styles)
 
-function Slider({ ...props }, ref) {
+function Slider({ products }, ref) {
+    let likes = 0, rates = 0, rating = 0;
+    let nowDate = new Date(Date.now());
+    let oldDate = new Date(products[0].createdAt);
+    let totalDate = Math.floor((nowDate - oldDate) / (1000 * 60 * 60 * 24));
+    let timeAgo = totalDate < 365 ? `${totalDate} Ngày Trước` : `${Math.floor(totalDate / 360)} Năm Trước`;
+
+    for (const product of products) {
+        likes += product.likes;
+        rates += product.total_rate;
+        rating += product.rating
+    }
+
     return (
         <Container fluid className={cx("slider")}>
             <Container className={cx("page-info-wrapper")}>
@@ -69,7 +81,7 @@ function Slider({ ...props }, ref) {
                                         Sản Phẩm:
                                     </div>
                                     <div className={cx("detail-value")}>
-                                        785
+                                        {products.length}
                                     </div>
                                 </Col>
                                 <Col xl={6} lg={6} sm={6} className={cx("detail-item")}>
@@ -92,7 +104,7 @@ function Slider({ ...props }, ref) {
                                         Người Theo Dõi :
                                     </div>
                                     <div className={cx("detail-value")}>
-                                        151,4k
+                                        {likes > 1000 ? `${(likes / 1000).toFixed(2)}k` : likes}
                                     </div>
                                 </Col>
                                 <Col xl={6} lg={6} sm={6} className={cx("detail-item")}>
@@ -130,7 +142,8 @@ function Slider({ ...props }, ref) {
                                         Đánh Giá :
                                     </div>
                                     <div className={cx("detail-value")}>
-                                        4.8 (57,8k Đánh Giá)
+                                        {`${(rating / products.length).toFixed(1)} (${rates > 1000 ? (rates / 1000).toFixed(2) : rates} Đánh Giá)`}
+
                                     </div>
                                 </Col>
                                 <Col xl={6} lg={6} sm={6} className={cx("detail-item")}>
@@ -178,7 +191,7 @@ function Slider({ ...props }, ref) {
                                         Tham Gia :
                                     </div>
                                     <div className={cx("detail-value")}>
-                                        5 Năm Trước
+                                        {timeAgo}
                                     </div>
                                 </Col>
 

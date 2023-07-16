@@ -12,6 +12,7 @@ import NotFound from "~/pages/Home/Components/ProductCatalogue/SubPages/NotFound
 import AboutShop from "~/pages/DetailProduct/AboutShop";
 import AboutProduct from "~/pages/DetailProduct/AboutProduct";
 import { useGetUsersQuery } from "~/features/users/usersApiSlice";
+import { useGetSearchMutation } from "~/features/products/productsApiSlice";
 
 
 import useAuth from "~/hooks/useAuth";
@@ -22,11 +23,21 @@ const cx = className.bind(styles)
 
 
 function DetailProduct() {
+    const [search] = useGetSearchMutation();
     const { title } = useParams();
     const id = title.split(":")[1]
     const { UserId } = useAuth();
     const navigate = useNavigate()
-    const [query, setQuery] = useState({ q: false })
+    const [query, setQuery] = useState({ q: false });
+    useEffect(() => {
+        const aTag = document.createElement("a");
+        aTag.href = "#details-product";
+        document.body.appendChild(aTag);
+        aTag.click();
+        aTag.remove();
+    }, [title])
+
+
 
     const { data: products, isLoading: isProductLoading, isSuccess: isProductSuccess } = useGetProductsQuery(query, {
         pollingInterval: 60000,
@@ -35,10 +46,19 @@ function DetailProduct() {
         forceRefetch: true
     });
     let product;
+    let likes = 0, numberOfRates = 0;
+
     if (isProductSuccess) {
 
         const term = Object.values(products.entities);
         product = Array.from(term).filter(item => item.id === id)[0];
+        for (const key of Array.from(term)) {
+
+            likes += key.likes;
+            numberOfRates += key.total_rate;
+        }
+
+
     }
 
 
@@ -77,8 +97,8 @@ function DetailProduct() {
 
     const [listActive, setListActive] = useState(listImg.slice(listView, listView + 5));
     const [quantity, setQuantity] = useState(1);
-    const [color, setColor] = useState([]);
-    const [size, setSize] = useState([]);
+    const [color, setColor] = useState("");
+    const [size, setSize] = useState("");
     const [like, setLike] = useState(user?.like_product?.includes(product?.id) || false);
     const [numberOfLikes, setNumberOfLikes] = useState(product?.likes);
 
@@ -200,19 +220,46 @@ function DetailProduct() {
         <div className={cx("d-flex justify-content-center  align-items-center w-100 h-100")}>
             <h1 className={cx("d-flex")} >Loading...</h1>
         </div>
-    </Container> : product && detailsProduct ? <div className={cx("wrapper")}>
+    </Container> : product && detailsProduct ? <div className={cx("wrapper")} id="details-product">
         <Container className={cx("menu", "px-0 bg-white")}>
-            <Link className={cx("link")}>Shop</Link>
+            <Link className={cx("link")} to="/home">Shop</Link>
             <svg enableBackground="new 0 0 11 11" viewBox="0 0 11 11" x="0" y="0" className={cx("menu-icon")}>
                 <path d="m2.5 11c .1 0 .2 0 .3-.1l6-5c .1-.1.2-.3.2-.4s-.1-.3-.2-.4l-6-5c-.2-.2-.5-.1-.7.1s-.1.5.1.7l5.5 4.6-5.5 4.6c-.2.2-.2.5-.1.7.1.1.3.2.4.2z">
                 </path>
             </svg>
-            <Link className={cx("link")}>{product.type_of_product}</Link>
+            <Link onClick={async () => {
+                const query = {
+                    keyword: product.details, details: true, more: {
+                        popular: "Liên Quan",
+                        price: "none"
+                    }
+                }
+                await search(query)
+
+                navigate(`/0/search?keyword=${query.keyword}&details=${query.details}`)
+            }
+
+
+            } className={cx("link")}>{product.type_of_product}</Link>
             <svg enableBackground="new 0 0 11 11" viewBox="0 0 11 11" x="0" y="0" className={cx("menu-icon")}>
                 <path d="m2.5 11c .1 0 .2 0 .3-.1l6-5c .1-.1.2-.3.2-.4s-.1-.3-.2-.4l-6-5c-.2-.2-.5-.1-.7.1s-.1.5.1.7l5.5 4.6-5.5 4.6c-.2.2-.2.5-.1.7.1.1.3.2.4.2z">
                 </path>
             </svg>
-            <Link className={cx("link")}>{product.details}</Link>
+            <Link onClick={async () => {
+                const query = {
+                    keyword: product.details, details: true, more: {
+                        popular: "Liên Quan",
+                        price: "none"
+                    }
+                }
+                await search(query)
+
+                navigate(`/0/search?keyword=${query.keyword}&details=${query.details}`)
+            }
+
+
+            }
+                className={cx("link")}>{product.details}</Link>
             <svg enableBackground="new 0 0 11 11" viewBox="0 0 11 11" x="0" y="0" className={cx("menu-icon")}>
                 <path d="m2.5 11c .1 0 .2 0 .3-.1l6-5c .1-.1.2-.3.2-.4s-.1-.3-.2-.4l-6-5c-.2-.2-.5-.1-.7.1s-.1.5.1.7l5.5 4.6-5.5 4.6c-.2.2-.2.5-.1.7.1.1.3.2.4.2z">
                 </path>
@@ -305,20 +352,20 @@ function DetailProduct() {
                             {product.title}
                         </div>
                         <div className={cx('details-quality')}>
-                            <Link className={cx('rating')}>
+                            <Link className={cx('rating')} to="#check-rate">
                                 <p>{rate}</p>
                                 <div>
                                     {rating}
                                     {leftrating}
                                 </div>
                             </Link>
-                            <Link className={cx('quanlity-rate')}>
+                            <Link className={cx('quanlity-rate')} to="#check-rate">
                                 <div>{product.total_rate}</div>
-                                {` Ratings`}
+                                {` Đánh Giá`}
                             </Link>
                             <div className={cx('sold')}>
                                 <div>{product.sold}</div>
-                                Sold
+                                Đã Bán
                                 <svg enableBackground="new 0 0 15 15" viewBox="0 0 15 15" role="img" className={cx('icon')}>
                                     <circle cx="7.5" cy="7.5" fill="none" r="6.5" strokeMiterlimit="10">
                                     </circle>
@@ -413,76 +460,60 @@ function DetailProduct() {
 
                                 </div>
                             </div>
-                            <div className={cx("type-color")}>
-                                <label className={cx("label")}>Màu</label>
-                                <div className={cx("box-btn")}>
-                                    {detailsProduct?.color.map(item => {
+                            {detailsProduct.color.length > 0 &&
+                                <div className={cx("type-color")}>
+                                    <label className={cx("label")}>Màu</label>
+                                    <div className={cx("box-btn")}>
+                                        {detailsProduct?.color.map(item => {
 
-                                        return (<div
-                                            key={item} className={cx("color-btn", color.includes(item) ? "active" : "")}
-                                            onClick={() => {
-                                                if (!color.includes(item)) {
-                                                    setColor(pre => [...pre, item])
-                                                } else {
-                                                    setColor(pre => {
-                                                        let term = color.findIndex(i => i === item)
-                                                        let result = [...pre]
-                                                        result.splice(term, 1)
-                                                        return result
-                                                    })
-
-                                                }
-
-                                            }}
-                                        >
-                                            {item}
-                                            <div className={cx("color-stick")}>
-                                                <svg enableBackground="new 0 0 12 12" viewBox="0 0 12 12" x="0" y="0" className={cx("stick-icon")}><g>
-                                                    <path d="m5.2 10.9c-.2 0-.5-.1-.7-.2l-4.2-3.7c-.4-.4-.5-1-.1-1.4s1-.5 1.4-.1l3.4 3 5.1-7c .3-.4 1-.5 1.4-.2s.5 1 .2 1.4l-5.7 7.9c-.2.2-.4.4-.7.4 0-.1 0-.1-.1-.1z">
-                                                    </path>
-                                                </g>
-                                                </svg>
-                                            </div>
-                                        </div>)
-                                    })}
+                                            return (<div
+                                                key={item} className={cx("color-btn", item === color ? "active" : "")}
+                                                onClick={() => {
+                                                    setColor(item)
+                                                }}
+                                            >
+                                                {item}
+                                                <div className={cx("color-stick")}>
+                                                    <svg enableBackground="new 0 0 12 12" viewBox="0 0 12 12" x="0" y="0" className={cx("stick-icon")}><g>
+                                                        <path d="m5.2 10.9c-.2 0-.5-.1-.7-.2l-4.2-3.7c-.4-.4-.5-1-.1-1.4s1-.5 1.4-.1l3.4 3 5.1-7c .3-.4 1-.5 1.4-.2s.5 1 .2 1.4l-5.7 7.9c-.2.2-.4.4-.7.4 0-.1 0-.1-.1-.1z">
+                                                        </path>
+                                                    </g>
+                                                    </svg>
+                                                </div>
+                                            </div>)
+                                        })}
 
 
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={cx("type-size")}>
-                                <label className={cx("label")}>SIZE</label>
-                                <div className={cx("box-btn")}>
-                                    {detailsProduct?.size.map(item => {
-                                        return <button
-                                            onClick={() => {
-                                                if (!size.includes(item)) {
-                                                    setSize(pre => [...pre, item])
-                                                } else {
-                                                    setSize(pre => {
-                                                        let term = size.findIndex(i => i === item)
-                                                        let result = [...pre]
-                                                        result.splice(term, 1)
-                                                        return result
-                                                    })
+                            }
+                            {detailsProduct.size.length > 0 &&
+                                <div className={cx("type-size")}>
+                                    <label className={cx("label")}>SIZE</label>
+                                    <div className={cx("box-btn")}>
+                                        {detailsProduct?.size.map(item => {
+                                            return <button
+                                                onClick={() => {
+                                                    setSize(item)
 
-                                                }
-
-                                            }}
-                                            key={item} className={cx("size-btn", size.includes(item) ? "active" : "")}>
-                                            {item}
-                                            <div className={cx("size-stick")}>
-                                                <svg enableBackground="new 0 0 12 12" viewBox="0 0 12 12" x="0" y="0" className={cx("stick-icon")}><g>
-                                                    <path d="m5.2 10.9c-.2 0-.5-.1-.7-.2l-4.2-3.7c-.4-.4-.5-1-.1-1.4s1-.5 1.4-.1l3.4 3 5.1-7c .3-.4 1-.5 1.4-.2s.5 1 .2 1.4l-5.7 7.9c-.2.2-.4.4-.7.4 0-.1 0-.1-.1-.1z">
-                                                    </path>
-                                                </g>
-                                                </svg>
-                                            </div>
-                                        </button>
-                                    })}
+                                                }}
+                                                key={item} className={cx("size-btn", item === size ? "active" : "")}>
+                                                {item}
+                                                <div className={cx("size-stick")}>
+                                                    <svg enableBackground="new 0 0 12 12" viewBox="0 0 12 12" x="0" y="0" className={cx("stick-icon")}><g>
+                                                        <path d="m5.2 10.9c-.2 0-.5-.1-.7-.2l-4.2-3.7c-.4-.4-.5-1-.1-1.4s1-.5 1.4-.1l3.4 3 5.1-7c .3-.4 1-.5 1.4-.2s.5 1 .2 1.4l-5.7 7.9c-.2.2-.4.4-.7.4 0-.1 0-.1-.1-.1z">
+                                                        </path>
+                                                    </g>
+                                                    </svg>
+                                                </div>
+                                            </button>
+                                        })}
 
 
+                                    </div>
                                 </div>
-                            </div>
+                            }
+
                             <div className={cx("quanlity")}>
                                 <label className={cx("label")}>Số Lượng</label>
                                 <div className={cx("box-quanlity")}>
@@ -552,7 +583,8 @@ function DetailProduct() {
                 </Col>
             </Row>
         </Container>
-        <AboutShop />
+        {isProductSuccess && <AboutShop products={Array.from(Object.values(products.entities))} numberOfLikes={likes} numberOfRates={numberOfRates} />}
+
         {
             (isProductSuccess && isSuccess) &&
             <AboutProduct

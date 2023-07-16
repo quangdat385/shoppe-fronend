@@ -44,7 +44,8 @@ function MainContent() {
     };
 
     let content = (<>
-        <Slider />
+        {isSuccess && <Slider products={Array.from(Object.values(products.entities))} />}
+
         <SubMenu />
         <ShopVourChers />
         {isSuccess && <ProductOffer products={offer} title="GỢI Ý DÀNH CHO BẠN " more className="primary" />}

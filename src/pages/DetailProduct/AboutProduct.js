@@ -227,7 +227,7 @@ function AboutProduct({ product, details, setQuery, userId, productId, products 
                         <div>{hashtag}</div>
                     </div>
                 </div>
-                <div className={cx('rating')}>
+                <div className={cx('rating')} id="check-rate">
                     <div className={cx('header')}>ĐÁNH GIÁ SẢN PHẨM</div>
                     <div className={cx('rating-box')}>
                         <div className={cx('over-view')}>
@@ -235,7 +235,7 @@ function AboutProduct({ product, details, setQuery, userId, productId, products 
                                 <p style={{
                                     fontSize: "24px",
                                     display: "inline-block"
-                                }}>{product.rating}</p>
+                                }}>{product.rating.toFixed(1)}</p>
                                 {` trên 5`}
                             </div>
                             <div className={cx("rate")}>
@@ -287,7 +287,7 @@ function AboutProduct({ product, details, setQuery, userId, productId, products 
                         })}
                     </Row>
                 </Container>
-                <Container>
+                <Container className={cx("pt-4")}>
                     <Row className={cx("suggest-btn")}>
                         <Col xs={4} offset={2}>
                             <div

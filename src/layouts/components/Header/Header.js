@@ -4,7 +4,7 @@ import Container from 'react-bootstrap/Container';
 
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-import avatar from "~/assets/images/20210214_092405.jpg";
+
 import notify from "~/assets/images/img_notify.png";
 import storage from '~/until/storage';
 
@@ -42,7 +42,7 @@ import { setCredentials } from "~/features/auth/authSlice"
 
 import styles from './Header.module.scss';
 
-
+import { useGetUsersQuery } from "~/features/users/usersApiSlice"
 import { useGetSearchMutation } from "~/features/products/productsApiSlice";
 import { useRefreshMutation } from '~/features/auth/authApiSlice';
 import usePersist from '~/hooks/usePersists';
@@ -61,6 +61,7 @@ function Header() {
     const [refresh] = useRefreshMutation();
     const [search] = useGetSearchMutation();
     const { token } = useSelector(setCredentials);
+
 
     const { pathname } = useLocation()
     useEffect(() => {
@@ -87,7 +88,20 @@ function Header() {
         // eslint-disable-next-line
     }, []);
 
-    const { user_name } = useAuth()
+    const { user_name, UserId } = useAuth()
+
+    const { data: users, isSuccess: isUserSuccess } = useGetUsersQuery("usersList", {
+        pollingInterval: 60000,
+        refetchOnMountOrArgChange: true,
+        refetchOnFocus: true,
+        forceRefetch: true
+    },
+    );
+    let currentUser
+    if (isUserSuccess) {
+        currentUser = users.entities[UserId];
+
+    }
 
     const navigate = useNavigate();
 
@@ -108,8 +122,7 @@ function Header() {
             localStorage.removeItem('persist')
             storage.delete('user')
             signOut(auth)
-            let term = JSON.parse(localStorage.getItem("path_name"))
-            navigate(`${term}`)
+            navigate('/login')
 
         }
     }, [isSuccess, navigate])
@@ -300,7 +313,9 @@ function Header() {
                                         <Avatar
                                             className={cx("avatar",)}
                                             user={user ? user : null}
-                                            src={avatar}
+                                            src={currentUser?.avatar ?
+                                                `http://localhost:3500/img/avatar/${currentUser?.avatar[0]}`
+                                                : null}
                                         />
                                         <p className={cx("user-name")}>{user}</p>
                                     </Link>

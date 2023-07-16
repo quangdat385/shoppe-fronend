@@ -1,5 +1,8 @@
 import className from 'classnames/bind';
 import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
+
+
 import storage from '~/until/storage';
 
 import { useGetUsersQuery } from "~/features/users/usersApiSlice";
@@ -41,17 +44,17 @@ const cx = className.bind(styles);
 function Profile() {
     const { UserId } = useAuth()
 
-    const {
-        data: users,
-        isSuccess,
-
-    } = useGetUsersQuery('usersList', {
+    const [query, setQuery] = useState({ update: false });
+    const { data: users, isSuccess } = useGetUsersQuery(query, {
         pollingInterval: 60000,
+        refetchOnMountOrArgChange: true,
         refetchOnFocus: true,
-        refetchOnMountOrArgChange: true
-    })
+        forceRefetch: true
+    },
+    );
+    let user
     if (isSuccess) {
-        const user = users.entities[UserId];
+        user = users.entities[UserId];
         storage.set("user", user.user_name)
     }
     return (
@@ -59,9 +62,9 @@ function Profile() {
 
 
             <Routes>
-                <Route path="/" element={<UserContent />}>
+                <Route path="/" element={<UserContent user={user} />}>
                     {/* user details */}
-                    <Route path="/profile" index element={<UserDetails />}>
+                    <Route path="/profile" index element={<UserDetails user={user} setQuery={setQuery} />}>
                     </Route>
                     <Route path="/bank" element={<Bank />}></Route>
                     <Route path="/password" element={<ChangePwd />}></Route>

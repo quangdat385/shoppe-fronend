@@ -10,7 +10,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         //get api/user
         getUsers: builder.query({
-            query: () => ({
+            query: ({ update = false }) => ({
                 url: '/user',
                 validateStatus: (response, result) => {
                     return response.status === 200 && !result.isError
@@ -68,10 +68,15 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         }),
         //update user 
         updateUser: builder.mutation({
-            query: initialUserData => ({
-                url: `/user/${initialUserData.id}/update`,
+            query: ({ id, ...patch }) => ({
+                url: `/user/${id}/update`,
+                headers: {
+                    "Content-Type": "multipart/form-data; boundary=name",
+
+
+                },
                 method: 'PATCH',
-                body: { ...initialUserData }
+                body: { id, ...patch }
             }),
             invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.id }]
         }),
@@ -114,7 +119,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: (result, error, arg) => [
                 { type: 'User', id: arg.id }
             ]
-        })
+        }),
+
+
     })
 
 })
