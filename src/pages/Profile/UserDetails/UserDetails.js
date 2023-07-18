@@ -12,12 +12,15 @@ import axios from 'axios';
 import { auth } from '~/until/fire';
 import {
 
-
+    signOut,
     RecaptchaVerifier,
     signInWithPhoneNumber,
+
 } from 'firebase/auth';
 
-import { useUpdateUserMutation } from "~/features/users/usersApiSlice"
+
+
+import { useUpdatePhoneNumberMutation, useUpdateUserMutation, useUpdateEmailMutation } from "~/features/users/usersApiSlice"
 import { selectCurrentToken } from "~/features/auth/authSlice";
 
 
@@ -29,19 +32,64 @@ const cx = className.bind(styles);
 
 function UserDetails({ user, setQuery }) {
     const PHONE_REGEX = /^[+?\s\- 0-9]{10,15}$/;
+    const EMAIL_REGEX = /^[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,4}$/;
     const token = useSelector(selectCurrentToken);
     const [sex, setSex] = useState("")
     const changeAvatar = useRef();
     const [canSave, setCanSave] = useState(false);
     const [profileImg, setProfileImg] = useState();
-    const [userName, setUserName] = useState(user?.user_name);
-    const [phoneNumber, setPhoneNumber] = useState(user?.phone_number);
+    const [userName, setUserName] = useState(user?.user_name || "");
+    const [fullName, setFullName] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState(user?.phone_number || "");
     const [date, setDate] = useState({});
     const [section, setSection] = useState("profile");
     const [result, setResult] = useState('');
+    const [otp, setOtp] = useState("");
+    const [errMsg, setErrMsg] = useState("");
+    const [email, setEmail] = useState("");
+    const [updateFields, setUpdateFields] = useState({});
+
+
+    const [updatePhoneNumber] = useUpdatePhoneNumberMutation();
+    const [updateEmailFn] = useUpdateEmailMutation();
     useEffect(() => {
         setUserName(user?.user_name)
+        setPhoneNumber(user?.phone_number)
     }, [user])
+    console.log(updateFields)
+
+    useEffect(() => {
+        if (userName !== user?.user_name && userName.length > 0) {
+            setUpdateFields(pre => {
+                return { ...pre, user_name: userName }
+            })
+        } else if (userName === user?.user_name) {
+            setUpdateFields(pre => {
+                delete pre.user_name
+                return { ...pre }
+            })
+        }
+        if (fullName.length > 0) {
+            setUpdateFields(pre => {
+                return { ...pre, full_name: fullName }
+            })
+        }
+
+        if (sex.length > 0) {
+            setUpdateFields(pre => {
+                return { ...pre, gender: sex }
+            })
+        }
+        if (date.month && date.day && date.year) {
+            let birthday = `${date.month}/${date.day}/${date.year}`
+
+            setUpdateFields(pre => {
+                return { ...pre, birthday: birthday }
+            })
+        }
+        // eslint-disable-next-line
+    }, [userName, fullName, sex, date])
+
     const signin = async (number) => {
         const recaptchaVerifier = new RecaptchaVerifier(
             "recaptcha-container",
@@ -68,13 +116,90 @@ function UserDetails({ user, setQuery }) {
             console.log(err);
         }
     }
+    const handleUpdateUser = async () => {
+        try {
+            const result = await updateUser({ id: user?.id, ...updateFields }).unwrap();
 
+            setResult(result);
+            setErrMsg("")
+            setSection("profile")
+
+        } catch (err) {
+            if (!err.status) {
+
+                setErrMsg('No Server Response');
+            } else if (err.status === 400) {
+                setErrMsg('All Field are required');
+            } else if (err.status === 401) {
+                setErrMsg('Unauthorized');
+            } else if (err.status === 403) {
+                setErrMsg('duplicated email');
+            } else {
+                setErrMsg(err.data?.message);
+            }
+
+        }
+    }
+    const updateEmail = async () => {
+        try {
+            const result = await updateEmailFn({ id: user.id, email: email }).unwrap();
+
+            setResult(result);
+            setErrMsg("")
+            setSection("profile")
+
+        } catch (err) {
+            if (!err.status) {
+
+                setErrMsg('No Server Response');
+            } else if (err.status === 400) {
+                setErrMsg('All Field are required');
+            } else if (err.status === 401) {
+                setErrMsg('Unauthorized');
+            } else if (err.status === 403) {
+                setErrMsg('duplicated email');
+            } else {
+                setErrMsg(err.data?.message);
+            }
+
+        }
+
+    }
+    const verifyOtp = async () => {
+        const res = await result.confirm(otp);
+
+        if (!res) return
+        setOtp("")
+
+        try {
+            const result = await updatePhoneNumber({ id: user.id, phone_number: phoneNumber }).unwrap();
+            signOut(auth)
+            setResult(result);
+            setErrMsg("")
+            setSection("profile")
+
+        } catch (err) {
+            if (!err.status) {
+
+                setErrMsg('No Server Response');
+            } else if (err.status === 400) {
+                setErrMsg('Missing Phone Number');
+            } else if (err.status === 401) {
+                setErrMsg('Unauthorized');
+            } else if (err.status === 403) {
+                setErrMsg('duplicated phone number');
+            } else {
+                setErrMsg(err.data?.message);
+            }
+
+        }
+    }
     const day = [], month = [], year = [];
     for (let i = 1; i < 32; i++) {
         day.push(i);
     }
     let dayNow = new Date(Date.now());
-    console.log(dayNow.getFullYear())
+
     for (let i = 1; i <= 12; i++) {
         month.push(i);
     }
@@ -106,18 +231,28 @@ function UserDetails({ user, setQuery }) {
                             <Row className={cx('pb-5')}>
                                 <Col lg={3} className={cx("label")}>Tên đăng nhập</Col>
                                 <Col lg={9} className={cx('input-wrapper')}>
-                                    <input value={userName} type="text" className={cx('input')}
-                                        onChange={(e) => {
-                                            setUserName(e.target.value);
-                                        }}
-                                    />
-                                    <div className={cx('input-label')}>Tên đăng nhập chỉ có thể thay đổi một lần</div>
+                                    {user?.isUserName ? <div>{userName}</div> : <>
+                                        <input value={userName} type="text" className={cx('input')}
+                                            onChange={(e) => {
+                                                setUserName(e.target.value);
+                                            }}
+                                        />
+                                        <div className={cx('input-label')}>Tên đăng nhập chỉ có thể thay đổi một lần</div>
+                                    </>}
+
                                 </Col>
                             </Row>
                             <Row className={cx('pb-5')}>
                                 <Col lg={3} className={cx("label")}>Tên</Col>
                                 <Col lg={9} className={cx('input-wrapper')}>
-                                    <input type="text" className={cx('input')} />
+                                    <input
+                                        value={fullName}
+                                        type="text"
+                                        className={cx('input')}
+                                        onChange={(e) => {
+                                            setFullName(e.target.value)
+                                        }}
+                                    />
 
                                 </Col>
                             </Row>
@@ -170,11 +305,13 @@ function UserDetails({ user, setQuery }) {
                                     }}
 
                                     >
+                                        <option value="" selected>Chọn Ngày</option>
                                         {
                                             day.map(item => {
                                                 return <option key={item} value={item}>{item}</option>
                                             })
                                         }
+
                                     </select>
 
                                     <select id="month" name="month" onChange={e => {
@@ -182,7 +319,7 @@ function UserDetails({ user, setQuery }) {
                                             return { ...pre, month: e.target.value }
                                         })
                                     }}>
-
+                                        <option value="" selected>Chọn Tháng</option>
                                         {
                                             month.map(item => {
                                                 return <option key={item} value={item}>{`Tháng ${item}`}</option>
@@ -195,7 +332,7 @@ function UserDetails({ user, setQuery }) {
                                             return { ...pre, year: e.target.value }
                                         })
                                     }}>
-
+                                        <option value="" selected>Chọn Năm</option>
                                         {
                                             year.map(item => {
                                                 return <option key={item} value={item}>{item}</option>
@@ -208,7 +345,10 @@ function UserDetails({ user, setQuery }) {
                                 <Col lg={3} className={cx("label")}></Col>
                                 <Col lg={9} className={cx('input-wrapper')}>
 
-                                    <div className={cx("submit-btn")}>Lưu</div>
+                                    <div
+                                        className={cx("submit-btn")}
+                                        onClick={handleUpdateUser}
+                                    >Lưu</div>
                                 </Col>
                             </Row>
                         </Container>
@@ -237,7 +377,7 @@ function UserDetails({ user, setQuery }) {
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         changeAvatar.current.click()
-                                        console.log(profileImg)
+
                                     }}
                                     className={cx("change-btn")}>
                                     Chọn Ảnh
@@ -268,6 +408,7 @@ function UserDetails({ user, setQuery }) {
                                             setQuery(pre => {
                                                 return { pre, update: true }
                                             })
+
                                         }
 
                                     }}>Cập Nhật</button>
@@ -300,9 +441,6 @@ function UserDetails({ user, setQuery }) {
                                         pattern={PHONE_REGEX}
 
                                     />
-
-                                </Col>
-                                <Col lg={9}>
                                     <div id="recaptcha-container" className="captcha"></div>
                                 </Col>
                             </Row>
@@ -325,6 +463,86 @@ function UserDetails({ user, setQuery }) {
                         </Container>
                     </Col>
 
+                </Row>
+            </Container>
+        </Container>)
+    } else if (section === "VERIFY_OTP") {
+        content = (<Container>
+            <div className={cx('header')}>
+                <div className={cx('title')}>Nhập Mã OTP</div>
+
+            </div>
+            <Container className={cx('pt-5')}>
+                <Row>
+                    <Col xs={12}>
+                        <Container className={cx('content')}>
+                            <Row className={cx('pb-5')}>
+                                <Col lg={3} className={cx("label")}>Nhập mã OTP</Col>
+                                <Col lg={9} className={cx('input-wrapper')}>
+                                    {errMsg.length > 0 ? <div className={cx('errMsg')} >{errMsg}</div> : ""}
+                                    <input value={otp} type="text" className={cx('input')}
+                                        onChange={(e) => {
+                                            setOtp(e.target.value);
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row className="pb-5">
+                                <Col lg={3} className={cx("label")}></Col>
+                                <Col lg={9} className={cx('input-wrapper')}>
+                                    <button
+                                        disabled={!otp.length}
+                                        onClick={verifyOtp}
+                                        className={cx("submit-btn", otp.length < 0 ? "disabled" : "")}
+                                    >Tiếp Theo</button>
+                                </Col>
+                            </Row>
+                            <Row>
+                            </Row>
+                        </Container>
+                    </Col>
+                </Row>
+            </Container>
+        </Container>)
+    } else if (section === "email") {
+        content = (<Container>
+            <div className={cx('header')}>
+                <div className={cx('title')}>Chỉnh Sửa Email</div>
+
+            </div>
+            <Container className={cx('pt-5')}>
+                <Row>
+                    <Col xs={12}>
+                        <Container className={cx('content')}>
+                            <Row className={cx('pb-5')}>
+                                <Col lg={3} className={cx("label")}>Nhập email</Col>
+                                <Col lg={9} className={cx('input-wrapper')}>
+                                    {errMsg.length > 0 ? <div className={cx('errMsg')} >{errMsg}</div> : ""}
+                                    <input
+                                        pattern={EMAIL_REGEX}
+                                        value={email}
+                                        type="text"
+                                        className={cx('input')}
+                                        onChange={(e) => {
+                                            setEmail(e.target.value);
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row className="pb-5">
+                                <Col lg={3} className={cx("label")}></Col>
+                                <Col lg={9} className={cx('input-wrapper')}>
+                                    <button
+                                        disabled={!EMAIL_REGEX.test(email)}
+                                        onClick={updateEmail}
+                                        className={cx("submit-btn", !EMAIL_REGEX.test(email) ? "disabled" : "")}
+                                    >Tiếp Theo</button>
+                                </Col>
+                            </Row>
+                            <Row>
+                            </Row>
+                        </Container>
+                    </Col>
                 </Row>
             </Container>
         </Container>)

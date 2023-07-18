@@ -70,11 +70,22 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         updateUser: builder.mutation({
             query: ({ id, ...patch }) => ({
                 url: `/user/${id}/update`,
-                headers: {
-                    "Content-Type": "multipart/form-data; boundary=name",
-
-
-                },
+                method: 'PATCH',
+                body: { id, ...patch }
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.id }]
+        }),
+        updatePhoneNumber: builder.mutation({
+            query: ({ id, ...patch }) => ({
+                url: `/user/${id}/update/phone`,
+                method: 'PATCH',
+                body: { id, ...patch }
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.id }]
+        }),
+        updateEmail: builder.mutation({
+            query: ({ id, ...patch }) => ({
+                url: `/user/${id}/update/email`,
                 method: 'PATCH',
                 body: { id, ...patch }
             }),
@@ -135,5 +146,7 @@ export const {
     useChangePasswordMutation,
     useSoftDeleteMutation,
     useDeleteUserMutation,
-    useRestoreUserMutation
+    useRestoreUserMutation,
+    useUpdatePhoneNumberMutation,
+    useUpdateEmailMutation
 } = usersApiSlice
