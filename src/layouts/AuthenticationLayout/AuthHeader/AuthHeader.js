@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 
 import styles from './AuthHeader.module.scss'
-import { NavBar } from 'react-bootstrap';
-import Container from 'react-bootstrap/Container'
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav'
 
 const cx = className.bind(styles)
@@ -13,9 +13,9 @@ const cx = className.bind(styles)
 function AuthHeader({ status }) {
     return (
         <div className={cx('wrapper')}>
-            <NavBar expand="lg" className={cx("header-nav")}>
+            <Navbar expand="lg" className={cx("header-nav")}>
                 <Container>
-                    <NavBar.Brand>
+                    <Navbar.Brand>
                         <Link to="/">
                             <svg viewBox="0 0 192 65" className={cx('logo')}>
                                 <g fillRule="evenodd">
@@ -24,7 +24,7 @@ function AuthHeader({ status }) {
                             </svg>
                         </Link>
 
-                    </NavBar.Brand>
+                    </Navbar.Brand>
                     <Nav className="me-auto" >
                         <p className={cx("text")}>{status === "login" ? "Đăng Nhập" : "Đăng Ký"}</p>
                         <svg className={cx("login-icon")} viewBox="0 0 512 512">
@@ -47,7 +47,7 @@ function AuthHeader({ status }) {
                     </Nav>
 
                 </Container>
-            </NavBar>
+            </Navbar>
         </div>
     );
 }
