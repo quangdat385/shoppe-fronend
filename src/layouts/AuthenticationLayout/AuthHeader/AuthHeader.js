@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 
 import styles from './AuthHeader.module.scss'
-import NavBar from 'react-bootstrap/NavBar'
+import { NavBar } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 
