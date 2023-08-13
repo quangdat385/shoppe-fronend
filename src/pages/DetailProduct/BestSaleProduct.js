@@ -22,7 +22,7 @@ function BestSaleProduct({ product }, ref) {
     return (<div className={cx("product-item")} to={`/detail/@:${product?.id ? product?.id : product?._id}`}>
         <div className={cx("product-img-wrapper")}>
             <img ref={ref} className={cx("img")}
-                src={`http://localhost:3500/img/${product?.img_product[0][0]}`} alt="" />
+                src={`${process.env.API_IMG_URL}/${product?.img_product[0][0]}`} alt="" />
 
 
         </div>

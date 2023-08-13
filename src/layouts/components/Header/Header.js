@@ -314,7 +314,7 @@ function Header() {
                                             className={cx("avatar",)}
                                             user={user ? user : null}
                                             src={currentUser?.avatar ?
-                                                `http://localhost:3500/img/avatar/${currentUser?.avatar[0]}`
+                                                `${process.env.API_IMG_URL}/avatar/${currentUser?.avatar[0]}`
                                                 : null}
                                         />
                                         <p className={cx("user-name")}>{user}</p>

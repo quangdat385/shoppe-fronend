@@ -379,7 +379,7 @@ function UserDetails({ user, setQuery }) {
                                 width={30}
                                 height={30}
                                 className={cx('avatar')}
-                                src={`http://localhost:3500/img/avatar/${user?.avatar[0]}`}
+                                src={`${process.env.API_IMG_URL}/avatar/${user?.avatar[0]}`}
                                 user={user?.user_name ? user.user_name : null}
 
                             />
@@ -418,7 +418,7 @@ function UserDetails({ user, setQuery }) {
                                         UserForm.append("avatar", profileImg[0])
 
 
-                                        const result = await axios.patch(`http://localhost:3500/api/user/${id}/update/avatar`, UserForm, {
+                                        const result = await axios.patch(`${process.env.REACT_APP_BASE_URL}/user/${id}/update/avatar`, UserForm, {
                                             headers: {
                                                 "Content-Type": "multipart/form-data",
                                                 'Authorization': `Bearer ${token}`

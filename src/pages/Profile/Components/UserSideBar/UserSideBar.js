@@ -62,7 +62,7 @@ const UserSideBar = ({ user }) => {
                     <Col xs={4} sm={4}>
                         <Avatar
                             className={cx('avatar')}
-                            src={`http://localhost:3500/img/avatar/${user?.avatar[0]}`}
+                            src={`${process.env.API_IMG_URL}/avatar/${user?.avatar[0]}`}
                             user={user_name ? user_name : null}
 
                         />
