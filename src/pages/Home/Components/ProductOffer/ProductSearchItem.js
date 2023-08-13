@@ -16,7 +16,7 @@ const cx = className.bind(styles);
 
 
 function ProductItem({ product }, ref) {
-    const img = `http://localhost:3500/img/${product?.img_product[0][0]}`;
+    const img = `${process.env.API_IMG_URL}/${product?.img_product[0][0]}`;
     let rating;
     let leftrating;
     let rate = product.rating;
@@ -70,7 +70,7 @@ function ProductItem({ product }, ref) {
             <img ref={ref} className={cx("img")}
                 src={img} alt="" />
             <img ref={ref} className={cx("img-bg")}
-                src={`http://localhost:3500/img/${product?.ship_label[0]}`} alt="" />
+                src={`${process.env.API_IMG_URL}/${product?.ship_label[0]}`} alt="" />
             <p className={cx("favourite-logo")}>Yêu Thích</p>
             {product.sale_off > 0 ? <div className={cx("stick-sale")}>
                 <p >{`${product.sale_off * 100}%`}</p>

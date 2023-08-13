@@ -72,9 +72,9 @@ function ProductItem({ product }, ref) {
     return (<Link className={cx("product-item")} to={`/detail/@:${product?.id ? product?.id : product?._id}`}>
         <div className={cx("product-img-wrapper")}>
             <img ref={ref} className={cx("img")}
-                src={`http://localhost:3500/img/${product?.img_product[0][0]}`} alt="" />
+                src={`${process.env.API_IMG_URL}/${product?.img_product[0][0]}`} alt="" />
             <img ref={ref} className={cx("img-bg")}
-                src={`http://localhost:3500/img/${product?.ship_label[0]}`} alt="" />
+                src={`${process.env.API_IMG_URL}/${product?.ship_label[0]}`} alt="" />
             <p className={cx("favourite-logo")}>Yêu Thích</p>
             {product.sale_off > 0 ? <div className={cx("stick-sale")}>
                 <p >{`${product.sale_off * 100}%`}</p>
