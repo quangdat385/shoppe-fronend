@@ -67,9 +67,34 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.id }]
         }),
         //update user 
+        addAddress: builder.mutation({
+            query: ({ id, ...patch }) => ({
+                url: `/user/${id}/addAddress`,
+                method: 'PATCH',
+                body: { id, ...patch }
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.id }]
+        }),
+        //delete address
+        deleteAddress: builder.mutation({
+            query: ({ id, ...patch }) => ({
+                url: `/user/${id}/remove/address`,
+                method: 'PATCH',
+                body: { id, ...patch }
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.id }]
+        }),
         updateUser: builder.mutation({
             query: ({ id, ...patch }) => ({
                 url: `/user/${id}/update`,
+                method: 'PATCH',
+                body: { id, ...patch }
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: 'User', id: arg.id }]
+        }),
+        updateAddress: builder.mutation({
+            query: ({ id, ...patch }) => ({
+                url: `/user/${id}/update/address`,
                 method: 'PATCH',
                 body: { id, ...patch }
             }),
@@ -148,5 +173,8 @@ export const {
     useDeleteUserMutation,
     useRestoreUserMutation,
     useUpdatePhoneNumberMutation,
-    useUpdateEmailMutation
+    useUpdateEmailMutation,
+    useUpdateAddressMutation,
+    useAddAddressMutation,
+    useDeleteAddressMutation
 } = usersApiSlice

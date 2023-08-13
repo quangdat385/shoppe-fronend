@@ -3,9 +3,30 @@
     width: 100%;
 
 
+    .sub-menu-icon {
+        color: #0000005c;
+        width: 28px;
+        height: 32px;
+        padding: 6px 0;
+    }
+
+    @media (max-width: 991px) {
+        .mobile-menu {
+            display: block;
+        }
+
+        .pc-menu {
+            &.hidden {
+                display: none;
+            }
+        }
+    }
 
 }
 
+.mobile-menu {
+    display: none;
+}
 
 .avatar {
     height: 48px;

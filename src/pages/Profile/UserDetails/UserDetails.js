@@ -20,12 +20,13 @@ import {
 
 
 
-import { useUpdatePhoneNumberMutation, useUpdateUserMutation, useUpdateEmailMutation } from "~/features/users/usersApiSlice"
+import { useUpdatePhoneNumberMutation, useAddAddressMutation, useUpdateEmailMutation } from "~/features/users/usersApiSlice";
 import { selectCurrentToken } from "~/features/auth/authSlice";
 
 
 
 import Avatar from '~/components/Avatar';
+
 
 
 const cx = className.bind(styles);
@@ -42,21 +43,25 @@ function UserDetails({ user, setQuery }) {
     const [fullName, setFullName] = useState("");
     const [phoneNumber, setPhoneNumber] = useState(user?.phone_number || "");
     const [date, setDate] = useState({});
+    const [timeZone, setTimeZone] = useState("");
     const [section, setSection] = useState("profile");
     const [result, setResult] = useState('');
     const [otp, setOtp] = useState("");
     const [errMsg, setErrMsg] = useState("");
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState(user?.email || "");
     const [updateFields, setUpdateFields] = useState({});
 
 
     const [updatePhoneNumber] = useUpdatePhoneNumberMutation();
     const [updateEmailFn] = useUpdateEmailMutation();
+    const [addAddress] = useAddAddressMutation("addAddress");
     useEffect(() => {
         setUserName(user?.user_name)
         setPhoneNumber(user?.phone_number)
-    }, [user])
-    console.log(updateFields)
+        setEmail(user?.email)
+    }, [user]);
+
+    console.log(phoneNumber);
 
     useEffect(() => {
         if (userName !== user?.user_name && userName.length > 0) {
@@ -85,6 +90,10 @@ function UserDetails({ user, setQuery }) {
 
             setUpdateFields(pre => {
                 return { ...pre, birthday: birthday }
+            })
+        } else if (timeZone.length > 0) {
+            setUpdateFields(pre => {
+                return { ...pre, birthday: timeZone }
             })
         }
         // eslint-disable-next-line
@@ -118,10 +127,11 @@ function UserDetails({ user, setQuery }) {
     }
     const handleUpdateUser = async () => {
         try {
-            const result = await updateUser({ id: user?.id, ...updateFields }).unwrap();
+            const result = await addAddress({ id: user?.id, address: updateFields }).unwrap();
 
             setResult(result);
             setErrMsg("")
+            setTimeZone("")
             setSection("profile")
 
         } catch (err) {
@@ -210,7 +220,7 @@ function UserDetails({ user, setQuery }) {
     console.log(date)
 
 
-    const [updateUser] = useUpdateUserMutation("updateUser");
+
     console.log(section)
     useEffect(() => {
         setCanSave(PHONE_REGEX.test(phoneNumber))
@@ -225,13 +235,13 @@ function UserDetails({ user, setQuery }) {
             </div>
 
             <Container className={cx('pt-5')}>
-                <Row>
-                    <Col lg={8}>
+                <Row className={cx('profile-box')}>
+                    <Col xl={8} lg={9} md={12}>
                         <Container className={cx('content')}>
                             <Row className={cx('pb-5')}>
-                                <Col lg={3} className={cx("label")}>Tên đăng nhập</Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
-                                    {user?.isUserName ? <div>{userName}</div> : <>
+                                <Col xl={3} lg={4} md={4} xs={5} className={cx("label")}>Tên đăng nhập</Col>
+                                <Col xl={9} lg={8} md={8} xs={7} className={cx('input-wrapper')}>
+                                    {user?.isUserName === true ? <div>{userName}</div> : <>
                                         <input value={userName} type="text" className={cx('input')}
                                             onChange={(e) => {
                                                 setUserName(e.target.value);
@@ -243,8 +253,8 @@ function UserDetails({ user, setQuery }) {
                                 </Col>
                             </Row>
                             <Row className={cx('pb-5')}>
-                                <Col lg={3} className={cx("label")}>Tên</Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                <Col lg={4} xl={3} md={4} xs={5} className={cx("label")}>Tên</Col>
+                                <Col lg={8} xl={9} md={8} xs={7} className={cx('input-wrapper')}>
                                     <input
                                         value={fullName}
                                         type="text"
@@ -258,8 +268,8 @@ function UserDetails({ user, setQuery }) {
                             </Row>
                             <Row className={cx('pb-5')}>
                                 <Col
-                                    lg={3} className={cx("label")}>Email</Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                    xl={3} lg={4} md={4} xs={5} className={cx("label")}>Email</Col>
+                                <Col xl={9} lg={8} md={8} xs={7} className={cx('input-wrapper')}>
                                     <div
                                         onClick={() => { setSection("email") }}
                                         className={cx('add')}>Thêm</div>
@@ -268,16 +278,16 @@ function UserDetails({ user, setQuery }) {
                             <Row className={cx('pb-5')}>
                                 <Col
 
-                                    lg={3} className={cx("label")}>Số điện thoại</Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                    xl={3} lg={4} md={4} xs={5} className={cx("label")}>Số điện thoại</Col>
+                                <Col xl={9} lg={8} md={8} xs={7} className={cx('input-wrapper')}>
                                     <div
                                         onClick={() => { setSection("phone_number") }}
                                         className={cx('add')}>Thêm</div>
                                 </Col>
                             </Row>
                             <Row className={cx('pb-5')}>
-                                <Col lg={3} className={cx("label")}>Giới tính</Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                <Col xl={3} lg={4} md={4} xs={5} className={cx("label")}>Giới tính</Col>
+                                <Col xl={9} lg={8} md={8} xs={7} className={cx('input-wrapper')}>
                                     <div className={cx('sex')}>
                                         {["male", "female", "others"].map(item => {
                                             return (<Fragment key={item}>
@@ -295,55 +305,65 @@ function UserDetails({ user, setQuery }) {
                                 </Col>
                             </Row>
                             <Row className={cx('pb-5')}>
-                                <Col lg={3} className={cx("label")}>Ngày sinh</Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
-
-                                    <select id="day" name="day" onChange={e => {
-                                        setDate(pre => {
-                                            return { ...pre, day: e.target.value }
-                                        })
-                                    }}
-
-                                    >
-                                        <option value="" selected>Chọn Ngày</option>
-                                        {
-                                            day.map(item => {
-                                                return <option key={item} value={item}>{item}</option>
+                                <Col xl={3} lg={4} md={4} xs={5} className={cx("label")}>Ngày sinh</Col>
+                                <Col xl={9} lg={8} md={8} xs={7} className={cx('input-wrapper')}>
+                                    <div className={cx('on-mobile')}>
+                                        <input
+                                            value={timeZone}
+                                            type="date"
+                                            className={cx('input')}
+                                            onChange={(e) => { setTimeZone(e.target.value) }}
+                                        />
+                                    </div>
+                                    <div className={cx("on-pc")}>
+                                        <select id="day" name="day" onChange={e => {
+                                            setDate(pre => {
+                                                return { ...pre, day: e.target.value }
                                             })
-                                        }
+                                        }}
 
-                                    </select>
+                                        >
+                                            <option value="" defaultValue>Ngày</option>
+                                            {
+                                                day.map(item => {
+                                                    return <option key={item} value={item}>{item}</option>
+                                                })
+                                            }
 
-                                    <select id="month" name="month" onChange={e => {
-                                        setDate(pre => {
-                                            return { ...pre, month: e.target.value }
-                                        })
-                                    }}>
-                                        <option value="" selected>Chọn Tháng</option>
-                                        {
-                                            month.map(item => {
-                                                return <option key={item} value={item}>{`Tháng ${item}`}</option>
+                                        </select>
+
+                                        <select id="month" name="month" onChange={e => {
+                                            setDate(pre => {
+                                                return { ...pre, month: e.target.value }
                                             })
-                                        }
-                                    </select>
+                                        }}>
+                                            <option value="" defaultValue>Tháng</option>
+                                            {
+                                                month.map(item => {
+                                                    return <option key={item} value={item}>{`${item}`}</option>
+                                                })
+                                            }
+                                        </select>
 
-                                    <select id="year" name="year" onChange={e => {
-                                        setDate(pre => {
-                                            return { ...pre, year: e.target.value }
-                                        })
-                                    }}>
-                                        <option value="" selected>Chọn Năm</option>
-                                        {
-                                            year.map(item => {
-                                                return <option key={item} value={item}>{item}</option>
+                                        <select id="year" name="year" onChange={e => {
+                                            setDate(pre => {
+                                                return { ...pre, year: e.target.value }
                                             })
-                                        }
-                                    </select>
+                                        }}>
+                                            <option value="" defaultValue>Năm</option>
+                                            {
+                                                year.map(item => {
+                                                    return <option key={item} value={item}>{item}</option>
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+
                                 </Col>
                             </Row>
                             <Row className="pb-5">
-                                <Col lg={3} className={cx("label")}></Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                <Col xl={3} lg={4} md={4} xs={5} className={cx("label")}></Col>
+                                <Col xl={9} lg={8} md={8} xs={7} className={cx('input-wrapper')}>
 
                                     <div
                                         className={cx("submit-btn")}
@@ -353,7 +373,7 @@ function UserDetails({ user, setQuery }) {
                             </Row>
                         </Container>
                     </Col>
-                    <Col lg={4}>
+                    <Col xl={4} lg={3} md={12}>
                         <div className={cx("avatar-block")}>
                             <Avatar
                                 width={30}
@@ -432,22 +452,22 @@ function UserDetails({ user, setQuery }) {
                     <Col xs={12}>
                         <Container className={cx('content')}>
                             <Row className={cx('pb-5')}>
-                                <Col lg={3} className={cx("label")}>Thêm số điện thoại mới</Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                <Col xl={3} lg={4} xs={5} className={cx("label")}>Thêm số điện thoại mới</Col>
+                                <Col xl={9} lg={8} xs={7} className={cx('input-wrapper')}>
                                     <input value={phoneNumber} type="tel" className={cx('input')}
                                         onChange={(e) => {
                                             setPhoneNumber(e.target.value);
                                         }}
                                         pattern={PHONE_REGEX}
-
+                                        autoComplete={false}
                                     />
-                                    <div id="recaptcha-container" className="captcha"></div>
+                                    <div id="recaptcha-container" className={cx("captcha")}></div>
                                 </Col>
                             </Row>
 
                             <Row className="pb-5">
-                                <Col lg={3} className={cx("label")}></Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                <Col xl={3} lg={4} xs={5} className={cx("label")}></Col>
+                                <Col xl={9} lg={8} xs={7} className={cx('input-wrapper')}>
 
                                     <button
                                         disabled={!canSave}
@@ -477,8 +497,8 @@ function UserDetails({ user, setQuery }) {
                     <Col xs={12}>
                         <Container className={cx('content')}>
                             <Row className={cx('pb-5')}>
-                                <Col lg={3} className={cx("label")}>Nhập mã OTP</Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                <Col xl={3} lg={4} xs={5} className={cx("label")}>Nhập mã OTP</Col>
+                                <Col xl={9} lg={8} xs={7} className={cx('input-wrapper')}>
                                     {errMsg.length > 0 ? <div className={cx('errMsg')} >{errMsg}</div> : ""}
                                     <input value={otp} type="text" className={cx('input')}
                                         onChange={(e) => {
@@ -488,8 +508,8 @@ function UserDetails({ user, setQuery }) {
                                 </Col>
                             </Row>
                             <Row className="pb-5">
-                                <Col lg={3} className={cx("label")}></Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                <Col xl={3} lg={4} xs={5} className={cx("label")}></Col>
+                                <Col xl={9} lg={8} xs={7} className={cx('input-wrapper')}>
                                     <button
                                         disabled={!otp.length}
                                         onClick={verifyOtp}
@@ -515,8 +535,8 @@ function UserDetails({ user, setQuery }) {
                     <Col xs={12}>
                         <Container className={cx('content')}>
                             <Row className={cx('pb-5')}>
-                                <Col lg={3} className={cx("label")}>Nhập email</Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                <Col xl={3} lg={4} xs={5} className={cx("label")}>Nhập email</Col>
+                                <Col xl={9} lg={8} xs={7} className={cx('input-wrapper')}>
                                     {errMsg.length > 0 ? <div className={cx('errMsg')} >{errMsg}</div> : ""}
                                     <input
                                         pattern={EMAIL_REGEX}
@@ -530,8 +550,8 @@ function UserDetails({ user, setQuery }) {
                                 </Col>
                             </Row>
                             <Row className="pb-5">
-                                <Col lg={3} className={cx("label")}></Col>
-                                <Col lg={9} className={cx('input-wrapper')}>
+                                <Col xl={3} lg={4} xs={5} className={cx("label")}></Col>
+                                <Col xl={9} lg={8} xs={7} className={cx('input-wrapper')}>
                                     <button
                                         disabled={!EMAIL_REGEX.test(email)}
                                         onClick={updateEmail}

@@ -375,7 +375,6 @@ function FormLoginByPhone({ setStatus }) {
                     <Form.Group as={Col} sm='12' controlId="confirm-password" >
 
                         <Form.Control
-
                             name="password"
                             required
                             suggested="current-password"
@@ -386,8 +385,6 @@ function FormLoginByPhone({ setStatus }) {
 
                             value={confirm_password}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-
-
                         />
 
                         <div className="padding-invalid"></div>

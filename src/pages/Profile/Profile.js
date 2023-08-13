@@ -67,8 +67,9 @@ function Profile() {
                     <Route path="/profile" index element={<UserDetails user={user} setQuery={setQuery} />}>
                     </Route>
                     <Route path="/bank" element={<Bank />}></Route>
-                    <Route path="/password" element={<ChangePwd />}></Route>
-                    <Route path="/address" element={<Address />}></Route>
+                    {isSuccess && <Route path="/password" element={<ChangePwd user={user} />}></Route>}
+                    {isSuccess && <Route path="/address" element={<Address user={user} />}></Route>}
+
                     {/* user gift */}
                     <Route path="/shop/birthday" element={<ShopSpecial />}></Route>
 

@@ -6,7 +6,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -30,6 +32,7 @@ const cx = className.bind(styles);
 const UserSideBar = ({ user }) => {
     const navigate = useNavigate();
     const { user_name } = useAuth();
+    const [hidden, setHidden] = useState(true);
     const [show, setShow] = useState(JSON.parse(localStorage.getItem("user_page")) || 3);
 
 
@@ -46,7 +49,15 @@ const UserSideBar = ({ user }) => {
 
     return (
         <div className={cx('wrapper')}>
-            <Container fluid>
+            <div className={cx('mobile-menu')} onClick={() => {
+                setHidden(pre => !pre)
+            }}>
+                <FontAwesomeIcon icon={faBars}
+                    className={cx("sub-menu-icon")}
+                />
+
+            </div>
+            <Container fluid className={cx('pc-menu', hidden ? "hidden" : "")}>
                 <Row className="py-4">
                     <Col xs={4} sm={4}>
                         <Avatar
