@@ -24,12 +24,23 @@ function App() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+
+
   useEffect(() => {
-    if (pathname === '/') {
-      navigate("/home")
+    if (pathname === "/") {
+      const shopPage = JSON.parse(localStorage.getItem("shop-Page"));
+
+      if (!shopPage) {
+        return navigate("/home/0/sort")
+      }
+      navigate(`${shopPage}`)
+
     }
-    // eslint-disable-next-line
-  }, [navigate]);
+  }, [pathname, navigate])
+
+
+
+
 
 
 

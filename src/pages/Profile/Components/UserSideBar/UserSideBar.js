@@ -30,6 +30,8 @@ import Avatar from '~/components/Avatar'
 const cx = className.bind(styles);
 
 const UserSideBar = ({ user }) => {
+    // // const API_IMG_URL = 'http://localhost:3500/img';
+    const API_IMG_URL = 'https://datnguyenshop-api.onrender.com/img';
     const navigate = useNavigate();
     const { user_name } = useAuth();
     const [hidden, setHidden] = useState(true);
@@ -62,7 +64,7 @@ const UserSideBar = ({ user }) => {
                     <Col xs={4} sm={4}>
                         <Avatar
                             className={cx('avatar')}
-                            src={`${process.env.API_IMG_URL}/avatar/${user?.avatar[0]}`}
+                            src={`${API_IMG_URL}/avatar/${user?.avatar[0]}`}
                             user={user_name ? user_name : null}
 
                         />

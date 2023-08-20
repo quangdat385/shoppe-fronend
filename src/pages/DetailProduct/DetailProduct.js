@@ -1,5 +1,5 @@
 import className from "classnames/bind";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styles from "./DetailProduct.module.scss"
 import { Container, Col, Row } from "react-bootstrap"
@@ -23,6 +23,14 @@ const cx = className.bind(styles)
 
 
 function DetailProduct() {
+    // const API_IMG_URL = 'http://localhost:3500/img';
+    const API_IMG_URL = 'https://datnguyenshop-api.onrender.com/img';
+
+    const { pathname } = useLocation();
+    useEffect(() => {
+        localStorage.setItem("shop-Page", JSON.stringify(pathname));
+        // eslint-disable-next-line 
+    }, [])
     const [search] = useGetSearchMutation();
     const { title } = useParams();
     const id = title.split(":")[1]
@@ -272,9 +280,9 @@ function DetailProduct() {
                     <div className={cx('img-box')}>
                         <div className={cx('img')}>
                             <div className={cx('img-background')}  >
-                                <img src={`http://localhost:3500/img/${product?.img_product[imgView][0]}`} alt={"img-product"} />
+                                <img src={`${API_IMG_URL}/${product?.img_product[imgView][0]}`} alt={"img-product"} />
                                 <div className={cx('img-overlay')}>
-                                    <img src={`http://localhost:3500/img/${product?.ship_label[0]}`} alt="overlay" />
+                                    <img src={`${API_IMG_URL}/${product?.ship_label[0]}`} alt="overlay" />
                                 </div>
                             </div>
 
@@ -300,9 +308,9 @@ function DetailProduct() {
                                         className={cx('slider-item', isVisible ? "" : "d-none")} key={item}>
                                         <div className={cx('img')}>
                                             <div className={cx('img-background')} >
-                                                <img src={`http://localhost:3500/img/${product?.img_product[item][0]}`} alt={"img-product"} />
+                                                <img src={`${API_IMG_URL}/${product?.img_product[item][0]}`} alt={"img-product"} />
                                                 <div className={cx('img-overlay')}>
-                                                    <img src={`http://localhost:3500/img/${product?.ship_label[0]}`} alt="overlay" />
+                                                    <img src={`${API_IMG_URL}/${product?.ship_label[0]}`} alt="overlay" />
                                                 </div>
                                             </div>
 

@@ -3,7 +3,7 @@ import className from 'classnames/bind';
 import { Container, Row, Col } from "react-bootstrap"
 import { useSelector, useDispatch } from "react-redux"
 import { useState, useEffect, Fragment } from "react";
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useLocation } from "react-router-dom"
 import "animate.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleLeft, faAngleRight, faFilter, faArrowUpWideShort, faArrowDownWideShort } from "@fortawesome/free-solid-svg-icons";
@@ -23,6 +23,11 @@ import ByRating from "./ByRating";
 const cx = className.bind(styles);
 
 function Search() {
+    const { pathname } = useLocation();
+    useEffect(() => {
+        localStorage.setItem("shop-Page", JSON.stringify(pathname));
+        // eslint-disable-next-line 
+    }, [])
     const { data: detailsProduct, isSuccess: isDetailsSuccess } = useGetDetailsQuery("listDetails", {
         pollingInterval: 60000,
         refetchOnMountOrArgChange: true,

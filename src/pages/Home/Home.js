@@ -25,10 +25,16 @@ const cx = className.bind(styles);
 
 
 
-function Home() {
+function Home({ setShopPage }) {
 
     const navigate = useNavigate();
     const { pathname } = useLocation();
+
+    useEffect(() => {
+        localStorage.setItem("shop-Page", JSON.stringify(pathname));
+        // eslint-disable-next-line 
+    }, [])
+
 
     // eslint-disable-next-line
     const [homePage] = useHomePage();

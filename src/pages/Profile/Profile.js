@@ -1,6 +1,6 @@
 import className from 'classnames/bind';
-import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 
 import storage from '~/until/storage';
@@ -42,6 +42,11 @@ const cx = className.bind(styles);
 
 
 function Profile() {
+    const { pathname } = useLocation();
+    useEffect(() => {
+        localStorage.setItem("shop-Page", JSON.stringify(pathname));
+        // eslint-disable-next-line 
+    }, [])
     const { UserId } = useAuth()
 
     const [query, setQuery] = useState({ update: false });

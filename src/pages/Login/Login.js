@@ -1,5 +1,6 @@
 import className from 'classnames/bind';
-
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import styles from './Login.module.scss';
 import Content from './components/Content'
@@ -12,7 +13,11 @@ const cx = className.bind(styles)
 
 function Login() {
 
-
+    const { pathname } = useLocation();
+    useEffect(() => {
+        localStorage.setItem("shop-Page", JSON.stringify(pathname));
+        // eslint-disable-next-line 
+    }, [])
 
     return (
         <div className={cx('wrapper')}>

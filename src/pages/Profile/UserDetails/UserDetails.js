@@ -32,6 +32,8 @@ import Avatar from '~/components/Avatar';
 const cx = className.bind(styles);
 
 function UserDetails({ user, setQuery }) {
+    // const API_IMG_URL = 'http://localhost:3500/img';
+    const API_IMG_URL = 'https://datnguyenshop-api.onrender.com/img';
     const PHONE_REGEX = /^[+?\s\- 0-9]{10,15}$/;
     const EMAIL_REGEX = /^[a-z0-9._%+]+@[a-z0-9.]+\.[a-z]{2,4}$/;
     const token = useSelector(selectCurrentToken);
@@ -61,7 +63,7 @@ function UserDetails({ user, setQuery }) {
         setEmail(user?.email)
     }, [user]);
 
-    console.log(phoneNumber);
+
 
     useEffect(() => {
         if (userName !== user?.user_name && userName.length > 0) {
@@ -217,11 +219,11 @@ function UserDetails({ user, setQuery }) {
     for (let i = 1900; i <= dayNow.getFullYear(); i++) {
         year.push(i);
     }
-    console.log(date)
 
 
 
-    console.log(section)
+
+
     useEffect(() => {
         setCanSave(PHONE_REGEX.test(phoneNumber))
         // eslint-disable-next-line
@@ -379,7 +381,7 @@ function UserDetails({ user, setQuery }) {
                                 width={30}
                                 height={30}
                                 className={cx('avatar')}
-                                src={`${process.env.API_IMG_URL}/avatar/${user?.avatar[0]}`}
+                                src={`${API_IMG_URL}/avatar/${user?.avatar[0]}`}
                                 user={user?.user_name ? user.user_name : null}
 
                             />

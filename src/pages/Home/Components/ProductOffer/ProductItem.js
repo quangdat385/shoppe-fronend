@@ -16,7 +16,8 @@ const cx = className.bind(styles);
 
 
 function ProductItem({ product }, ref) {
-
+    // const API_IMG_URL = 'http://localhost:3500/img';
+    const API_IMG_URL = 'https://datnguyenshop-api.onrender.com/img';
     let rating;
     let leftrating;
 
@@ -72,9 +73,9 @@ function ProductItem({ product }, ref) {
     return (<Link className={cx("product-item")} to={`/detail/@:${product?.id ? product?.id : product?._id}`}>
         <div className={cx("product-img-wrapper")}>
             <img ref={ref} className={cx("img")}
-                src={`${process.env.API_IMG_URL}/${product?.img_product[0][0]}`} alt="" />
+                src={`${API_IMG_URL}/${product?.img_product[0][0]}`} alt="" />
             <img ref={ref} className={cx("img-bg")}
-                src={`${process.env.API_IMG_URL}/${product?.ship_label[0]}`} alt="" />
+                src={`${API_IMG_URL}/${product?.ship_label[0]}`} alt="" />
             <p className={cx("favourite-logo")}>Yêu Thích</p>
             {product.sale_off > 0 ? <div className={cx("stick-sale")}>
                 <p >{`${product.sale_off * 100}%`}</p>
