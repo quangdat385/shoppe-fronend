@@ -28,12 +28,7 @@ function App() {
 
   useEffect(() => {
     if (pathname === "/") {
-      const shopPage = JSON.parse(localStorage.getItem("shop-Page"));
-
-      if (!shopPage) {
-        return navigate("/home/0/sort")
-      }
-      navigate(`${shopPage}`)
+      return navigate(`/home/0/sort?&byCollection=0`)
 
     }
   }, [pathname, navigate])

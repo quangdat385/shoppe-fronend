@@ -11,7 +11,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         //get api/user
         getUsers: builder.query({
             query: ({ update = false }) => ({
-                url: '/user',
+                url: '/users',
                 validateStatus: (response, result) => {
                     return response.status === 200 && !result.isError
                 },
@@ -36,6 +36,14 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
 
 
+        }),
+        getUser: builder.query({
+            query: ({ id, update = false }) => ({
+                url: `/users/${id}`,
+                validateStatus: (response, result) => {
+                    return response.status === 200 && !result.isError
+                },
+            })
         }),
         //get user soft delete user/show/delete
         getSoftDeleteUsers: builder.mutation({
@@ -163,6 +171,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
+    useGetUserQuery,
     useGetUsersQuery,
     useGetSoftDeleteUsersMutation,
     useAddNewUserMutation,

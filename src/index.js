@@ -4,7 +4,8 @@ import SSRProvider from 'react-bootstrap/SSRProvider';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import App from './App';
 import { store } from '~/app/store';
@@ -22,6 +23,7 @@ root.render(
     <Provider store={store}>
       <SSRProvider>
         <GlobalStyles>
+          <ToastContainer />
           <BrowserRouter>
             <Routes>
               <Route path="/*" element={<App />} ></Route>

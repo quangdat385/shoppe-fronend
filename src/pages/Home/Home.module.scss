@@ -1,7 +1,17 @@
 .wrapper {
-    width: 100%;
-    display: block;
-    background-color: #fff;
+  width: 100%;
+  display: block;
+  background-color: #fff;
 
+  .scroll-to-top {
+    position: fixed;
+    border-radius: 50%;
+    bottom: 80px;
+    right: 20px;
+    height: 40px;
+    width: 40px;
+    box-shadow: 0 1px 3px #e3e3e3;
+    cursor: pointer;
+  }
 
 }

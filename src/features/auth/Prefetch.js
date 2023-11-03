@@ -10,14 +10,13 @@ import { useEffect } from 'react';
 
 const Prefetch = ({ children }) => {
 
-    useEffect(() => {
-        store.dispatch(usersApiSlice.util.prefetch('getUsers', 'usersList', { force: true }))
-
-    }, [])
-    return children
+  useEffect(() => {
+    store.dispatch(usersApiSlice.util.prefetch('getUser', 'userInfo', { force: true }))
+  }, [])
+  return children
 }
 
 Prefetch.prototype = {
-    children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired
 }
 export default Prefetch;

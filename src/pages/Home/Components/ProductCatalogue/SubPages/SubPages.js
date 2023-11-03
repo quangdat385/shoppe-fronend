@@ -17,7 +17,6 @@ import ProductSearchItem from "../../ProductOffer/ProductSearchItem";
 const cx = ClassName.bind(styles);
 
 function SubPages({ isTrue, products, isLoading, isSuccess }) {
-
     let content;
     if (isLoading) {
         return content = (<Container className={cx("px-0", isTrue ? "" : "d-none")}>

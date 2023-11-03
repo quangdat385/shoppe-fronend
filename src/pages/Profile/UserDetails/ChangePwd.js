@@ -19,10 +19,8 @@ function ChangePwd({ user }) {
     const [canSave, setCanSave] = useState(false);
     const [errMsg, setErrMsg] = useState("");
     const [updatePassword] = useChangePasswordMutation("changePassword");
+    const [isActive, setIsActive] = useState(false);
 
-
-    console.log(validPwd, validconfirmPassword, password, confirmPassword)
-    console.log(PWD_REG.test(password), errMsg.length)
 
     useEffect(() => {
         if (PWD_REG.test(password)) {
@@ -47,6 +45,7 @@ function ChangePwd({ user }) {
     }, [validPwd, validconfirmPassword]);
 
     const changePassWord = async () => {
+        setIsActive(true)
         if (password !== confirmPassword) {
             setErrMsg("Mật Khẩu và mật khẩu xác nhận phải giống nhau")
             return
@@ -87,7 +86,7 @@ function ChangePwd({ user }) {
                                     <Col lg={3}></Col>
                                     <Col lg={9} className={cx('input-wrapper')}>
                                         {
-                                            errMsg.length > 0 &&
+                                            errMsg?.length > 0 &&
                                             <div className={cx("errMsg")}>
                                                 {errMsg}
                                             </div>
@@ -114,8 +113,8 @@ function ChangePwd({ user }) {
                                             className={cx('input')}
                                             onChange={e => { setPassword(e.target.value.trim()) }}
                                         />
-                                        {validPwd ? "" :
-                                            <div className={cx('invalid')}>Vui lòng điền trường này !!!</div>
+                                        {
+                                            (!validPwd && isActive) && <div className={cx('invalid')}>Vui lòng điền trường này !!!</div>
                                         }
 
                                     </Col>
@@ -136,7 +135,7 @@ function ChangePwd({ user }) {
                                             className={cx('input')}
                                             onChange={e => { setConfirmPassword(e.target.value.trim()) }}
                                         />
-                                        {validconfirmPassword ? "" :
+                                        {(!validconfirmPassword && isActive) &&
                                             <div className={cx('invalid')}>Vui lòng điền trường này !!!</div>
                                         }
                                     </Col>
