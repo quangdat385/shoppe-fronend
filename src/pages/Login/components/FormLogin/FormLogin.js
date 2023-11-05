@@ -124,7 +124,11 @@ function FormLogin() {
       setUserName('');
       setPassword('');
       let term = JSON.parse(localStorage.getItem("path_name"));
-      navigate(`${term}`);
+      const partern = /^\/home\/\d{1}\/sort$/
+      if (partern.test(term)) {
+        return navigate(`${term}?byCollection=0`);
+      }
+      navigate(`${term}`)
     } catch (err) {
       if (!err.status) {
 
@@ -160,7 +164,11 @@ function FormLogin() {
       if (next_step === "views") {
         dispatch(setCredentials({ accessToken }));
         let term = JSON.parse(localStorage.getItem("path_name"));
-        navigate(`${term}`);
+        const partern = /^\/home\/\d{1}\/sort$/
+        if (partern.test(term)) {
+          return navigate(`${term}?byCollection=0`);
+        }
+        navigate(`${term}`)
       } else {
         setResult(data);
         setStatus("update password");
@@ -215,7 +223,11 @@ function FormLogin() {
       setValidated(false);
       setStatus("login")
       let term = JSON.parse(localStorage.getItem("path_name"));
-      navigate(`${term}`);
+      const partern = /^\/home\/\d{1}\/sort$/
+      if (partern.test(term)) {
+        return navigate(`${term}?byCollection=0`);
+      }
+      navigate(`${term}`)
 
     } catch (err) {
       if (!err.status) {

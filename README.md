@@ -1,3 +1,56 @@
+# Project Shopee Clone JS
+
+## Main Features
+
+- Authentication module: Management by JWT,Firebase
+
+  - Login, Signup by Social Media
+  - Login , Signup by OTP
+  - Logout
+
+- Home Page:
+
+  - Pagination
+  - Sort by attribute
+  - Advanced classification by attributes
+  - Search by Product
+
+- Search Page:
+
+  - Pagination
+  - Sort by attribute
+  - Advanced classification by attributes
+  - Search by Product
+
+- Details Product Page:
+
+  - Show Details Product
+  - Show images by slider
+  - Buy Product
+
+- Cart Page
+
+  - Management Order: add, update, delete order
+  - Purchase Product
+
+- Management Profile Client
+
+  - Update Profile
+  - Upload Avatar
+  - Change Password
+  - Check order status
+    ​
+
+- Add More : Developing ...
+
+## Technology Used
+
+- UI / CSS Library: React Bootstrap (Full Responsive),SCSS, CSS Module
+- State Management: Redux Toolkit
+- Router: React Router
+- Build tool: Create React App
+- API: Rest API Node Express Mongoose
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

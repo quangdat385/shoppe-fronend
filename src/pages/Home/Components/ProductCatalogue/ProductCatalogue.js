@@ -63,6 +63,7 @@ function ProductCatalogue() {
       return { ...pre, collection: byCollection ? Number(byCollection) : 0 }
     })
     setHomePage(pre => { return { ...pre, menu: Number(byCollection) } })
+    // eslint-disable-next-line use-isnan
     setMenu(Number(byCollection))
   }, [byCollection])
   useEffect(() => {

@@ -191,7 +191,7 @@ function Header() {
           <Navbar.Collapse className={cx("collapse-bgcolor")} id="responsive-navbar-nav">
             <Nav className="me-auto">
               <div className={cx('nav_qr')}>
-                <Link className={cx('nav_link', 'nav_link--after')} >
+                <Link className={cx('nav_link', 'nav_link--after')} to="/home/0/sort?&byCollection=0" >
                   Vào cửa hàng ứng dụng trên AppStore
                 </Link>
                 <Container fluid className={cx("my-toast", "bg-transparent border-0 shadow-none ps-4")}>
@@ -199,9 +199,9 @@ function Header() {
                   <div className={cx("nav__qr-content")}>
                     <img src={Qrcode} alt="QR code" className={cx("nav__qr--img")} />
                     <div className={cx("nav__apps")}>
-                      <Link className={cx("nav__apps-img")}> <img src={AppStore} alt="App Store" className={cx("nav__apps-apple")} /></Link>
-                      <Link className={cx("nav__apps-img")}><img src={GoogleLay} alt="Goole Play" className={cx("nav__apps-goole")} /></Link>
-                      <Link className={cx("nav__apps-img")}><img src={ApppGalleri} alt="Gallery" className={cx("nav__apps-gallery")} /></Link>
+                      <Link to="/home/0/sort?&byCollection=0" className={cx("nav__apps-img")}> <img src={AppStore} alt="App Store" className={cx("nav__apps-apple")} /></Link>
+                      <Link to="/home/0/sort?&byCollection=0" className={cx("nav__apps-img")}><img src={GoogleLay} alt="Goole Play" className={cx("nav__apps-goole")} /></Link>
+                      <Link to="/home/0/sort?&byCollection=0" className={cx("nav__apps-img")}><img src={ApppGalleri} alt="Gallery" className={cx("nav__apps-gallery")} /></Link>
                     </div>
                   </div>
 
@@ -209,10 +209,10 @@ function Header() {
               </div>
               <Nav.Item className={cx('conect')} >
                 <span className={cx('text')} >Kết Nối</span>
-                <Link className={cx('fa-icon')} >
+                <Link className={cx('fa-icon')} to="/home/0/sort?&byCollection=0"  >
 
                 </Link>
-                <Link className={cx('ins-icon')} >
+                <Link className={cx('ins-icon')} to="/home/0/sort?&byCollection=0"  >
 
                 </Link>
               </Nav.Item>
@@ -220,7 +220,7 @@ function Header() {
             </Nav>
             <Nav>
               <div className={cx('notify')}>
-                <Link className={cx('nav_link')} >
+                <Link className={cx('nav_link')} to="/home/0/sort?&byCollection=0" >
                   <svg viewBox="3 2.5 14 14" x="0" y="0" className={cx('notify-icon')}>
                     <path fill="white" d="m17 15.6-.6-1.2-.6-1.2v-7.3c0-.2 0-.4-.1-.6-.3-1.2-1.4-2.2-2.7-2.2h-1c-.3-.7-1.1-1.2-2.1-1.2s-1.8.5-2.1 1.3h-.8c-1.5 0-2.8 1.2-2.8 2.7v7.2l-1.2 2.5-.2.4h14.4zm-12.2-.8.1-.2.5-1v-.1-7.6c0-.8.7-1.5 1.5-1.5h6.1c.8 0 1.5.7 1.5 1.5v7.5.1l.6 1.2h-10.3z">
                     </path>
@@ -240,7 +240,7 @@ function Header() {
                         </header>
                         <div className={cx("notify-list")}>
                           <div className={cx("notify-list__item", "list-item--viewed")}>
-                            <Link className={cx("notify-list__link")}>
+                            <Link className={cx("notify-list__link")} to="/home/0/sort?&byCollection=0" >
                               <img className={cx("notify-img")} alt="Thông Báo" src="https://abphotos.link/photos/resized/320x/73-1573644148-myohui.png" />
                               <div className={cx("notify-info")}>
                                 <span className={cx("notify-name")}>
@@ -302,7 +302,7 @@ function Header() {
                   </div>
                 </Container>
               </div>
-              <Link className={cx('help', 'nav_link')}  >
+              <Link to="/home/0/sort?&byCollection=0" className={cx('help', 'nav_link')}  >
                 <svg height="16" viewBox="0 0 16 16" width="16" className={cx('help-icon')}>
                   <g fill="none" fillRule="evenodd" transform="translate(1)">
                     <circle cx="7" cy="8" r="7" stroke="white"></circle>

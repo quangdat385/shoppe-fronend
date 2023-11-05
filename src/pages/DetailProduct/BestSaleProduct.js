@@ -8,7 +8,7 @@ import { memo, } from "react"
 import { forwardRef } from "react"
 
 import { formatCurrency } from "~/until/formatNumber";
-
+import { Link } from "react-router-dom";
 import styles from "./DetailProduct.module.scss";
 
 const cx = className.bind(styles);
@@ -17,7 +17,7 @@ const cx = className.bind(styles);
 function BestSaleProduct({ product }, ref) {
 
 
-  return (<div className={cx("product-item")} to={`/detail/@:${product?.id ? product?.id : product?._id}`}>
+  return (<Link className={cx("product-item")} to={`/detail/@:${product?.id ? product?.id : product?._id}`}>
     <div className={cx("product-img-wrapper")}>
       <img ref={ref} className={cx("img")}
         src={`${process.env.REACT_APP_API_IMG_URL}/${product?.img_product[0][0]}`} alt="" />
@@ -47,7 +47,7 @@ function BestSaleProduct({ product }, ref) {
 
     </div>
 
-  </div>);
+  </Link>);
 
 }
 
