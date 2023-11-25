@@ -48,7 +48,6 @@ function Profile() {
     // eslint-disable-next-line 
   }, [])
   const { UserId } = useAuth()
-
   const [query, setQuery] = useState({ id: UserId, update: false });
   const { data: userInfo, isSuccess } = useGetUserQuery(query, {
     pollingInterval: 60000,
@@ -62,6 +61,7 @@ function Profile() {
     user = userInfo;
     storage.set("user", user.user_name)
   }
+
   return (
     <div className={cx('wrapper')}>
 
@@ -69,11 +69,12 @@ function Profile() {
       <Routes>
         {isSuccess && <Route path="/" element={<UserContent user={user} />}>
           {/* user details */}
-          <Route path="/profile" index element={<UserDetails user={user} setQuery={setQuery} />}>
-          </Route>
+          {(isSuccess && user) && <Route path="/profile" index element={<UserDetails user={user} setQuery={setQuery} />}>
+          </Route>}
+
           <Route path="/bank" element={<Bank />}></Route>
-          {isSuccess && <Route path="/password" element={<ChangePwd user={user} />}></Route>}
-          {isSuccess && <Route path="/address" element={<Address user={user} />}></Route>}
+          {(isSuccess && user) && <Route path="/password" element={<ChangePwd user={user} />}></Route>}
+          {(isSuccess && user) && <Route path="/address" element={<Address user={user} setQuery={setQuery} />}></Route>}
 
           {/* user gift */}
           <Route path="/shop/birthday" element={<ShopSpecial />}></Route>
