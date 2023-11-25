@@ -241,6 +241,20 @@
     animation: Header_headerNotiGrowth__H3IBR ease-in 1s;
     will-change: opacity, transfom;
     z-index: 999;
+
+    .range-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 30px;
+      margin-top: 30px;
+      background-color: #ee4d2d;
+      color: #fff;
+      outline: none;
+      border: none;
+      border-radius: 3px;
+    }
   }
 
   .search-text {

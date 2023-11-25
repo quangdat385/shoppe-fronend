@@ -365,7 +365,17 @@ function Search() {
                 setMenu={setVoucher}
                 content={[{ details: "Voucher Xtra" }, { details: "Đang Giảm Giá" }, { details: "Gì Cũng Rẻ" }, { details: "Hàng Có Sẵn" }, { details: "Mua giá bán buôn/ bán sỉ" }]}
               />
-
+              <button
+                className={cx("range-btn")}
+                onClick={() => {
+                  setMenu([]);
+                  setPlace([]);
+                  setDeliver([]);
+                  setRangePrice(null);
+                  SetRate(null)
+                  setVoucher([]);
+                }}
+              >XÓA TÂT CẢ</button>
 
             </div>
           </div>
